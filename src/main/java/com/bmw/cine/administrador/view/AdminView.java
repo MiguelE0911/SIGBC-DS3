@@ -1,33 +1,28 @@
 package com.bmw.cine.administrador.view;
 
-import javafx.geometry.Insets;
+import java.io.IOException;
+
+import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.view.HeaderPrincipalController;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.scene.control.MenuItem;
 
 public class AdminView {
 
-    // Componentes principales de la interfaz
+    // Usuario autenticado
+    private UsuarioDTO usuarioActivo;
+
+    // Componentes principales
     private BorderPane root;
-    private HBox header;
     private StackPane contentPane;
 
-    // Botones de navegación
-    private Button btnGestionUsuarios;
-    private Button btnReportes;
-
-    // Menú del usuario
-    private MenuButton menuUsuario;
-
-    // Opciones del menú
-    private MenuItem itemMiInformacion;
-    private MenuItem itemCambiarSeccion;
-    private MenuItem itemCerrarSesion;
+    // Header reutilizable
+    private HeaderPrincipalController headerController;
 
     // Escena
     private Scene escena;
@@ -35,7 +30,8 @@ public class AdminView {
     /**
      * Constructor de la vista.
      */
-    public AdminView() {
+    public AdminView(UsuarioDTO usuarioActivo) {
+        this.usuarioActivo = usuarioActivo;
         inicializarComponentes();
     }
 
@@ -43,60 +39,48 @@ public class AdminView {
      * Inicializa y organiza todos los componentes visuales.
      */
     private void inicializarComponentes() {
+
         // Contenedor principal
         root = new BorderPane();
-        root.setStyle("-fx-background-color: linear-gradient(to bottom, #1b1224, #100b16);");
+        root.getStyleClass().add("panel-fondo");
 
-        // Header
-        header = new HBox(15);
-        header.setPadding(new Insets(20));
-        header.setStyle("-fx-background-color: #241a30;");
 
-        // Botones de navegación
-        btnGestionUsuarios = new Button("Gestión de Usuarios");
-        btnReportes = new Button("Reportes");
+        // Header reutilizable
+        try {
 
-        String estiloBoton =
-                "-fx-background-color: #d4af37;" +
-                        "-fx-text-fill: #1b1224;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 20;" +
-                        "-fx-cursor: hand;";
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/common/view/HeaderPrincipal.fxml"));
 
-        btnGestionUsuarios.setStyle(estiloBoton);
-        btnReportes.setStyle(estiloBoton);
+            Parent header = loader.load();
 
-        // Menú del usuario (por ahora solo el botón)
-        menuUsuario = new MenuButton("Administrador");
-        menuUsuario.setStyle(estiloBoton);
+            headerController = loader.getController();
 
-        itemMiInformacion = new MenuItem("Mi información");
-        itemCambiarSeccion = new MenuItem("Cambiar de sección");
-        itemCerrarSesion = new MenuItem("Cerrar sesión");
+            headerController.configurar(
+                    "Panel de Administrador",
+                    usuarioActivo,
+                    true);
 
-        menuUsuario.getItems().addAll(
-                itemMiInformacion,
-                itemCambiarSeccion,
-                itemCerrarSesion
-        );
+            root.setTop(header);
 
-        // Agregar componentes al Header
-        header.getChildren().addAll(
-                btnGestionUsuarios,
-                btnReportes,
-                menuUsuario
-        );
+        } catch (IOException e) {
+            throw new RuntimeException("No se pudo cargar HeaderPrincipal.fxml", e);
+        }
 
-        // Panel central
+        // Contenido central
         contentPane = new StackPane();
-        contentPane.setPadding(new Insets(30));
-
-        // Agregar al BorderPane
-        root.setTop(header);
         root.setCenter(contentPane);
 
-        // Crear la escena
+        // Escena
         escena = new Scene(root, 1200, 700);
+
+        escena.getStylesheets().add(
+                getClass().getResource("/css/tema-global.css").toExternalForm());
+
+        escena.getStylesheets().add(
+                getClass().getResource("/css/header-principal.css").toExternalForm());
+
+        escena.getStylesheets().add(
+                getClass().getResource("/css/panel-comun.css").toExternalForm());
     }
 
     /**
@@ -109,31 +93,25 @@ public class AdminView {
         stage.show();
     }
 
-    public Button getBtnGestionUsuarios() {
-        return btnGestionUsuarios;
-    }
-
-    public Button getBtnReportes() {
-        return btnReportes;
-    }
-
-    public MenuButton getMenuUsuario() {
-        return menuUsuario;
-    }
-
+    /**
+     * Devuelve el contenedor donde se cargarán las distintas vistas
+     * (Gestión de Usuarios, Reportes, etc.).
+     */
     public StackPane getContentPane() {
         return contentPane;
     }
 
-    public MenuItem getItemMiInformacion() {
-        return itemMiInformacion;
+    /**
+     * Devuelve el controlador del Header reutilizable.
+     */
+    public HeaderPrincipalController getHeaderController() {
+        return headerController;
     }
 
-    public MenuItem getItemCambiarSeccion() {
-        return itemCambiarSeccion;
-    }
-
-    public MenuItem getItemCerrarSesion() {
-        return itemCerrarSesion;
+    /**
+     * Devuelve el usuario autenticado.
+     */
+    public UsuarioDTO getUsuarioActivo() {
+        return usuarioActivo;
     }
 }
