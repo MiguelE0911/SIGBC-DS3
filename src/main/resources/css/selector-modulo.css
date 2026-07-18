@@ -1,0 +1,64 @@
+.selector-fondo {
+    -fx-background-color: linear-gradient(to bottom, #1b1224, #100b16);
+}
+
+.selector-titulo {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f4e8d0;
+}
+
+.selector-subtitulo {
+    -fx-font-size: 14px;
+    -fx-text-fill: #b8a9c9;
+}
+
+.contenedor-tarjetas {
+    -fx-padding: 0 40 48 40;
+}
+
+.tarjeta {
+    -fx-background-color: #241a30;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #3a2b4a;
+    -fx-border-width: 1;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 14, 0, 0, 6);
+    -fx-cursor: hand;
+}
+
+.tarjeta:hover {
+    -fx-background-color: #2e2140;
+    -fx-border-color: #d4af37;
+    -fx-effect: dropshadow(gaussian, rgba(212,175,55,0.35), 18, 0, 0, 8);
+}
+
+.tarjeta-icono {
+    -fx-font-size: 42px;
+}
+
+.tarjeta-titulo {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f4e8d0;
+}
+
+.tarjeta-descripcion {
+    -fx-font-size: 12px;
+    -fx-text-fill: #b8a9c9;
+    -fx-text-alignment: center;
+}
+
+.tarjeta-boton {
+    -fx-background-color: #d4af37;
+    -fx-text-fill: #1b1224;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 8 24 8 24;
+    -fx-cursor: hand;
+}
+
+.tarjeta-boton:hover {
+    -fx-background-color: #e6c34f;
+}
