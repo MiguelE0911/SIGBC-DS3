@@ -1,19 +1,16 @@
-package com.bmw.cine.espectador;
+package com.bmw.cine.espectador.controller;
 
-import com.bmw.cine.common.dao.UsuarioDAO;
+import com.bmw.cine.common.dao.DAOException;
+import com.bmw.cine.common.dao.UsuarioDAO; // Asegúrate de importar el Modelo
+import com.bmw.cine.common.model.Usuario;
+import com.bmw.cine.espectador.view.LoginView;
+import com.bmw.cine.espectador.view.RegistroView;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
-/**
- * Controlador encargado de gestionar la lógica de negocio y los eventos
- * de la pantalla de creación de cuenta (RegistroView).
- * @author Wilma
- * @version 1.0
- */
 public class RegistroController {
-
     private final RegistroView vista;
     private final UsuarioDAO usuarioDAO;
     private final Stage stage;
@@ -24,18 +21,12 @@ public class RegistroController {
         this.usuarioDAO = usuarioDAO;
         this.stage = stage;
         this.vistaLogin = vistaLogin;
-
         configurarEventos();
     }
 
     private void configurarEventos() {
-        // Evento del botón principal "Registrarse"
         vista.getBtnRegistrar().setOnAction(e -> procesarRegistro());
-
-        // Evento del enlace para regresar al Login
-        vista.getLnkVolverLogin().setOnAction(e -> {
-            vistaLogin.mostrar(stage);
-        });
+        vista.getLnkVolverLogin().setOnAction(e -> vistaLogin.mostrar(stage));
     }
 
     private void procesarRegistro() {
@@ -44,25 +35,27 @@ public class RegistroController {
         String usuario = vista.getUsuario();
         String password = vista.getPassword();
 
-        // 1. Validar que ningún campo esté vacío
         if (nombre.isEmpty() || correo.isEmpty() || usuario.isEmpty() || password.isEmpty()) {
-            mostrarAlerta("Campos Incompletos", "Por favor, complete todos los campos para registrarse.", AlertType.WARNING);
+            mostrarAlerta("Campos Incompletos", "Por favor, complete todos los campos.", AlertType.WARNING);
             return;
         }
 
         try {
-            // Nota: Aquí llamarías al método de inserción en base de datos de tu compañero si existiera en el DAO.
-            // Ej: usuarioDAO.registrar(new UsuarioDTO(...));
-            
-            // Simulación de éxito para la presentación de tu módulo
-            mostrarAlerta("Registro Exitoso", "¡Cuenta creada correctamente! Ahora puedes iniciar sesión.", AlertType.INFORMATION);
-            
-            // 2. Redirigir automáticamente de vuelta al Login para que pruebe su nueva cuenta
+            // 1. Crear el modelo Usuario (con constructor adecuado)
+          
+            Usuario nuevoUsuario = new Usuario(nombre, correo, usuario, Usuario.ROL_ESPECTADOR);
+
+            // 2. Registrar en base de datos
+            usuarioDAO.registrar(nuevoUsuario, password);
+
+            mostrarAlerta("Registro Exitoso", "¡Cuenta creada correctamente!", AlertType.INFORMATION);
             vistaLogin.mostrar(stage);
 
-        } catch (Exception ex) {
-            mostrarAlerta("Error de Registro", "No se pudo crear la cuenta en este momento.", AlertType.ERROR);
-            ex.printStackTrace();
+        } catch (DAOException e) {
+            mostrarAlerta("Error de Registro", e.getMessage(), AlertType.ERROR);
+        } catch (Exception e) {
+            mostrarAlerta("Error", "Ocurrió un error inesperado.", AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 

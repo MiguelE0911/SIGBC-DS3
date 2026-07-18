@@ -1,4 +1,4 @@
-package com.bmw.cine.espectador;
+package com.bmw.cine.espectador.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

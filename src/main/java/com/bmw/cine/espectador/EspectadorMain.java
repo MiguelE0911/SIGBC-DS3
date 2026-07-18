@@ -1,5 +1,8 @@
 package com.bmw.cine.espectador;
 
+import com.bmw.cine.espectador.controller.LoginController;
+import com.bmw.cine.espectador.view.LoginView;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -33,3 +36,5 @@ public class EspectadorMain extends Application {
         launch(args);
     }
 }
+
+//mvn clean compile exec:java -Dexec.mainClass="com.bmw.cine.espectador.EspectadorMain"
