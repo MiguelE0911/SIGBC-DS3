@@ -37,7 +37,7 @@ public class Pelicula {
     public int getDuracionMinutos() {return duracionMinutos;}
     public void setDuracionMinutos(int duracionMinutos) {this.duracionMinutos = duracionMinutos;}
 
-    public String getPosterUrl() {return rutaPoster;}
+    public String getRutaPoster() {return rutaPoster;}
     public void setPosterUrl(String rutaPoster) {this.rutaPoster = rutaPoster;}
 
     public boolean isActiva() {return activa;}
