@@ -1,7 +1,8 @@
 package com.bmw.cine.common.session;
 
+import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
-
+import com.bmw.cine.common.session.OpcionModulo;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,10 +16,26 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-public class SelectorModulo {
-    public static void iniciar(Stage stage, Usuario usuarioActivo) {
-        int rol = usuarioActivo.getRol();
 
+/**
+ * Pantalla intermedia que aparece después de un login exitoso, ANTES de
+ * entrar a cualquier módulo (Espectador, Personal, Administrador).
+ *
+ * Reglas de negocio (ver Meta del flujo):
+ *  - Espectador NUNCA ve esta pantalla: entra directo a Cartelera.
+ *  - Personal ve 2 tarjetas: Cartelera / Taquilla.
+ *  - Administrador ve 3 tarjetas: Cartelera / Taquilla / Panel de Administrador.
+ *  - Si Personal o Administrador entra a "Cartelera", esa instancia se
+ *    comporta EXACTAMENTE igual que la de un Espectador normal (compra
+ *    para sí mismo) — no se le pasan permisos de staff a esa vista.
+ *
+ * TODO: los métodos entrarA*() de abajo son placeholders. Cuando existan
+ * los lanzadores reales de cada módulo, reemplazar cada Alert por la
+ * llamada correspondiente (ver comentarios).
+ */
+public class SelectorModulo {
+    public static void iniciar(Stage stage, UsuarioDTO usuarioActivo) {
+        int rol = usuarioActivo.getRol();
         if (rol == Usuario.ROL_ESPECTADOR) { // Regla de negocio: el Espectador nunca ve el selector.
             entrarACartelera(stage, usuarioActivo);
             return;
@@ -28,7 +45,7 @@ public class SelectorModulo {
     }
 
     // Construcción de las opciones según el rol
-    private static List<OpcionModulo> construirOpciones(Stage stage, Usuario usuarioActivo, int rol) {
+    private static List<OpcionModulo> construirOpciones(Stage stage, UsuarioDTO usuarioActivo, int rol) {
         List<OpcionModulo> opciones = new ArrayList<>();
         opciones.add(new OpcionModulo("\uD83C\uDFAC", "Cartelera", "Compra boletos para ti mismo",
                 () -> entrarACartelera(stage, usuarioActivo)
@@ -44,8 +61,9 @@ public class SelectorModulo {
         return opciones;
     }
 
+
     // Construcción visual
-    private static void mostrarPantalla(Stage stage, Usuario usuarioActivo, List<OpcionModulo> opciones) {
+    private static void mostrarPantalla(Stage stage, UsuarioDTO usuarioActivo, List<OpcionModulo> opciones) {
         VBox encabezado = construirEncabezado(usuarioActivo);
 
         FlowPane tarjetas = new FlowPane();
@@ -73,7 +91,7 @@ public class SelectorModulo {
         stage.show();
     }
 
-    private static VBox construirEncabezado(Usuario usuarioActivo) {
+    private static VBox construirEncabezado(UsuarioDTO usuarioActivo) {
         Label titulo = new Label("¿A dónde quieres entrar?");
         titulo.getStyleClass().add("selector-titulo");
 
@@ -117,25 +135,24 @@ public class SelectorModulo {
     }
 
     // Destinos (placeholders hasta que existan los módulos reales)
-    private static void entrarACartelera(Stage stage, Usuario usuarioActivo) {
+    private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
         // TODO: reemplazar por EspectadorModule.iniciar(stage, usuarioActivo);
+        // Importante: esta llamada debe ser SIEMPRE la misma, sin importar
+        // si quien entra es Espectador, Personal o Administrador — la vista
+        // de Cartelera no debe recibir ni usar permisos de staff.
         mostrarPendiente("Cartelera");
-        /* Importante: esta llamada debe ser SIEMPRE la misma, sin importar
-         si quien entra es Espectador, Personal o Administrador, la vista
-         de Cartelera no debe recibir ni usar permisos de staff.*/
     }
 
-    private static void entrarATaquilla(Stage stage, Usuario usuarioActivo) {
+    private static void entrarATaquilla(Stage stage, UsuarioDTO usuarioActivo) {
         // TODO: reemplazar por PersonalModule.iniciar(stage, usuarioActivo);
         mostrarPendiente("Taquilla");
     }
 
-    private static void entrarAAdmin(Stage stage, Usuario usuarioActivo) {
+    private static void entrarAAdmin(Stage stage, UsuarioDTO usuarioActivo) {
         // TODO: reemplazar por AdminModule.iniciar(stage, usuarioActivo);
         mostrarPendiente("Panel de Administrador");
     }
 
-    // Método temporal, mientras se desarrolla cada módulo.
     private static void mostrarPendiente(String nombreModulo) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("Módulo pendiente");
