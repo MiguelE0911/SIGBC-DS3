@@ -103,7 +103,7 @@ public class AdminView {
      * Muestra la vista.
      */
     public void mostrar(Stage stage) {
-        stage.setTitle("Cinema BMW - Panel de Administrador");
+        stage.setTitle("Cinema - Panel de Administrador");
         stage.setScene(escena);
         stage.setMaximized(true);
         stage.show();
