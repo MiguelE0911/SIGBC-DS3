@@ -1,6 +1,7 @@
 package com.bmw.cine.espectador.view;
 
 import com.bmw.cine.espectador.model.Boleto;
+import com.bmw.cine.espectador.model.QrGenerator; // Importación necesaria para la utilidad
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,9 +12,10 @@ import javafx.scene.layout.VBox;
 
 /**
  * Componente visual que representa una fila individual en la Billetera.
- * Muestra el QR del boleto, detalles de la función y el estado visual.
+ * Muestra el QR del boleto generado dinámicamente, detalles de la función y el estado.
  * 
  * @author Wilma
+ * @version 1.1
  */
 public class BoletoItemView extends HBox {
 
@@ -30,7 +32,7 @@ public class BoletoItemView extends HBox {
         this.setSpacing(15);
         this.setPadding(new Insets(15));
         
-        // Estilo de tarjeta basado en tu CSS VIP
+        // Estilo de tarjeta basado en tu identidad visual VIP [2, 3]
         this.setStyle(
             "-fx-background-color: #241a30; " +
             "-fx-background-radius: 12; " +
@@ -41,12 +43,19 @@ public class BoletoItemView extends HBox {
     }
 
     private void inicializarComponentes() {
-        // 1. Representación del QR (Como imagen)
-        // Nota: Aquí podrías usar una utilidad para generar la imagen real del QR
+        // 1. Representación del QR Funcional
+        // Preparamos la información que contendrá el QR según los requisitos [1]
+        String infoQr = String.format("ID Compra: %d | Película: %s | Asiento: %s", 
+                                      boleto.getIdCompra(), 
+                                      boleto.getPelicula(), 
+                                      boleto.getAsiento());
+
         ImageView imgQR = new ImageView();
         imgQR.setFitWidth(70);
         imgQR.setFitHeight(70);
-        // imgQR.setImage(new Image("ruta/a/qr/placeholder.png")); 
+        
+        // Llamada a la utilidad QrGenerator para obtener la imagen real [4]
+        imgQR.setImage(QrGenerator.generarImagenQr(infoQr)); 
 
         // 2. Información del Boleto (Columna Central)
         VBox infoContainer = new VBox(5);
@@ -65,7 +74,7 @@ public class BoletoItemView extends HBox {
         lblEstado.setPadding(new Insets(4, 10, 4, 10));
         lblEstado.setStyle(obtenerEstiloEstado(boleto.getEstado()));
 
-        // Asegurar que el estado se empuje a la derecha
+        // Asegurar que el estado se empuje a la derecha para un diseño balanceado [5]
         HBox.setHgrow(infoContainer, javafx.scene.layout.Priority.ALWAYS);
 
         this.getChildren().addAll(imgQR, infoContainer, lblEstado);
@@ -73,7 +82,7 @@ public class BoletoItemView extends HBox {
 
     /**
      * Devuelve el estilo CSS según el estado del boleto.
-     * Verde para CONFIRMADO, Naranja para PENDIENTE.
+     * Verde para CONFIRMADO, Naranja para PENDIENTE [6].
      */
     private String obtenerEstiloEstado(Boleto.EstadoBoleto estado) {
         String baseStyle = "-fx-background-radius: 15; -fx-font-weight: bold; -fx-font-size: 10px; ";

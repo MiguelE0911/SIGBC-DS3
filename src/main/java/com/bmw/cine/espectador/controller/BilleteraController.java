@@ -1,28 +1,27 @@
 package com.bmw.cine.espectador.controller;
 
+import java.util.List;
+
 import com.bmw.cine.common.dao.DAOException;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.espectador.model.Boleto;
 import com.bmw.cine.espectador.view.BilleteraView;
 import com.bmw.cine.espectador.view.BoletoItemView;
-import javafx.application.Platform;
+
 import javafx.scene.control.Alert;
-import java.util.List;
+import javafx.scene.control.Label;
 
 /**
  * Controlador para gestionar la lógica de la Billetera del Espectador.
  * Se encarga de solicitar los boletos al DAO y poblar la vista.
  * 
  * @author Wilma
- * @version 1.0
+ * @version 1.1
  */
 public class BilleteraController {
 
     private final BilleteraView vista;
     private final UsuarioDTO usuarioActivo;
-    // Nota: Aquí usarías un BoletoDAO. Si aún no lo creas, puedes 
-    // centralizar la consulta en una nueva interfaz o en UsuarioDAO.
-    // private final BoletoDAO boletoDAO; 
 
     /**
      * Constructor del controlador.
@@ -33,7 +32,12 @@ public class BilleteraController {
     public BilleteraController(BilleteraView vista, UsuarioDTO usuarioActivo) {
         this.vista = vista;
         this.usuarioActivo = usuarioActivo;
-        // this.boletoDAO = new BoletoDAOImpl(); 
+        
+        // SOLUCIÓN AL AVISO: Se utiliza 'usuarioActivo' para personalizar la vista
+        // de la billetera al momento de iniciarla.
+        Label lblUsuario = new Label("Billetera de: " + usuarioActivo.getNombre());
+        lblUsuario.setStyle("-fx-text-fill: #f4e8d0; -fx-font-weight: bold; -fx-font-size: 14px;");
+        this.vista.getContenedorBoletos().getChildren().add(lblUsuario);
         
         inicializarBilletera();
     }
@@ -49,22 +53,25 @@ public class BilleteraController {
      * Solicita los datos a la capa DAO y renderiza cada boleto en la vista.
      */
     public void actualizarListaBoletos() {
-        // Limpiar la lista actual antes de recargar
-        vista.getContenedorBoletos().getChildren().clear();
+        // Limpiamos los boletos anteriores, manteniendo el encabezado si es necesario
+        // En este caso, removemos solo los items de tipo BoletoItemView para no borrar el nombre arriba
+        vista.getContenedorBoletos().getChildren().removeIf(node -> node instanceof BoletoItemView);
 
         try {
-            // TODO: Implementar boletoDAO.listarPorUsuario(usuarioActivo.getId())
-            // Simulamos la obtención de datos para la Meta 3:
+            // TODO: En la fase funcional se reemplazará por la consulta real:
+            // List<Boleto> boletos = boletoDAO.listarPorUsuario(usuarioActivo.getId());
+            
+            // Simulamos la obtención de datos para las pruebas de la Meta 3
             List<Boleto> boletos = obtenerBoletosSimulados(); 
 
             if (boletos.isEmpty()) {
                 mostrarMensajeVacio();
             } else {
                 for (Boleto boleto : boletos) {
-                    // Creamos el componente visual individual
+                    // Creamos el componente visual individual (tarjeta)
                     BoletoItemView itemView = new BoletoItemView(boleto);
                     
-                    // Agregamos la "tarjeta" al VBox de la BilleteraView
+                    // Agregamos la "tarjeta" al contenedor scrolleable de la vista
                     vista.getContenedorBoletos().getChildren().add(itemView);
                 }
             }
@@ -75,7 +82,7 @@ public class BilleteraController {
     }
 
     private void mostrarMensajeVacio() {
-        javafx.scene.control.Label lblVacio = new javafx.scene.control.Label("No tienes boletos comprados.");
+        Label lblVacio = new Label("No tienes boletos comprados.");
         lblVacio.setStyle("-fx-text-fill: #b8a9c9; -fx-font-style: italic;");
         vista.getContenedorBoletos().getChildren().add(lblVacio);
     }
