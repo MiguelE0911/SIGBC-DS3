@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <!-- Se reemplaza source/target por release para chequeos de compatibilidad estrictos [1, 2] -->
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -22,40 +22,42 @@
             <version>3.4.0</version>
         </dependency>
 
+        <!-- Logging Simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.7</version>
         </dependency>
 
+        <!-- Driver PostgreSQL (Requerido por la arquitectura del proyecto [3]) -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.2</version>
         </dependency>
 
-        <!-- Pool de Conexiones HikariCP -->
+        <!-- Pool de Conexiones HikariCP [4] -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>5.1.0</version>
         </dependency>
 
-        <!-- Gestión de Variables de Entorno (.env) -->
+        <!-- Gestión de Variables de Entorno (.env) [4] -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
             <version>3.0.0</version>
         </dependency>
 
-        <!-- Seguridad de Contraseñas -->
+        <!-- Seguridad de Contraseñas (jBCrypt) [4] -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
 
-        <!-- Generación de PDFs (iText 8) -->
+        <!-- Generación de PDFs (iText 8) [5] -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext-core</artifactId>
@@ -75,7 +77,7 @@
             <version>21.0.2</version>
         </dependency>
 
-        <!-- NUEVA DEPENDENCIA: ZXing para Generación de Códigos QR -->
+        <!-- ZXing para Generación de Códigos QR (Meta 3 [6]) -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -86,17 +88,14 @@
             <artifactId>javase</artifactId>
             <version>3.5.3</version>
         </dependency>
-        <dependency>
-    <groupId>org.openjfx</groupId>
-    <artifactId>javafx-swing</artifactId>
-    <version>21.0.2</version>
-</dependency>
-<dependency>
-    <groupId>org.openjfx</groupId>
-    <artifactId>javafx-swing</artifactId>
-    <version>21.0.2</version>
-</dependency>
 
+        <!-- Conversión de imágenes Swing a JavaFX (Necesario para renderizar el QR) -->
+        <!-- Se eliminó la declaración duplicada y se corrigió el error de 'vrsion' [Historial] -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -106,8 +105,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <!-- Uso de la opción release para asegurar integridad entre entornos [1, 2] -->
+                    <release>21</release>
                 </configuration>
             </plugin>
 

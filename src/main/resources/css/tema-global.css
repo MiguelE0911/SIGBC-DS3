@@ -1,0 +1,22 @@
+.root {
+    /* 1. Fondos */
+    -fx-fondo-base: #100b16;
+    -fx-fondo-secundario: #1b1224;
+    -fx-fondo-tarjetas: #241a30;
+    -fx-fondo-hover: #2e2140;
+
+    /* 2. Bordes y Separadores */
+    -fx-borde-sutil: #3a2b4a;
+
+    /* 3. Textos */
+    -fx-texto-titulos: #f4e8d0;
+    -fx-texto-subtitulos: #b8a9c9;
+    -fx-texto-blanco: #ffffff;
+
+    /* 4. Acentos */
+    -fx-acento-principal: #d4af37;
+    -fx-acento-hover: #e6c34f;
+
+    /* 5. Tipografia */
+    -fx-font-family: "Segoe UI";
+}
