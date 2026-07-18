@@ -1,0 +1,18 @@
+.panel-fondo {
+    -fx-background-color: #100b16;
+}
+
+.vista-cuerpo {
+    -fx-background-color: #100b16;
+}
+
+.vista-titulo {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f4e8d0;
+}
+
+.vista-subtitulo {
+    -fx-font-size: 13px;
+    -fx-text-fill: #b8a9c9;
+}

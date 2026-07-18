@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+
+<!--
+  Header reutilizable para los 3 flujos (Espectador no lo necesita
+  completo, pero Personal y Administrador sí). Se carga con FXMLLoader
+  y se configura desde Java vía HeaderPrincipalController.configurar(...).
+
+  Copien este archivo y su Controller tal cual — la idea es que NO se
+  edite el FXML por módulo, sino que se configure en tiempo de
+  ejecución (título del panel, botones de navegación, si aparece o no
+  "Cambiar de sección").
+-->
+<HBox fx:id="raizHeader" alignment="CENTER_LEFT" spacing="16" styleClass="header-principal"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.bmw.cine.common.view.HeaderPrincipalController">
+    <padding>
+        <Insets top="14" right="28" bottom="14" left="28"/>
+    </padding>
+
+    <Label fx:id="lblTituloPanel" styleClass="header-titulo" text="Panel"/>
+
+    <Region HBox.hgrow="ALWAYS"/>
+
+    <HBox fx:id="contenedorNav" spacing="8" alignment="CENTER" styleClass="header-nav"/>
+
+    <Region HBox.hgrow="ALWAYS"/>
+
+    <MenuButton fx:id="menuUsuario" styleClass="header-menu-usuario" text="Usuario">
+        <items>
+            <MenuItem fx:id="itemCambiarSeccion" text="Cambiar de sección"/>
+            <SeparatorMenuItem fx:id="separadorMenu"/>
+            <MenuItem fx:id="itemCerrarSesion" text="Cerrar sesión"/>
+        </items>
+    </MenuButton>
+</HBox>

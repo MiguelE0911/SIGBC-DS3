@@ -1,0 +1,68 @@
+.header-principal {
+    -fx-background-color: -fx-fondo-secundario;
+    -fx-border-color: transparent transparent -fx-borde-sutil transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.header-titulo {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-texto-titulos;
+}
+
+.header-nav-boton {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-texto-subtitulos;
+    -fx-font-size: 13px;
+    -fx-padding: 6 16 6 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.header-nav-boton:hover {
+    -fx-background-color: -fx-fondo-hover;
+    -fx-text-fill: -fx-texto-titulos;
+}
+
+.header-nav-boton-activo {
+    -fx-background-color: -fx-fondo-hover;
+    -fx-text-fill: -fx-acento-principal;
+    -fx-font-weight: bold;
+}
+
+.header-menu-usuario {
+    -fx-background-color: -fx-fondo-tarjetas;
+    -fx-text-fill: -fx-texto-blanco;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-background-radius: 20;
+    -fx-padding: 6 16 6 16;
+    -fx-border-color: -fx-borde-sutil;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.header-menu-usuario .label {
+    -fx-text-fill: -fx-texto-blanco;
+    -fx-font-weight: bold;
+}
+
+.header-menu-usuario .arrow {
+    -fx-background-color: -fx-texto-subtitulos;
+}
+
+.header-menu-usuario .context-menu {
+    -fx-background-color: -fx-fondo-tarjetas;
+    -fx-border-color: -fx-borde-sutil;
+    -fx-border-width: 1;
+}
+
+.header-menu-usuario .menu-item .label {
+    -fx-text-fill: -fx-texto-titulos;
+    -fx-font-size: 12px;
+}
+
+.header-menu-usuario .menu-item:focused {
+    -fx-background-color: -fx-fondo-hover;
+}
