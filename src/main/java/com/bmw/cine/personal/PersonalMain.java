@@ -1,6 +1,6 @@
-package com.bmw.cine.personal.controller;
+package com.bmw.cine.personal;
 
-public class Main {
+public class PersonalMain {
     public static void main(String[] args){
         System.out.println("Rama Personal");
     }

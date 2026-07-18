@@ -1,6 +1,6 @@
-package com.bmw.cine.espectador.controller;
+package com.bmw.cine.espectador;
 
-public class Main {
+public class EspectadorMain {
     public static void main(String[] args){
         System.out.println("Rama Espectador");
     }
