@@ -3,6 +3,10 @@ package com.bmw.cine.app;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
 import com.bmw.cine.common.session.SelectorModulo;
+import com.bmw.cine.espectador.controller.MainWindowController; // Línea añadida [1]
+import com.bmw.cine.espectador.view.MainWindowView; // Línea añadida [1]
+
+import javafx.scene.Scene; // Línea añadida [2]
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
@@ -25,7 +29,17 @@ public class SessionRouter {
     public static void enrutar(Stage stage, UsuarioDTO usuarioActivo) {
         if (usuarioActivo.getRol() == Usuario.ROL_ESPECTADOR) {
             // TODO: reemplazar por EspectadorModule.iniciar(stage, usuarioActivo);
-            mostrarPendiente("Cartelera (Espectador)"); // Eliminar esta linea cuando se haya creado el enlace a cartelera
+            
+            // --- LÍNEAS AÑADIDAS PARA LA RAMA ESPECTADOR ---
+            MainWindowView vistaPrincipal = new MainWindowView(); // [2]
+            new MainWindowController(vistaPrincipal, usuarioActivo); // [2, 3]
+            Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800); // [2]
+            stage.setScene(escena); // [2]
+            stage.setTitle("Multicines BMW - Cartelera"); // [2]
+            stage.show(); // [2]
+            // -----------------------------------------------
+
+            // mostrarPendiente("Cartelera (Espectador)"); 
             return;
         }
         SelectorModulo.iniciar(stage, usuarioActivo); // Personal y Administrador pasan por el selector.

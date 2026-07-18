@@ -1,37 +1,35 @@
 package com.bmw.cine.espectador;
 
+import com.bmw.cine.common.dao.UsuarioDAO;
+import com.bmw.cine.common.dao.impl.UsuarioDAOImpl;
+import com.bmw.cine.espectador.controller.LoginController;
+import com.bmw.cine.espectador.view.LoginView;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * Clase principal lanzadora para el Módulo del Espectador.
- * Se encarga de inicializar el entorno de JavaFX y desplegar
- * la vista inicial de inicio de sesión (LoginView).
- * * @author Wilma
- * @version 1.0
+ * Clase lanzadora que conecta el DAO real con la vista de Login.
  */
 public class EspectadorMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // 1. Instanciamos la Vista del Login
-        LoginView loginView = new LoginView();
-        
-        // 2. Instanciamos el DAO simulado/real para el manejo de usuarios
-        com.bmw.cine.common.dao.UsuarioDAO usuarioDAO = new com.bmw.cine.common.dao.impl.UsuarioDAOImpl();
-        
-        // 3. Inicializamos el Controlador pasando la vista y el Stage principal
-        // Esto activará de inmediato el método configurarEventos() para escuchar los botones
-        new LoginController(loginView, usuarioDAO, primaryStage);
-        
-        // 4. Configurar el Stage y mostrar la ventana de Login obligatoriamente
+        // 1. Instanciar la implementación real que conecta a MariaDB [3]
+        UsuarioDAO usuarioDAO = new UsuarioDAOImpl(); 
+
+        // 2. Instanciar la vista
+        LoginView loginView = new LoginView(); 
+
+        // 3. Crear el controlador inyectando el DAO y el stage [2, 4]
+        new LoginController(loginView, usuarioDAO, primaryStage); 
+
+        // 4. Mostrar la ventana
         primaryStage.setTitle("Cine BMW - Iniciar Sesión");
-        loginView.mostrar(primaryStage);
+        loginView.mostrar(primaryStage); 
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
-
-//mvn clean compile exec:java -Dexec.mainClass="com.bmw.cine.espectador.EspectadorMain"
