@@ -33,3 +33,5 @@ public class EspectadorMain extends Application {
         launch(args);
     }
 }
+
+//mvn clean compile exec:java -Dexec.mainClass="com.bmw.cine.espectador.EspectadorMain"
