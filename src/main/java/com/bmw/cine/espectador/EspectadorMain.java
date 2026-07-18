@@ -1,5 +1,8 @@
 package com.bmw.cine.espectador;
 
+import com.bmw.cine.espectador.controller.LoginController;
+import com.bmw.cine.espectador.view.LoginView;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 

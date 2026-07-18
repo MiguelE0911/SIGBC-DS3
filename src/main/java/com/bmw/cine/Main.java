@@ -1,8 +1,7 @@
 package com.bmw.cine;
 
-import com.bmw.cine.app.SessionRouter;
-import com.bmw.cine.common.dto.UsuarioDTO;
-import com.bmw.cine.common.model.Usuario;
+import com.bmw.cine.espectador.view.LoginView;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -19,7 +18,14 @@ public class Main extends Application {
         // y que sea el LoginController quien, al autenticar (UsuarioDAO.autenticar),
         // reciba el UsuarioDTO ya resuelto y llame a SelectorModulo.iniciar(...)
         // (o directo a EspectadorModule si el rol es Espectador).
+        
+        /* // Código de prueba
         UsuarioDTO usuarioPrueba = new UsuarioDTO(1, "Ana Torres", "ana@test.com", "ana.torres", Usuario.ROL_ADMINISTRADOR, true);
         SessionRouter.enrutar(stage, usuarioPrueba);
+        */
+
+        // Ahora iniciamos con la vista de Login real:
+        LoginView loginView = new LoginView();
+        loginView.mostrar(stage);
     }
 }
