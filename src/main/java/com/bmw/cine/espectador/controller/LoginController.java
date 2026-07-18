@@ -1,19 +1,21 @@
-package com.bmw.cine.espectador;
+package com.bmw.cine.espectador.controller;
 
 import java.util.Optional;
 
+import com.bmw.cine.app.SessionRouter;
 import com.bmw.cine.common.dao.UsuarioDAO;
 import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.espectador.view.LoginView;
+import com.bmw.cine.espectador.view.RegistroView;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 /**
- * Controlador encargado de gestionar la lógica de negocio y los eventos
- * de la pantalla de inicio de sesión (LoginView).
- * * @author Wilma
- * @version 1.1
+ * Controlador encargado de gestionar la lógica de inicio de sesión.
+ * @author Wilma
+ * @version 1.2
  */
 public class LoginController {
 
@@ -21,39 +23,25 @@ public class LoginController {
     private final UsuarioDAO usuarioDAO;
     private final Stage stage;
 
-    /**
-     * Constructor del controlador con los 3 parámetros requeridos.
-     */
     public LoginController(LoginView vista, UsuarioDAO usuarioDAO, Stage stage) {
         this.vista = vista;
         this.usuarioDAO = usuarioDAO;
         this.stage = stage;
-
-        // Inicializar los escuchadores de eventos
         configurarEventos();
     }
 
-    /**
-     * Asigna las acciones correspondientes a los botones y enlaces de la vista.
-     */
-   /**
-     * Asigna las acciones correspondientes a los botones y enlaces de la vista.
-     */
     private void configurarEventos() {
-        // Evento cuando se hace clic en el botón "Ingresar"
+        // Evento botón "Ingresar"
         vista.getBtnIngresar().setOnAction(e -> procesarLogin());
 
-        // EVENTO CORREGIDO PARA IR AL REGISTRO CON SU PROPIO CONTROLADOR:
+        // Evento enlace "Registrarse"
         vista.getLnkRegistrarse().setOnAction(e -> {
             RegistroView registroView = new RegistroView();
-            // Inicializamos el controlador del registro pasándole la vista actual de Login para poder regresar
             new RegistroController(registroView, usuarioDAO, stage, vista);
             registroView.mostrar(stage);
         });
     }
-    /**
-     * Captura las credenciales de la vista, maneja el Optional del DAO y gestiona excepciones.
-     */
+
     private void procesarLogin() {
         String usuario = vista.getUsuario();
         String password = vista.getPassword();
@@ -64,16 +52,13 @@ public class LoginController {
         }
 
         try {
-            // SOLUCIÓN AL OPTIONAL: Capturamos el Optional y extraemos el DTO de forma segura
             Optional<UsuarioDTO> usuarioOpt = usuarioDAO.autenticar(usuario, password);
 
             if (usuarioOpt.isPresent()) {
                 UsuarioDTO usuarioDTO = usuarioOpt.get();
-                mostrarAlerta("¡Bienvenido!", "Inicio de sesión exitoso.", AlertType.INFORMATION);
                 
-                // NOTA: Como SessionRouter no existe en com.bmw.cine.common.app, 
-                // lo dejamos comentado para no detener tu compilación.
-                // com.bmw.cine.common.app.SessionRouter.enrutar(stage, usuarioDTO);
+                // Redirección al módulo correspondiente según el rol del usuario
+                SessionRouter.enrutar(stage, usuarioDTO);
                 
             } else {
                 mostrarAlerta("Error de Acceso", "Usuario o contraseña incorrectos.", AlertType.ERROR);
@@ -87,9 +72,6 @@ public class LoginController {
         }
     }
 
-    /**
-     * Helper para mostrar ventanas de diálogo.
-     */
     private void mostrarAlerta(String titulo, String mensaje, AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
