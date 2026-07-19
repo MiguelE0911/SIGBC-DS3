@@ -13,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TableCell;
 
 public class GestionUsuariosView extends VBox {
 
@@ -91,6 +92,19 @@ public class GestionUsuariosView extends VBox {
                 new TableColumn<>("Estado");
         colEstado.setCellValueFactory(
                 new PropertyValueFactory<>("activo"));
+
+        colEstado.setCellFactory(columna -> new TableCell<UsuarioDTO,
+                Boolean>() {
+            @Override
+            protected void updateItem(Boolean activo, boolean empty) {
+                super.updateItem(activo, empty);
+                if (empty || activo == null) {
+                    setText(null);
+                } else {
+                    setText(activo ? "Activo" : "Suspendido");
+                }
+            }
+        });
 
         tablaUsuarios.getColumns().addAll(
                 colNombre,

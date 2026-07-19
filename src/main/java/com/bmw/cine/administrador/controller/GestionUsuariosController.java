@@ -4,6 +4,7 @@ import com.bmw.cine.administrador.view.GestionUsuariosView;
 import com.bmw.cine.common.dao.DAOException;
 import com.bmw.cine.common.dao.UsuarioDAO;
 import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.model.Usuario;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.Alert;
@@ -74,16 +75,50 @@ public class GestionUsuariosController {
 
     private void configurarBotones() {
         vista.getBtnGuardarCambios().setOnAction(e -> {
+
             if (usuarioSeleccionado == null) {
                 return;
             }
-            Alert alerta = new Alert(AlertType.INFORMATION);
-            alerta.setHeaderText(null);
-            alerta.setContentText(
-                    "Aquí se guardará el nuevo rol."
-            );
-            alerta.showAndWait();
 
+            String nuevoRol = vista.getCmbNuevoRol().getValue();
+
+            int rolBD = convertirRol(nuevoRol);
+
+            try {
+
+                boolean actualizado = usuarioDAO.actualizarRol(
+                        usuarioSeleccionado.getId(),
+                        rolBD
+                );
+
+                if (actualizado) {
+
+                    Alert alerta = new Alert(AlertType.INFORMATION);
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("Rol actualizado correctamente.");
+                    alerta.showAndWait();
+
+                    recargarTabla();
+
+                    vista.getTablaUsuarios()
+                            .getSelectionModel()
+                            .select(usuarioSeleccionado);
+
+                } else {
+
+                    Alert alerta = new Alert(AlertType.ERROR);
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("No fue posible actualizar el rol.");
+                    alerta.showAndWait();
+                }
+
+            } catch (DAOException ex) {
+
+                Alert alerta = new Alert(AlertType.ERROR);
+                alerta.setHeaderText(null);
+                alerta.setContentText(ex.getMessage());
+                alerta.showAndWait();
+            }
         });
 
         vista.getBtnSuspender().setOnAction(e -> {
@@ -178,6 +213,17 @@ public class GestionUsuariosController {
 
         vista.getTablaUsuarios().setItems(
                 FXCollections.observableArrayList(resultado));
+    }
+
+    private int convertirRol(String rol) {
+        switch (rol) {
+            case "Administrador":
+                return Usuario.ROL_ADMINISTRADOR;
+            case "Personal":
+                return Usuario.ROL_PERSONAL;
+            default:
+                return Usuario.ROL_ESPECTADOR;
+        }
     }
 
     /**
