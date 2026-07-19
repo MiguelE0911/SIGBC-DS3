@@ -50,10 +50,9 @@ public class PersonalModule {
             });
 
             // CONFIGURAR ACCIONES DEL MENÚ DESPLEGABLE
-            headerCtrl.setOnCerrarSesion(() -> mostrarPendiente("Cerrar Sesión próximamente"));
-            headerCtrl.setOnCambiarSeccion(() -> {
-                com.bmw.cine.common.session.SelectorModulo.iniciar(stage, usuarioActivo);
-            });
+            headerCtrl.setOnCerrarSesion(() -> headerCtrl.setOnCerrarSesion(() ->com.bmw.cine.app.SessionRouter.cerrarSesion(stage)));
+
+            headerCtrl.setOnCambiarSeccion(() -> com.bmw.cine.common.session.SelectorModulo.iniciar(stage, usuarioActivo));
 
             //  ESTADO INICIAL DE LA PANTALLA
             contenedorPrincipal.setTop(header);
