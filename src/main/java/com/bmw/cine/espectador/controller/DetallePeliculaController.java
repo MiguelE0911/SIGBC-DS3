@@ -1,11 +1,15 @@
 package com.bmw.cine.espectador.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import com.bmw.cine.common.dao.BoletoDAO;
 import com.bmw.cine.common.dao.FuncionDAO;
 import com.bmw.cine.common.dao.PeliculaDAO;
+import com.bmw.cine.common.dao.impl.BoletoDAOImpl;
 import com.bmw.cine.common.dto.FuncionDTO;
+import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Pelicula;
 import com.bmw.cine.espectador.view.DetallePeliculaView;
 
@@ -19,18 +23,33 @@ import javafx.stage.StageStyle;
 
 /**
  * Controlador de la ventana de Detalle de Película (Meta 5).
+ * El botón "Comprar boleto" abre la Selección de Asientos (Meta 6).
  */
 public class DetallePeliculaController {
+
+    private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");
 
     private final DetallePeliculaView vista;
     private final PeliculaDAO peliculaDAO;
     private final FuncionDAO funcionDAO;
+    private final BoletoDAO boletoDAO;
     private final Stage ventanaDetalle;
+    private final UsuarioDTO usuarioActivo;
+    private final Runnable onCompraExitosa;
     private Pelicula peliculaActual;
 
-    public DetallePeliculaController(int peliculaId, PeliculaDAO peliculaDAO, FuncionDAO funcionDAO, Stage stageOwner) {
+    public DetallePeliculaController(int peliculaId, PeliculaDAO peliculaDAO, FuncionDAO funcionDAO,
+                                      Stage stageOwner, UsuarioDTO usuarioActivo) {
+        this(peliculaId, peliculaDAO, funcionDAO, stageOwner, usuarioActivo, null);
+    }
+
+    public DetallePeliculaController(int peliculaId, PeliculaDAO peliculaDAO, FuncionDAO funcionDAO,
+                                      Stage stageOwner, UsuarioDTO usuarioActivo, Runnable onCompraExitosa) {
         this.peliculaDAO = peliculaDAO;
         this.funcionDAO = funcionDAO;
+        this.boletoDAO = new BoletoDAOImpl();
+        this.usuarioActivo = usuarioActivo;
+        this.onCompraExitosa = onCompraExitosa;
         this.vista = new DetallePeliculaView();
 
         this.ventanaDetalle = new Stage();
@@ -51,7 +70,6 @@ public class DetallePeliculaController {
         vista.getBtnComprar().setOnAction(e -> procesarCompra());
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
     private void cargarPelicula(int peliculaId) {
         Task<Optional<Pelicula>> tarea = new Task<>() {
             @Override
@@ -81,7 +99,6 @@ public class DetallePeliculaController {
         lanzar(tarea);
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
     private void cargarHorarios(int peliculaId) {
         Task<List<FuncionDTO>> tarea = new Task<>() {
             @Override
@@ -122,15 +139,19 @@ public class DetallePeliculaController {
             return;
         }
 
-        // TODO: siguiente meta — abrir la vista de Selección de Asientos,
-        // pasando funcion.getFuncionId(), cantidad y peliculaActual.
-        // funcionDAO.listarAsientosOcupados(funcion.getFuncionId()) ya está listo para esa pantalla.
-        mostrarAlerta(
-            "Continuar a selección de asientos",
-            "Película: " + peliculaActual.getTitulo() + "\n" +
-            "Función: " + funcion.getNombreSala() + "\n" +
-            "Boletos: " + cantidad,
-            AlertType.INFORMATION
+        String infoFuncion = funcion.getHorario().format(FORMATO_HORA) + " — " + funcion.getNombreSala();
+
+        new SeleccionAsientosController(
+            ventanaDetalle,
+            peliculaActual.getTitulo(),
+            infoFuncion,
+            funcion.getFuncionId(),
+            cantidad,
+            usuarioActivo.getId(),
+            funcionDAO,
+            boletoDAO,
+            onCompraExitosa,
+            ventanaDetalle::close // al comprar con éxito, también se cierra el Detalle
         );
     }
 

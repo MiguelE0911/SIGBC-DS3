@@ -1,23 +1,16 @@
 package com.bmw.cine.espectador.controller;
 
 import com.bmw.cine.common.dao.DAOException;
-import com.bmw.cine.common.dao.UsuarioDAO;
+import com.bmw.cine.common.dao.UsuarioDAO; // Asegúrate de importar el Modelo
 import com.bmw.cine.common.model.Usuario;
 import com.bmw.cine.espectador.view.LoginView;
 import com.bmw.cine.espectador.view.RegistroView;
 
-import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
-/**
- * Controlador encargado de gestionar el registro de nuevos usuarios.
- * @author Wilma
- * @version 1.1
- */
 public class RegistroController {
-
     private final RegistroView vista;
     private final UsuarioDAO usuarioDAO;
     private final Stage stage;
@@ -36,7 +29,6 @@ public class RegistroController {
         vista.getLnkVolverLogin().setOnAction(e -> vistaLogin.mostrar(stage));
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
     private void procesarRegistro() {
         String nombre = vista.getNombre();
         String correo = vista.getCorreo();
@@ -48,44 +40,23 @@ public class RegistroController {
             return;
         }
 
-        vista.getBtnRegistrar().setDisable(true);
-        vista.getBtnRegistrar().setText("Registrando...");
+        try {
+            // 1. Crear el modelo Usuario (con constructor adecuado)
+          
+            Usuario nuevoUsuario = new Usuario(nombre, correo, usuario, Usuario.ROL_ESPECTADOR);
 
-        Task<Void> tareaRegistro = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                Usuario nuevoUsuario = new Usuario(nombre, correo, usuario, Usuario.ROL_ESPECTADOR);
-                usuarioDAO.registrar(nuevoUsuario, password);
-                return null;
-            }
-        };
+            // 2. Registrar en base de datos
+            usuarioDAO.registrar(nuevoUsuario, password);
 
-        tareaRegistro.setOnSucceeded(evt -> {
-            restaurarBoton();
             mostrarAlerta("Registro Exitoso", "¡Cuenta creada correctamente!", AlertType.INFORMATION);
             vistaLogin.mostrar(stage);
-        });
 
-        tareaRegistro.setOnFailed(evt -> {
-            restaurarBoton();
-            Throwable ex = tareaRegistro.getException();
-
-            if (ex instanceof DAOException) {
-                mostrarAlerta("Error de Registro", ex.getMessage(), AlertType.ERROR);
-            } else {
-                mostrarAlerta("Error", "Ocurrió un error inesperado.", AlertType.ERROR);
-                ex.printStackTrace();
-            }
-        });
-
-        Thread hilo = new Thread(tareaRegistro);
-        hilo.setDaemon(true);
-        hilo.start();
-    }
-
-    private void restaurarBoton() {
-        vista.getBtnRegistrar().setDisable(false);
-        vista.getBtnRegistrar().setText("Registrarse");
+        } catch (DAOException e) {
+            mostrarAlerta("Error de Registro", e.getMessage(), AlertType.ERROR);
+        } catch (Exception e) {
+            mostrarAlerta("Error", "Ocurrió un error inesperado.", AlertType.ERROR);
+            e.printStackTrace();
+        }
     }
 
     private void mostrarAlerta(String titulo, String mensaje, AlertType tipo) {

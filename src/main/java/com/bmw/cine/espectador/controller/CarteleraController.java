@@ -7,6 +7,7 @@ import com.bmw.cine.common.dao.PeliculaDAO;
 import com.bmw.cine.common.dao.impl.FuncionDAOImpl;
 import com.bmw.cine.common.dao.impl.PeliculaDAOImpl;
 import com.bmw.cine.common.dto.PeliculaCardDTO;
+import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.espectador.view.CarteleraView;
 import com.bmw.cine.espectador.view.PeliculaCardView;
 
@@ -20,10 +21,18 @@ public class CarteleraController {
     private final PeliculaDAO peliculaDAO;
     private final FuncionDAO funcionDAO;
     private final Stage stage;
+    private final UsuarioDTO usuarioActivo;
+    private final Runnable onCompraExitosa;
 
-    public CarteleraController(CarteleraView vista, Stage stage) {
+    public CarteleraController(CarteleraView vista, Stage stage, UsuarioDTO usuarioActivo) {
+        this(vista, stage, usuarioActivo, null);
+    }
+
+    public CarteleraController(CarteleraView vista, Stage stage, UsuarioDTO usuarioActivo, Runnable onCompraExitosa) {
         this.vista = vista;
         this.stage = stage;
+        this.usuarioActivo = usuarioActivo;
+        this.onCompraExitosa = onCompraExitosa;
         this.peliculaDAO = new PeliculaDAOImpl();
         this.funcionDAO = new FuncionDAOImpl();
         cargarCartelera();
@@ -42,7 +51,7 @@ public class CarteleraController {
             for (PeliculaCardDTO dto : tarea.getValue()) {
                 PeliculaCardView card = new PeliculaCardView(dto);
                 card.setOnMouseClicked(e ->
-                    new DetallePeliculaController(dto.getPeliculaId(), peliculaDAO, funcionDAO, stage)
+                    new DetallePeliculaController(dto.getPeliculaId(), peliculaDAO, funcionDAO, stage, usuarioActivo, onCompraExitosa)
                 );
                 vista.getFlowPaneCartelera().getChildren().add(card);
             }

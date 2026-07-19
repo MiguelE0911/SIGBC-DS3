@@ -134,7 +134,7 @@ public class SelectorModulo {
 
      private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
     CarteleraView carteleraView = new CarteleraView();
-    new CarteleraController(carteleraView, stage); // <-- agregue stage 
+    new CarteleraController(carteleraView, stage, usuarioActivo);// <-- agregue stage y usuarioActivo
 
     Scene escena = new Scene(carteleraView, 900, 600);
     stage.setTitle("Cine BMW - Cartelera");

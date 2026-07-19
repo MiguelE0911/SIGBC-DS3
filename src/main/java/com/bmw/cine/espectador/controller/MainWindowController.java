@@ -12,18 +12,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
-/**
- * Controlador principal de la interfaz del Espectador.
- * Gestiona el header global, la Cartelera como vista central,
- * y la carga dinámica de la Billetera en el panel lateral.
- *
- * @author Wilma
- * @version 1.2
- */
 public class MainWindowController {
     private final MainWindowView vista;
     private final UsuarioDTO usuarioActivo;
     private final Stage stage;
+    private BilleteraController billeteraControllerActual; // null si el panel está cerrado
 
     public MainWindowController(MainWindowView vista, UsuarioDTO usuarioActivo, Stage stage) {
         this.vista = vista;
@@ -33,24 +26,21 @@ public class MainWindowController {
         inicializarEventos();
     }
 
-    /**
-     * La Cartelera es la vista central por defecto al entrar como Espectador.
-     */
     private void cargarCarteleraInicial() {
         CarteleraView carteleraView = new CarteleraView();
-        new CarteleraController(carteleraView, stage);
+        // Antes: this::refrescarBilleteraSiEstaAbierta
+        // Ahora: al comprar, la Billetera se ABRE (si estaba cerrada) y se refresca.
+        new CarteleraController(carteleraView, stage, usuarioActivo, this::irABilletera);
         vista.setVistaCentral(carteleraView);
     }
 
     private void inicializarEventos() {
-        // EVENTO BILLETERA: usa el panel deslizable real del SplitPane (Meta 3)
         vista.getBtnBilletera().setOnAction(e -> {
             BilleteraView billeteraVista = new BilleteraView();
-            new BilleteraController(billeteraVista, usuarioActivo);
-            vista.toggleBilletera(billeteraVista);
+            billeteraControllerActual = new BilleteraController(billeteraVista, usuarioActivo);
+            vista.toggleBilletera(billeteraVista); // este sí alterna: botón manual = abrir/cerrar
         });
 
-        // EVENTO SESIÓN: confirmación + regreso real al Login (Meta 8)
         vista.getBtnSesion().setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Cerrar Sesión");
@@ -62,5 +52,16 @@ public class MainWindowController {
                 SessionRouter.cerrarSesion(stage);
             }
         });
+    }
+
+    /**
+     * Se ejecuta tras una compra exitosa (viene encadenado desde
+     * SeleccionAsientosController -> DetallePeliculaController -> CarteleraController).
+     * Abre la Billetera si estaba cerrada y la deja actualizada con el boleto nuevo.
+     */
+    private void irABilletera() {
+        BilleteraView billeteraVista = new BilleteraView();
+        billeteraControllerActual = new BilleteraController(billeteraVista, usuarioActivo);
+        vista.mostrarBilletera(billeteraVista); // idempotente: no cierra si ya estaba abierta
     }
 }

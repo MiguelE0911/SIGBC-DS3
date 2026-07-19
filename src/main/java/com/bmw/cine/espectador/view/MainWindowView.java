@@ -96,6 +96,16 @@ public class MainWindowView {
             divisor.setStyle("-fx-background-color: #3a2b4a;");
         }
     }
+    public void mostrarBilletera(Node billeteraView) {
+    if (splitPane.getItems().size() <= 1) {
+        splitPane.getItems().add(billeteraView);
+        splitPane.setDividerPositions(0.7);
+    } else {
+        // Ya hay un panel lateral: lo reemplazamos por la vista nueva
+        // (importante porque cada compra crea una BilleteraView distinta).
+        splitPane.getItems().set(1, billeteraView);
+    }
+}
 
     /**
      * Alterna la visibilidad de la billetera en el SplitPane.
