@@ -22,6 +22,7 @@ public class CarteleraController {
         cargarCartelera();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private void cargarCartelera() {
         Task<List<PeliculaCardDTO>> tarea = new Task<>() {
             @Override

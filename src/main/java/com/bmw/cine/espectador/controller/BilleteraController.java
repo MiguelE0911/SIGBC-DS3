@@ -52,6 +52,7 @@ public class BilleteraController {
     /**
      * Solicita los datos a la capa DAO y renderiza cada boleto en la vista.
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     public void actualizarListaBoletos() {
         // Limpiamos los boletos anteriores, manteniendo el encabezado si es necesario
         // En este caso, removemos solo los items de tipo BoletoItemView para no borrar el nombre arriba

@@ -1,9 +1,12 @@
 package com.bmw.cine.personal;
 
+import java.io.IOException;
+
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.personal.view.CarteleraCrudView;
 import com.bmw.cine.personal.view.TaquillaView;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,11 +15,10 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 // Lanzador del módulo de Personal usando el Header FXML original.
 public class PersonalModule {
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void iniciar(Stage stage, UsuarioDTO usuarioActivo) {
         try {
             stage.setTitle("Panel de Personal - Cine BMW");

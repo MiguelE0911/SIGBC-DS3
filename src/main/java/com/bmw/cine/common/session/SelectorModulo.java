@@ -134,7 +134,6 @@ public class SelectorModulo {
 
       private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
         CarteleraView carteleraView = new CarteleraView();
-        // El controlador engancha el DAO real y carga las películas dentro de la vista
         new CarteleraController(carteleraView);
 
         Scene escena = new Scene(carteleraView, 900, 600);
