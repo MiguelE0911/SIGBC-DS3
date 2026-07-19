@@ -63,16 +63,30 @@
     -fx-font-weight: bold;
 }
 
-.tabla-usuarios .table-row-cell {
+.tabla-usuarios .table-row-cell:even {
     -fx-background-color: #241a30;
 }
 
-.tabla-usuarios .table-row-cell:hover {
-    -fx-background-color: #2e2140;
+.tabla-usuarios .table-row-cell:odd {
+    -fx-background-color: #2b1f39;
 }
 
+/* Hover */
+.tabla-usuarios .table-row-cell:even:hover {
+    -fx-background-color: #34244a;
+}
+
+.tabla-usuarios .table-row-cell:odd:hover {
+    -fx-background-color: #3b2952;
+}
+
+/* Selección */
 .tabla-usuarios .table-row-cell:selected {
     -fx-background-color: #d4af37;
+}
+
+.tabla-usuarios .table-row-cell:selected .table-cell {
+    -fx-text-fill: #1b1224;
 }
 
 .tabla-usuarios .table-cell {

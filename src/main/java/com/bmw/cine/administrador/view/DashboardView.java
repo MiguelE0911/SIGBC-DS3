@@ -69,8 +69,8 @@ public class DashboardView extends VBox {
         tarjeta.setAlignment(Pos.CENTER);
         tarjeta.setPadding(new Insets(25));
 
-        tarjeta.setPrefHeight(180);
-        tarjeta.setMaxHeight(180);
+        tarjeta.setMinHeight(180);
+        tarjeta.setPrefHeight(200);
 
         tarjeta.setPrefWidth(340);
         tarjeta.setMaxWidth(340);

@@ -40,7 +40,7 @@ public class PeliculaCardView extends VBox {
         // Póster [5]
         ImageView imgPoster = new ImageView();
         try {
-            imgPoster.setImage(new Image(pelicula.getRutaPoster(), true));
+            imgPoster.setImage(new Image(pelicula.rutaPoster(), true));
         } catch (Exception e) {
             // Imagen por defecto si falla la carga
         }
