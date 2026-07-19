@@ -2,7 +2,6 @@ package com.bmw.cine.administrador.controller.InformesPDF;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
@@ -14,16 +13,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.List;
 
-public class ReporteFinancieroPDF {
+public class ReporteBoletosPDF {
 
     public void generar(Window owner) {
 
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Guardar reporte financiero");
-        chooser.setInitialFileName("Reporte_Financiero.pdf");
+        chooser.setTitle("Guardar reporte de boletos");
+        chooser.setInitialFileName("Reporte_Boletos.pdf");
 
         chooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter(
@@ -39,21 +37,22 @@ public class ReporteFinancieroPDF {
 
         try {
 
-            ReporteFinancieroService service = new ReporteFinancieroService();
+            ReporteBoletosService service = new ReporteBoletosService();
 
-            List<ReporteFinancieroService.FilaReporteFinanciero> registros =
+            List<ReporteBoletosService.RegistroBoleto> registros =
                     service.obtenerReporte();
 
             PdfWriter writer = new PdfWriter(archivo);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            Paragraph titulo = new Paragraph("REPORTE FINANCIERO")
+            Paragraph titulo = new Paragraph("REPORTE DE BOLETOS VENDIDOS")
                     .setBold()
                     .setFontSize(20)
                     .setTextAlignment(TextAlignment.CENTER);
 
             document.add(titulo);
+
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
@@ -61,20 +60,18 @@ public class ReporteFinancieroPDF {
             tabla.setWidth(UnitValue.createPercentValue(100));
 
             tabla.addHeaderCell(new Cell().add(new Paragraph("Película")));
+            tabla.addHeaderCell(new Cell().add(new Paragraph("Función")));
             tabla.addHeaderCell(new Cell().add(new Paragraph("Boletos vendidos")));
-            tabla.addHeaderCell(new Cell().add(new Paragraph("Ganancia")));
 
-            BigDecimal totalGeneral = BigDecimal.ZERO;
+            int totalBoletos = 0;
 
-            for (ReporteFinancieroService.FilaReporteFinanciero registro : registros) {
+            for (ReporteBoletosService.RegistroBoleto registro : registros) {
 
                 tabla.addCell(registro.getPelicula());
+                tabla.addCell(registro.getFuncion());
+                tabla.addCell(String.valueOf(registro.getBoletosVendidos()));
 
-                tabla.addCell(String.valueOf(registro.getAsistentes()));
-
-                tabla.addCell("$" + registro.getGanancia());
-
-                totalGeneral = totalGeneral.add(registro.getGanancia());
+                totalBoletos += registro.getBoletosVendidos();
             }
 
             document.add(tabla);
@@ -82,7 +79,7 @@ public class ReporteFinancieroPDF {
             document.add(new Paragraph(" "));
 
             document.add(
-                    new Paragraph("Total General: $" + totalGeneral)
+                    new Paragraph("Total de boletos vendidos: " + totalBoletos)
                             .setBold()
                             .setTextAlignment(TextAlignment.RIGHT)
             );

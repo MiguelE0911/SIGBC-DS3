@@ -18,8 +18,8 @@ public class ReporteFinancieroService {
     private final PeliculaDAO peliculaDAO;
 
     public ReporteFinancieroService() {
-        funcionDAO = new FuncionDAOImpl();
-        peliculaDAO = new PeliculaDAOImpl();
+        this.funcionDAO = new FuncionDAOImpl();
+        this.peliculaDAO = new PeliculaDAOImpl();
     }
 
     public List<FilaReporteFinanciero> obtenerReporte() {
@@ -30,8 +30,7 @@ public class ReporteFinancieroService {
 
         for (Funcion funcion : funciones) {
 
-            Optional<Pelicula> peliculaOpt =
-                    peliculaDAO.buscarPorId(funcion.getPeliculaId());
+            Optional<Pelicula> peliculaOpt = peliculaDAO.buscarPorId(funcion.getPeliculaId());
 
             if (peliculaOpt.isEmpty()) {
                 continue;
@@ -39,13 +38,13 @@ public class ReporteFinancieroService {
 
             Pelicula pelicula = peliculaOpt.get();
 
-            int asistentes =
-                    funcionDAO.listarAsientosOcupados(funcion.getId()).size();
+            int asistentes = funcionDAO
+                    .listarAsientosOcupados(funcion.getId())
+                    .size();
 
             BigDecimal precio = funcion.precioBase();
 
-            BigDecimal ganancia =
-                    precio.multiply(BigDecimal.valueOf(asistentes));
+            BigDecimal ganancia = precio.multiply(BigDecimal.valueOf(asistentes));
 
             reporte.add(new FilaReporteFinanciero(
                     pelicula.getTitulo(),
@@ -59,9 +58,6 @@ public class ReporteFinancieroService {
         return reporte;
     }
 
-    /**
-     * Representa una fila del reporte.
-     */
     public static class FilaReporteFinanciero {
 
         private final String pelicula;

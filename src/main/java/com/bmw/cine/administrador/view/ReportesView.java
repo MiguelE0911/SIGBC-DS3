@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 public class ReportesView extends VBox {
 
     private final Button btnGenerarPDF;
+    private final Button btnReporteBoletosPDF;
 
     public ReportesView() {
 
@@ -24,16 +25,21 @@ public class ReportesView extends VBox {
 
         // Subtítulo
         Label subtitulo = new Label(
-                "Genera y exporta documentos con la información financiera del sistema."
+                "Genera y exporta documentos con la información del sistema."
         );
         subtitulo.getStyleClass().add("descripcion-pagina");
 
-        // Tarjeta
+        // ============================
+        // TARJETA REPORTE FINANCIERO
+        // ============================
+
         VBox tarjetaReporte = new VBox(20);
         tarjetaReporte.setAlignment(Pos.CENTER);
         tarjetaReporte.setPadding(new Insets(30));
-        tarjetaReporte.setMaxHeight(220);
         tarjetaReporte.setPrefHeight(220);
+        tarjetaReporte.setMaxHeight(220);
+        tarjetaReporte.setPrefWidth(550);
+        tarjetaReporte.setMaxWidth(550);
 
         tarjetaReporte.getStyleClass().add("tarjeta-reporte");
 
@@ -48,8 +54,6 @@ public class ReportesView extends VBox {
 
         btnGenerarPDF = new Button("Generar PDF");
         btnGenerarPDF.getStyleClass().add("boton-principal");
-        tarjetaReporte.setPrefWidth(550);
-        tarjetaReporte.setMaxWidth(550);
 
         tarjetaReporte.getChildren().addAll(
                 lblTitulo,
@@ -57,9 +61,49 @@ public class ReportesView extends VBox {
                 btnGenerarPDF
         );
 
+        // TARJETA REPORTE OCUPACIÓN
+
+        VBox tarjetaOcupacion = new VBox(20);
+        tarjetaOcupacion.setAlignment(Pos.CENTER);
+        tarjetaOcupacion.setPadding(new Insets(30));
+        tarjetaOcupacion.setPrefHeight(220);
+        tarjetaOcupacion.setMaxHeight(220);
+        tarjetaOcupacion.setPrefWidth(550);
+        tarjetaOcupacion.setMaxWidth(550);
+
+        tarjetaOcupacion.getStyleClass().add("tarjeta-reporte");
+
+        Label lblTituloOcupacion = new Label("Reporte de Boletos");
+        lblTituloOcupacion.getStyleClass().add("vista-titulo");
+
+        Label lblDescripcionOcupacion = new Label(
+                "Exporta un resumen de los boletos vendidos por película o función."
+        );
+        lblDescripcionOcupacion.setWrapText(true);
+        lblDescripcionOcupacion.getStyleClass().add("descripcion-tarjeta");
+
+        btnReporteBoletosPDF = new Button("Generar PDF");
+        btnReporteBoletosPDF.getStyleClass().add("boton-principal");
+
+        tarjetaOcupacion.getChildren().addAll(
+                lblTituloOcupacion,
+                lblDescripcionOcupacion,
+                btnReporteBoletosPDF
+        );
+
+        // Contenedor de tarjetas
+
+        VBox tarjetas = new VBox(20);
+        tarjetas.setAlignment(Pos.TOP_CENTER);
+
+        tarjetas.getChildren().addAll(
+                tarjetaReporte,
+                tarjetaOcupacion
+        );
+
         StackPane contenedor = new StackPane();
         contenedor.setAlignment(Pos.TOP_CENTER);
-        contenedor.getChildren().add(tarjetaReporte);
+        contenedor.getChildren().add(tarjetas);
 
         VBox.setVgrow(contenedor, Priority.ALWAYS);
 
@@ -72,5 +116,9 @@ public class ReportesView extends VBox {
 
     public Button getBtnGenerarPDF() {
         return btnGenerarPDF;
+    }
+
+    public Button getBtnReporteBoletosPDF() {
+        return btnReporteBoletosPDF;
     }
 }
