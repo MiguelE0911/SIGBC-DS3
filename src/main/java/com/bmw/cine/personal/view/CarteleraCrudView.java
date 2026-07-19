@@ -4,6 +4,7 @@ import com.bmw.cine.common.dao.DAOException;
 import com.bmw.cine.common.dao.PeliculaDAO;
 import com.bmw.cine.common.dao.impl.PeliculaDAOImpl;
 import com.bmw.cine.common.model.Pelicula;
+import com.bmw.cine.common.util.Notificador;
 import com.bmw.cine.common.util.PosterFileUtil;
 
 import javafx.collections.FXCollections;
@@ -37,7 +38,7 @@ public class CarteleraCrudView extends BorderPane {
         cargarDatos();
     }
 
-    // Encabezado
+    //  Encabezado
     private HBox construirEncabezado() {
         Label titulo = new Label("Cartelera — Administración");
         titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: -fx-texto-titulos;");
@@ -55,7 +56,7 @@ public class CarteleraCrudView extends BorderPane {
         return encabezado;
     }
 
-    // Tabla
+    //  Tabla
     private TableView<Pelicula> construirTabla() {
         tabla.setItems(datos);
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -93,7 +94,13 @@ public class CarteleraCrudView extends BorderPane {
 
                 btnEditar.setOnAction(e -> abrirFormulario(getTableView().getItems().get(getIndex())));
                 btnOcultar.setOnAction(e -> alternarVisibilidad(getTableView().getItems().get(getIndex())));
-                btnEliminar.setOnAction(e -> confirmarEliminar(getTableView().getItems().get(getIndex())));
+                btnEliminar.setOnAction(e -> {
+                    Pelicula pelicula = getTableView().getItems().get(getIndex());
+                    if (Notificador.confirmar("Eliminar película",
+                            "¿Eliminar \"" + pelicula.getTitulo() + "\"? Esta acción no se puede deshacer.")) {
+                        eliminar(pelicula);
+                    }
+                });
             }
 
             @Override
@@ -118,7 +125,7 @@ public class CarteleraCrudView extends BorderPane {
             List<Pelicula> lista = peliculaDAO.listarTodas();
             datos.setAll(lista);
         } catch (DAOException e) {
-            mostrarAlerta("Error", "No se pudo cargar la cartelera: " + e.getMessage(), Alert.AlertType.ERROR);
+            Notificador.error("Error", "No se pudo cargar la cartelera: " + e.getMessage());
         }
     }
 
@@ -131,6 +138,7 @@ public class CarteleraCrudView extends BorderPane {
         if (getScene() != null) {
             dialog.initOwner(getScene().getWindow());
         }
+        dialog.getDialogPane().getStylesheets().clear(); // evita heredar el tema oscuro del panel principal
 
         ButtonType btnGuardarTipo = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardarTipo, ButtonType.CANCEL);
@@ -148,7 +156,6 @@ public class CarteleraCrudView extends BorderPane {
         previewPoster.setFitHeight(160);
         previewPoster.setPreserveRatio(true);
 
-        // Guarda el nombre de archivo ya persistido en /posters, mutable dentro del lambda
         String[] rutaPoster = { esEdicion ? existente.getRutaPoster() : null };
         previewPoster.setImage(PosterFileUtil.cargarImagen(rutaPoster[0]));
 
@@ -180,7 +187,7 @@ public class CarteleraCrudView extends BorderPane {
         Node botonGuardar = dialog.getDialogPane().lookupButton(btnGuardarTipo);
         botonGuardar.addEventFilter(ActionEvent.ACTION, event -> {
             if (txtTitulo.getText().isBlank()) {
-                mostrarAlerta("Campos incompletos", "El título es obligatorio.", Alert.AlertType.WARNING);
+                Notificador.advertencia("Campos incompletos", "El título es obligatorio.");
                 event.consume();
             }
         });
@@ -193,7 +200,7 @@ public class CarteleraCrudView extends BorderPane {
             p.setSinopsis(txtSinopsis.getText().trim());
             p.setGenero(txtGenero.getText().trim());
             p.setDuracionMinutos(spnDuracion.getValue());
-            p.setPosterUrl(rutaPoster[0]);
+            p.setRutaPoster(rutaPoster[0]);
             if (!esEdicion) {
                 p.setActiva(true); // nueva película entra visible por defecto
             }
@@ -204,56 +211,43 @@ public class CarteleraCrudView extends BorderPane {
     }
 
     private void guardar(Pelicula pelicula) {
+        boolean esNueva = pelicula.getId() == 0;
         try {
-            if (pelicula.getId() == 0) {
+            if (esNueva) {
                 peliculaDAO.crear(pelicula);
+                Notificador.exito("Película \"" + pelicula.getTitulo() + "\" agregada correctamente.");
             } else {
                 peliculaDAO.actualizar(pelicula);
+                Notificador.exito("Película \"" + pelicula.getTitulo() + "\" actualizada correctamente.");
             }
             cargarDatos();
         } catch (DAOException e) {
-            mostrarAlerta("Error", "No se pudo guardar la película: " + e.getMessage(), Alert.AlertType.ERROR);
+            Notificador.error("Error", "No se pudo guardar la película: " + e.getMessage());
         }
     }
 
-    // ---------- Visibilidad / Eliminar ----------
-
+    // Visibilidad / Eliminar
     private void alternarVisibilidad(Pelicula pelicula) {
         boolean nuevoEstado = !pelicula.isActiva();
         try {
             peliculaDAO.actualizarVisibilidad(pelicula.getId(), nuevoEstado);
             pelicula.setActiva(nuevoEstado);
             tabla.refresh();
+            Notificador.exito("Película \"" + pelicula.getTitulo() + "\" ahora está " + (nuevoEstado ? "visible" : "oculta") + ".");
         } catch (DAOException e) {
-            mostrarAlerta("Error", "No se pudo cambiar la visibilidad: " + e.getMessage(), Alert.AlertType.ERROR);
+            Notificador.error("Error", "No se pudo cambiar la visibilidad: " + e.getMessage());
         }
-    }
-
-    private void confirmarEliminar(Pelicula pelicula) {
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Eliminar película");
-        confirmacion.setHeaderText(null);
-        confirmacion.setContentText("¿Eliminar \"" + pelicula.getTitulo() + "\"? Esta acción no se puede deshacer.");
-        confirmacion.showAndWait().filter(b -> b == ButtonType.OK).ifPresent(b -> eliminar(pelicula));
     }
 
     private void eliminar(Pelicula pelicula) {
         try {
             peliculaDAO.eliminar(pelicula.getId());
             cargarDatos();
+            Notificador.exito("Película \"" + pelicula.getTitulo() + "\" eliminada correctamente.");
         } catch (DAOException e) {
-            mostrarAlerta("No se puede eliminar",
+            Notificador.advertencia("No se puede eliminar",
                     "Esta película tiene funciones programadas asociadas. "
-                            + "Oculta la película en vez de eliminarla, o elimina primero sus funciones.",
-                    Alert.AlertType.WARNING);
+                            + "Oculta la película en vez de eliminarla, o elimina primero sus funciones.");
         }
-    }
-
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
     }
 }

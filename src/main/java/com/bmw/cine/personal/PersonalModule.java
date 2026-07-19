@@ -21,7 +21,7 @@ public class PersonalModule {
 
     public static void iniciar(Stage stage, UsuarioDTO usuarioActivo) {
         try {
-            stage.setTitle("Panel de Personal - Cine BMW");
+            stage.setTitle("Panel de Personal - Cinema BMW");
 
             BorderPane contenedorPrincipal = new BorderPane();
             contenedorPrincipal.getStyleClass().add("panel-fondo");
@@ -32,7 +32,7 @@ public class PersonalModule {
             HeaderPrincipalController headerCtrl = loader.getController();
 
             // CONFIGURAR DATOS DEL HEADER
-            headerCtrl.configurar("Cine BMW", usuarioActivo, true);
+            headerCtrl.configurar("Cinema BMW", usuarioActivo, true);
 
             // INSTANCIAR LAS VISTAS
             TaquillaView vistaTaquilla = new TaquillaView(usuarioActivo);

@@ -11,6 +11,7 @@ import com.bmw.cine.common.dto.FuncionDTO;
 import com.bmw.cine.common.dto.SolicitudBoletoDTO;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Pelicula;
+import com.bmw.cine.common.util.Notificador;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,9 +26,6 @@ import javafx.util.StringConverter;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * Vista de Taquilla adaptada al sistema de diseño global.
- */
 public class TaquillaView extends BorderPane {
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -45,7 +43,6 @@ public class TaquillaView extends BorderPane {
     public TaquillaView(UsuarioDTO usuarioActivo) {
         this.usuarioActivo = usuarioActivo;
 
-        // Aplicamos el estilo de cuerpo principal
         getStyleClass().add("vista-cuerpo");
         setPadding(new Insets(24));
 
@@ -97,7 +94,7 @@ public class TaquillaView extends BorderPane {
             cargarSolicitudes();
         });
 
-        // --- Función ---
+        // Función
         comboFuncion.setConverter(new StringConverter<>() {
             @Override public String toString(FuncionDTO f) {
                 return f == null ? "Todas las funciones" : f.getHorario().format(FORMATO_FECHA) + " · " + f.getNombreSala();
@@ -106,7 +103,7 @@ public class TaquillaView extends BorderPane {
         });
         comboFuncion.setOnAction(e -> cargarSolicitudes());
 
-        // --- Estado ---
+        // Estado
         comboEstado.setItems(FXCollections.observableArrayList("Pendientes", "Confirmados", "Todos"));
         comboEstado.setValue("Pendientes");
         comboEstado.setOnAction(e -> cargarSolicitudes());
@@ -135,7 +132,6 @@ public class TaquillaView extends BorderPane {
     private TableView<SolicitudBoletoDTO> construirTabla() {
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // Columnas
         TableColumn<SolicitudBoletoDTO, String> colUsuario = new TableColumn<>("Usuario");
         colUsuario.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getNombreUsuario()));
 
@@ -187,26 +183,34 @@ public class TaquillaView extends BorderPane {
     private void cargarSolicitudes() {
         try {
             tabla.setItems(FXCollections.observableArrayList(boletoDAO.listarSolicitudes(leerFiltroActual())));
-        } catch (DAOException e) { mostrarError("Error: " + e.getMessage()); }
+        } catch (DAOException e) {
+            Notificador.error("Error", e.getMessage());
+        }
     }
 
     private void aprobar(SolicitudBoletoDTO fila) {
         try {
-            if (boletoDAO.aprobarSolicitud(fila.getBoletoId(), usuarioActivo.getId())) cargarSolicitudes();
-            else mostrarError("Solicitud ya procesada.");
-        } catch (DAOException e) { mostrarError(e.getMessage()); }
+            if (boletoDAO.aprobarSolicitud(fila.getBoletoId(), usuarioActivo.getId())) {
+                cargarSolicitudes();
+                Notificador.exito("Solicitud aprobada correctamente.");
+            } else {
+                Notificador.advertencia("Aviso", "Solicitud ya procesada.");
+            }
+        } catch (DAOException e) {
+            Notificador.error("Error", e.getMessage());
+        }
     }
 
     private void rechazar(SolicitudBoletoDTO fila) {
         try {
-            if (boletoDAO.rechazarSolicitud(fila.getBoletoId())) cargarSolicitudes();
-            else mostrarError("Solicitud ya procesada.");
-        } catch (DAOException e) { mostrarError(e.getMessage()); }
-    }
-
-    private void mostrarError(String mensaje) {
-        Alert alerta = new Alert(Alert.AlertType.ERROR);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
+            if (boletoDAO.rechazarSolicitud(fila.getBoletoId())) {
+                cargarSolicitudes();
+                Notificador.exito("Solicitud rechazada correctamente.");
+            } else {
+                Notificador.advertencia("Aviso", "Solicitud ya procesada.");
+            }
+        } catch (DAOException e) {
+            Notificador.error("Error", e.getMessage());
+        }
     }
 }
