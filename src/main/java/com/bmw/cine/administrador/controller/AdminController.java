@@ -7,7 +7,8 @@ import com.bmw.cine.common.dao.impl.UsuarioDAOImpl;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.administrador.view.ReportesView;
-import com.bmw.cine.administrador.controller.ReportesController;
+import com.bmw.cine.administrador.view.DashboardView;
+import com.bmw.cine.administrador.controller.DashboardController;
 
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -20,6 +21,7 @@ public class AdminController {
     private final UsuarioDAO usuarioDAO;
 
     private Button btnGestionUsuarios;
+    private Button btnDashboard;
     private Button btnReportes;
 
     public AdminController(AdminView vista,
@@ -36,8 +38,8 @@ public class AdminController {
         configurarEventos();
 
         // Vista inicial
-        mostrarGestionUsuarios();
-        vista.getHeaderController().marcarActivo(btnGestionUsuarios);
+        mostrarDashboard();
+        vista.getHeaderController().marcarActivo(btnDashboard);
     }
 
     /**
@@ -46,6 +48,10 @@ public class AdminController {
     private void configurarHeader() {
 
         HeaderPrincipalController header = vista.getHeaderController();
+
+        btnDashboard = header.agregarBotonNav(
+                "Dashboard",
+                this::mostrarDashboard);
 
         btnGestionUsuarios = header.agregarBotonNav(
                 "Gestión de Usuarios",
@@ -90,6 +96,14 @@ public class AdminController {
         vista.getContentPane()
                 .getChildren()
                 .setAll(gestionUsuariosView);
+    }
+
+    private void mostrarDashboard() {
+        DashboardView dashboardView = new DashboardView();
+        new DashboardController(dashboardView);
+        vista.getContentPane()
+                .getChildren()
+                .setAll(dashboardView);
     }
 
     private void mostrarReportes() {
