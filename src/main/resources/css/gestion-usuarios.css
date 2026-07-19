@@ -85,7 +85,13 @@
     -fx-background-color: #d4af37;
 }
 
-.tabla-usuarios .table-row-cell:selected .table-cell {
+/* Mantener amarillo aunque el mouse siga encima */
+.tabla-usuarios .table-row-cell:selected:hover {
+    -fx-background-color: #d4af37;
+}
+
+.tabla-usuarios .table-row-cell:selected .table-cell,
+.tabla-usuarios .table-row-cell:selected:hover .table-cell {
     -fx-text-fill: #1b1224;
 }
 

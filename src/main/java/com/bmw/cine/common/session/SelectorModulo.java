@@ -1,8 +1,8 @@
 package com.bmw.cine.common.session;
 
+
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
-import com.bmw.cine.common.session.OpcionModulo;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -139,7 +139,7 @@ public class SelectorModulo {
     }
 
     private static void entrarAAdmin(Stage stage, UsuarioDTO usuarioActivo) {
-        mostrarPendiente("Panel de Administrador");
+        com.bmw.cine.administrador.AdminModule.iniciar(stage, usuarioActivo);
     }
 
     private static void mostrarPendiente(String nombreModulo) {
