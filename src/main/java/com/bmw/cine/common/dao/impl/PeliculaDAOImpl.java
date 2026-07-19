@@ -94,7 +94,7 @@ public class PeliculaDAOImpl implements PeliculaDAO {
             ps.setString(2, pelicula.getSinopsis());
             ps.setString(3, pelicula.getGenero());
             ps.setInt(4, pelicula.getDuracionMinutos());
-            ps.setString(5, pelicula.getPosterUrl());
+            ps.setString(5, pelicula.getRutaPoster());
             ps.setBoolean(6, pelicula.isActiva());
 
             ps.executeUpdate();
@@ -122,7 +122,7 @@ public class PeliculaDAOImpl implements PeliculaDAO {
             ps.setString(2, pelicula.getSinopsis());
             ps.setString(3, pelicula.getGenero());
             ps.setInt(4, pelicula.getDuracionMinutos());
-            ps.setString(5, pelicula.getPosterUrl());
+            ps.setString(5, pelicula.getRutaPoster());
             ps.setInt(6, pelicula.getId());
 
             return ps.executeUpdate() > 0;
