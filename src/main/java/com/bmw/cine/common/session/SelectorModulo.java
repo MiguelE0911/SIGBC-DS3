@@ -132,15 +132,15 @@ public class SelectorModulo {
         return tarjeta;
     }
 
-      private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
-        CarteleraView carteleraView = new CarteleraView();
-        new CarteleraController(carteleraView);
+     private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
+    CarteleraView carteleraView = new CarteleraView();
+    new CarteleraController(carteleraView, stage); // <-- agregue stage 
 
-        Scene escena = new Scene(carteleraView, 900, 600);
-        stage.setTitle("Cine BMW - Cartelera");
-        stage.setScene(escena);
-        stage.show();
-    }
+    Scene escena = new Scene(carteleraView, 900, 600);
+    stage.setTitle("Cine BMW - Cartelera");
+    stage.setScene(escena);
+    stage.show();
+}
 
     private static void entrarATaquilla(Stage stage, UsuarioDTO usuarioActivo) {
         com.bmw.cine.personal.PersonalModule.iniciar(stage, usuarioActivo);
