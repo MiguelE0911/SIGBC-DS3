@@ -42,7 +42,7 @@ public class MainWindowView {
             "-fx-border-width: 0 0 1 0;"
         );
 
-        this.lblLogo = new Label("🎬 MULTICINES BMW");
+        this.lblLogo = new Label("🎬 CINEMA BMW");
         this.lblLogo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
         this.lblLogo.setStyle("-fx-text-fill: #f4e8d0;");
 

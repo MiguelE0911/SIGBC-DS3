@@ -1,10 +1,10 @@
 package com.bmw.cine.common.dao;
 
-import com.bmw.cine.common.dto.UsuarioDTO;
-import com.bmw.cine.common.model.Usuario;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.model.Usuario;
 
 /**
  * Contrato de acceso a datos para Usuario. Cubre login/registro
@@ -36,4 +36,7 @@ public interface UsuarioDAO {
     boolean actualizarEstadoActivo(int usuarioId, boolean activo); // Suspender o reactivar una cuenta.
     boolean actualizarRol(int usuarioId, int nuevoRol); // Cambiar el rol de un usuario (ver constantes ROL_* en Usuario).
     List<UsuarioDTO> buscarPorTexto(String texto); // Búsqueda parcial por nombre, correo o username (activos). Usado por Personal al emitir boletos manualmente.
+    boolean actualizarPerfil(int usuarioId, String nombre, String correo, String username);
+    boolean existeCorreoExcluyendo(String correo, int usuarioIdExcluir);  // Igual que existeCorreo, pero ignora al propio usuario (para editar su perfil sin chocar consigo mismo).
+    boolean existeUsernameExcluyendo(String username, int usuarioIdExcluir);
 }
