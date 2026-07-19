@@ -2,8 +2,13 @@ package com.bmw.cine.personal;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.view.HeaderPrincipalController;
+import com.bmw.cine.personal.controller.CarteleraCrudController;
+import com.bmw.cine.personal.controller.EmitirBoletoController;
+import com.bmw.cine.personal.controller.GestionFuncionesController;
+import com.bmw.cine.personal.controller.TaquillaController;
 import com.bmw.cine.personal.view.CarteleraCrudView;
 import com.bmw.cine.personal.view.EmitirBoletoView;
+import com.bmw.cine.personal.view.GestionFuncionesView;
 import com.bmw.cine.personal.view.TaquillaView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +25,7 @@ public class PersonalModule {
 
     public static void iniciar(Stage stage, UsuarioDTO usuarioActivo) {
         try {
-            stage.setTitle("Panel de Personal - Cine BMW");
+            stage.setTitle("Panel de Personal - Cinema BMW");
 
             BorderPane contenedorPrincipal = new BorderPane();
             contenedorPrincipal.getStyleClass().add("panel-fondo");
@@ -31,25 +36,33 @@ public class PersonalModule {
             HeaderPrincipalController headerCtrl = loader.getController();
 
             // CONFIGURAR DATOS DEL HEADER
-            headerCtrl.configurar("Cine BMW", usuarioActivo, true);
+            headerCtrl.configurar("Cinema BMW", usuarioActivo, true);
 
             // INSTANCIAR LAS VISTAS
-            TaquillaView vistaTaquilla = new TaquillaView(usuarioActivo);
-            CarteleraCrudView vistaCartelera = new CarteleraCrudView();
-            EmitirBoletoView vistaEmitir = new EmitirBoletoView(usuarioActivo);
+            TaquillaView vistaTaquilla = new TaquillaView(); new TaquillaController(vistaTaquilla, usuarioActivo);
+            CarteleraCrudView vistaCartelera = new CarteleraCrudView(); new CarteleraCrudController(vistaCartelera);
+            EmitirBoletoView vistaEmitir = new EmitirBoletoView(); new EmitirBoletoController(vistaEmitir, usuarioActivo);
+            GestionFuncionesView vistaFunciones = new GestionFuncionesView(); new GestionFuncionesController(vistaFunciones);
 
             // AGREGAR BOTONES DE NAVEGACIÓN
             Button btnTaquilla = headerCtrl.agregarBotonNav("Taquilla", () -> {
                 contenedorPrincipal.setCenter(vistaTaquilla);
             });
-            Button btnCartelera = headerCtrl.agregarBotonNav("Cartelera", () -> {
-                contenedorPrincipal.setCenter(vistaCartelera);
-            });
             Button btnEmitir = headerCtrl.agregarBotonNav("Emitir boleto", () -> {
                 contenedorPrincipal.setCenter(vistaEmitir);
             });
+            Button btnCartelera = headerCtrl.agregarBotonNav("Cartelera", () -> {
+                contenedorPrincipal.setCenter(vistaCartelera);
+            });
+            Button btnFunciones = headerCtrl.agregarBotonNav("Funciones", () -> {
+                contenedorPrincipal.setCenter(vistaFunciones);
+            });
 
             // CONFIGURAR ACCIONES DEL MENÚ DESPLEGABLE
+            headerCtrl.setOnVerPerfil(() -> {
+                com.bmw.cine.common.view.PerfilDialog.mostrar(stage, usuarioActivo, new com.bmw.cine.common.dao.impl.UsuarioDAOImpl())
+                        .ifPresent(headerCtrl::actualizarNombreUsuario);
+            });
             headerCtrl.setOnCerrarSesion(() -> headerCtrl.setOnCerrarSesion(() ->com.bmw.cine.app.SessionRouter.cerrarSesion(stage)));
 
             headerCtrl.setOnCambiarSeccion(() -> com.bmw.cine.common.session.SelectorModulo.iniciar(stage, usuarioActivo));

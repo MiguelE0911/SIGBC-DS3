@@ -225,4 +225,47 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         }
         return resultados;
     }
+
+    @Override
+    public boolean actualizarPerfil(int usuarioId, String nombre, String correo, String username) {
+        String sql = "UPDATE " + TABLA + " SET nombre = ?, correo = ?, username = ? WHERE id = ?";
+
+        try (Connection con = Conexion.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+            ps.setString(2, correo);
+            ps.setString(3, username);
+            ps.setInt(4, usuarioId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DAOException("Error al actualizar el perfil del usuario " + usuarioId, e);
+        }
+    }
+
+    @Override
+    public boolean existeCorreoExcluyendo(String correo, int usuarioIdExcluir) {
+        return existeValorExcluyendo("correo", correo, usuarioIdExcluir);
+    }
+
+    @Override
+    public boolean existeUsernameExcluyendo(String username, int usuarioIdExcluir) {
+        return existeValorExcluyendo("username", username, usuarioIdExcluir);
+    }
+
+    private boolean existeValorExcluyendo(String columna, String valor, int usuarioIdExcluir) {
+        String sql = "SELECT 1 FROM " + TABLA + " WHERE " + columna + " = ? AND id <> ?";
+
+        try (Connection con = Conexion.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, valor);
+            ps.setInt(2, usuarioIdExcluir);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al verificar " + columna + " = " + valor, e);
+        }
+    }
 }

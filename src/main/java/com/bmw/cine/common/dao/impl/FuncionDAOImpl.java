@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -190,6 +191,39 @@ public class FuncionDAOImpl implements FuncionDAO {
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al obtener dimensiones de sala", ex);
+        }
+    }
+
+    @Override
+    public boolean existeSolapamiento(int salaId, LocalDateTime inicio, LocalDateTime fin, Integer excluirFuncionId) {
+        // Dos rangos [f.horario, f.horario + duración] y [inicio, fin) se solapan
+        // si f.horario < fin  Y  f.horario + duración > inicio (regla clásica de intervalos).
+        StringBuilder sql = new StringBuilder(
+                "SELECT COUNT(*) FROM funcion f "
+                        + "JOIN pelicula p ON p.id = f.pelicula_id "
+                        + "WHERE f.sala_id = ? "
+                        + "AND f.horario < ? "
+                        + "AND DATE_ADD(f.horario, INTERVAL p.duracion_minutos MINUTE) > ? ");
+        if (excluirFuncionId != null) {
+            sql.append("AND f.id <> ? ");
+        }
+
+        try (Connection con = Conexion.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql.toString())) {
+
+            ps.setInt(1, salaId);
+            ps.setTimestamp(2, java.sql.Timestamp.valueOf(fin));
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(inicio));
+            if (excluirFuncionId != null) {
+                ps.setInt(4, excluirFuncionId);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al validar solapamiento de horarios", e);
         }
     }
 }

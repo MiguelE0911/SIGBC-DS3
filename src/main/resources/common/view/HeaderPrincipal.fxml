@@ -35,6 +35,8 @@
 
     <MenuButton fx:id="menuUsuario" styleClass="header-menu-usuario" text="Usuario">
         <items>
+            <MenuItem fx:id="itemVerPerfil" text="Mi perfil"/>
+            <SeparatorMenuItem fx:id="separadorPerfil"/>
             <MenuItem fx:id="itemCambiarSeccion" text="Cambiar de sección"/>
             <SeparatorMenuItem fx:id="separadorMenu"/>
             <MenuItem fx:id="itemCerrarSesion" text="Cerrar sesión"/>

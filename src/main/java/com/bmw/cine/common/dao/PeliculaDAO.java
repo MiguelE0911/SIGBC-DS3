@@ -25,4 +25,5 @@ public interface PeliculaDAO {
     Pelicula crear(Pelicula pelicula);
     boolean actualizar(Pelicula pelicula);
     boolean actualizarVisibilidad(int id, boolean visible); // (activa=True)(desactivada=False)
+    boolean eliminar(int id); // borrado físico — falla si hay funciones asociadas (FK)
 }
