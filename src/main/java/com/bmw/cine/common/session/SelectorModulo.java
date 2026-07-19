@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
-import com.bmw.cine.espectador.controller.CarteleraController;
-import com.bmw.cine.espectador.view.CarteleraView;
+import com.bmw.cine.espectador.controller.MainWindowController;
+import com.bmw.cine.espectador.view.MainWindowView;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -132,15 +132,15 @@ public class SelectorModulo {
         return tarjeta;
     }
 
-     private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
-    CarteleraView carteleraView = new CarteleraView();
-    new CarteleraController(carteleraView, stage, usuarioActivo);// <-- agregue stage y usuarioActivo
+    private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
+         MainWindowView mainView = new MainWindowView();
+         new MainWindowController(mainView, usuarioActivo, stage);
 
-    Scene escena = new Scene(carteleraView, 900, 600);
-    stage.setTitle("Cine BMW - Cartelera");
-    stage.setScene(escena);
-    stage.show();
-}
+         Scene escena = new Scene(mainView.getRootLayout(), 1000, 650);
+         stage.setTitle("Cinema BMW");
+         stage.setScene(escena);
+         stage.show();
+    }
 
     private static void entrarATaquilla(Stage stage, UsuarioDTO usuarioActivo) {
         com.bmw.cine.personal.PersonalModule.iniciar(stage, usuarioActivo);
