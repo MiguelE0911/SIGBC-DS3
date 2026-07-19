@@ -133,7 +133,6 @@ public class TaquillaView extends BorderPane {
     }
 
     private TableView<SolicitudBoletoDTO> construirTabla() {
-        tabla.getStyleClass().add("tabla-solicitudes");
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Columnas

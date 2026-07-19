@@ -1,27 +1,259 @@
 package com.bmw.cine.personal.view;
 
+import com.bmw.cine.common.dao.DAOException;
+import com.bmw.cine.common.dao.PeliculaDAO;
+import com.bmw.cine.common.dao.impl.PeliculaDAOImpl;
+import com.bmw.cine.common.model.Pelicula;
+import com.bmw.cine.common.util.PosterFileUtil;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 
-// Placeholder de la sección Cartelera-CRUD dentro del Panel de Personal.
-public class CarteleraCrudView extends VBox {
+import java.io.File;
+import java.util.List;
+import java.util.Optional;
+
+public class CarteleraCrudView extends BorderPane {
+
+    private final PeliculaDAO peliculaDAO = new PeliculaDAOImpl();
+    private final ObservableList<Pelicula> datos = FXCollections.observableArrayList();
+    private final TableView<Pelicula> tabla = new TableView<>();
 
     public CarteleraCrudView() {
-        this.setStyle("-fx-background-color: #100b16;");
+        getStyleClass().add("panel-fondo");
+        setPadding(new Insets(24));
 
-        this.setAlignment(Pos.CENTER);
-        this.setSpacing(14);
-        this.setPadding(new Insets(48));
+        setTop(construirEncabezado());
+        setCenter(construirTabla());
 
-        Label titulo = new Label("Cartelera — CRUD");
-        titulo.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #f4e8d0; -fx-font-family: 'Segoe UI';");
+        cargarDatos();
+    }
 
-        Label subtitulo = new Label("Alta, edición y baja de películas — próximamente (Meta 4)");
-        subtitulo.setStyle("-fx-font-size: 13px; -fx-text-fill: #b8a9c9; -fx-font-family: 'Segoe UI';");
-        subtitulo.setWrapText(true);
+    // Encabezado
+    private HBox construirEncabezado() {
+        Label titulo = new Label("Cartelera — Administración");
+        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: -fx-texto-titulos;");
 
-        getChildren().addAll(titulo, subtitulo);
+        Button btnAgregar = new Button("+ Agregar película");
+        btnAgregar.getStyleClass().add("boton-aprobar");
+        btnAgregar.setOnAction(e -> abrirFormulario(null));
+
+        HBox spacer = new HBox();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox encabezado = new HBox(12, titulo, spacer, btnAgregar);
+        encabezado.setAlignment(Pos.CENTER_LEFT);
+        encabezado.setPadding(new Insets(0, 0, 16, 0));
+        return encabezado;
+    }
+
+    // Tabla
+    private TableView<Pelicula> construirTabla() {
+        tabla.setItems(datos);
+        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<Pelicula, String> colTitulo = new TableColumn<>("Título");
+        colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+
+        TableColumn<Pelicula, String> colGenero = new TableColumn<>("Género");
+        colGenero.setCellValueFactory(new PropertyValueFactory<>("genero"));
+
+        TableColumn<Pelicula, Integer> colDuracion = new TableColumn<>("Duración (min)");
+        colDuracion.setCellValueFactory(new PropertyValueFactory<>("duracionMinutos"));
+
+        TableColumn<Pelicula, Boolean> colVisible = new TableColumn<>("Visible");
+        colVisible.setCellValueFactory(new PropertyValueFactory<>("activa"));
+        colVisible.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Boolean visible, boolean vacio) {
+                super.updateItem(visible, vacio);
+                setText(vacio || visible == null ? null : (visible ? "Sí" : "No"));
+            }
+        });
+
+        TableColumn<Pelicula, Void> colAcciones = new TableColumn<>("Acciones");
+        colAcciones.setCellFactory(col -> new TableCell<>() {
+            private final Button btnEditar = new Button("Editar");
+            private final Button btnOcultar = new Button();
+            private final Button btnEliminar = new Button("Eliminar");
+            private final HBox contenedor = new HBox(6, btnEditar, btnOcultar, btnEliminar);
+
+            {
+                btnEditar.getStyleClass().add("boton-secundario");
+                btnEliminar.getStyleClass().add("boton-rechazar");
+                btnOcultar.getStyleClass().add("boton-aprobar");
+
+                btnEditar.setOnAction(e -> abrirFormulario(getTableView().getItems().get(getIndex())));
+                btnOcultar.setOnAction(e -> alternarVisibilidad(getTableView().getItems().get(getIndex())));
+                btnEliminar.setOnAction(e -> confirmarEliminar(getTableView().getItems().get(getIndex())));
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean vacio) {
+                super.updateItem(item, vacio);
+                if (vacio) {
+                    setGraphic(null);
+                } else {
+                    Pelicula p = getTableView().getItems().get(getIndex());
+                    btnOcultar.setText(p.isActiva() ? "Ocultar" : "Mostrar");
+                    setGraphic(contenedor);
+                }
+            }
+        });
+
+        tabla.getColumns().addAll(colTitulo, colGenero, colDuracion, colVisible, colAcciones);
+        return tabla;
+    }
+
+    private void cargarDatos() {
+        try {
+            List<Pelicula> lista = peliculaDAO.listarTodas();
+            datos.setAll(lista);
+        } catch (DAOException e) {
+            mostrarAlerta("Error", "No se pudo cargar la cartelera: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    //  Formulario Agregar/Editar
+    private void abrirFormulario(Pelicula existente) {
+        boolean esEdicion = existente != null;
+
+        Dialog<Pelicula> dialog = new Dialog<>();
+        dialog.setTitle(esEdicion ? "Editar película" : "Agregar película");
+        if (getScene() != null) {
+            dialog.initOwner(getScene().getWindow());
+        }
+
+        ButtonType btnGuardarTipo = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnGuardarTipo, ButtonType.CANCEL);
+
+        TextField txtTitulo = new TextField(esEdicion ? existente.getTitulo() : "");
+        TextField txtGenero = new TextField(esEdicion ? existente.getGenero() : "");
+        Spinner<Integer> spnDuracion = new Spinner<>(1, 600, esEdicion ? existente.getDuracionMinutos() : 90);
+        spnDuracion.setEditable(true);
+        TextArea txtSinopsis = new TextArea(esEdicion ? existente.getSinopsis() : "");
+        txtSinopsis.setPrefRowCount(3);
+        txtSinopsis.setWrapText(true);
+
+        ImageView previewPoster = new ImageView();
+        previewPoster.setFitWidth(120);
+        previewPoster.setFitHeight(160);
+        previewPoster.setPreserveRatio(true);
+
+        // Guarda el nombre de archivo ya persistido en /posters, mutable dentro del lambda
+        String[] rutaPoster = { esEdicion ? existente.getRutaPoster() : null };
+        previewPoster.setImage(PosterFileUtil.cargarImagen(rutaPoster[0]));
+
+        Button btnExaminar = new Button("Examinar...");
+        btnExaminar.setOnAction(e -> {
+            Optional<File> archivo = PosterFileUtil.elegirArchivo(dialog.getDialogPane().getScene().getWindow());
+            archivo.ifPresent(f -> {
+                String nombreGuardado = PosterFileUtil.guardarPoster(f);
+                rutaPoster[0] = nombreGuardado;
+                previewPoster.setImage(PosterFileUtil.cargarImagen(nombreGuardado));
+            });
+        });
+
+        VBox posterBox = new VBox(8, previewPoster, btnExaminar);
+        posterBox.setAlignment(Pos.TOP_CENTER);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(16, 0, 16, 0));
+        grid.addRow(0, new Label("Título:"), txtTitulo);
+        grid.addRow(1, new Label("Género:"), txtGenero);
+        grid.addRow(2, new Label("Duración (min):"), spnDuracion);
+        grid.addRow(3, new Label("Sinopsis:"), txtSinopsis);
+
+        HBox contenido = new HBox(20, grid, posterBox);
+        dialog.getDialogPane().setContent(contenido);
+
+        Node botonGuardar = dialog.getDialogPane().lookupButton(btnGuardarTipo);
+        botonGuardar.addEventFilter(ActionEvent.ACTION, event -> {
+            if (txtTitulo.getText().isBlank()) {
+                mostrarAlerta("Campos incompletos", "El título es obligatorio.", Alert.AlertType.WARNING);
+                event.consume();
+            }
+        });
+
+        dialog.setResultConverter(boton -> {
+            if (boton != btnGuardarTipo) return null;
+
+            Pelicula p = esEdicion ? existente : new Pelicula();
+            p.setTitulo(txtTitulo.getText().trim());
+            p.setSinopsis(txtSinopsis.getText().trim());
+            p.setGenero(txtGenero.getText().trim());
+            p.setDuracionMinutos(spnDuracion.getValue());
+            p.setPosterUrl(rutaPoster[0]);
+            if (!esEdicion) {
+                p.setActiva(true); // nueva película entra visible por defecto
+            }
+            return p;
+        });
+
+        dialog.showAndWait().ifPresent(this::guardar);
+    }
+
+    private void guardar(Pelicula pelicula) {
+        try {
+            if (pelicula.getId() == 0) {
+                peliculaDAO.crear(pelicula);
+            } else {
+                peliculaDAO.actualizar(pelicula);
+            }
+            cargarDatos();
+        } catch (DAOException e) {
+            mostrarAlerta("Error", "No se pudo guardar la película: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    // ---------- Visibilidad / Eliminar ----------
+
+    private void alternarVisibilidad(Pelicula pelicula) {
+        boolean nuevoEstado = !pelicula.isActiva();
+        try {
+            peliculaDAO.actualizarVisibilidad(pelicula.getId(), nuevoEstado);
+            pelicula.setActiva(nuevoEstado);
+            tabla.refresh();
+        } catch (DAOException e) {
+            mostrarAlerta("Error", "No se pudo cambiar la visibilidad: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void confirmarEliminar(Pelicula pelicula) {
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Eliminar película");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText("¿Eliminar \"" + pelicula.getTitulo() + "\"? Esta acción no se puede deshacer.");
+        confirmacion.showAndWait().filter(b -> b == ButtonType.OK).ifPresent(b -> eliminar(pelicula));
+    }
+
+    private void eliminar(Pelicula pelicula) {
+        try {
+            peliculaDAO.eliminar(pelicula.getId());
+            cargarDatos();
+        } catch (DAOException e) {
+            mostrarAlerta("No se puede eliminar",
+                    "Esta película tiene funciones programadas asociadas. "
+                            + "Oculta la película en vez de eliminarla, o elimina primero sus funciones.",
+                    Alert.AlertType.WARNING);
+        }
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }

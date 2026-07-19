@@ -22,4 +22,6 @@ public interface FuncionDAO {
 
     /** @return {filas, columnas} de la sala asociada a la función */
     int[] obtenerDimensionesSala(int funcionId) throws DAOException;
+    boolean existeSolapamiento(int salaId, java.time.LocalDateTime inicio,
+                               java.time.LocalDateTime fin, Integer excluirFuncionId);
 }

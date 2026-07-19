@@ -4,6 +4,7 @@ import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.personal.view.CarteleraCrudView;
 import com.bmw.cine.personal.view.EmitirBoletoView;
+import com.bmw.cine.personal.view.GestionFuncionesView;
 import com.bmw.cine.personal.view.TaquillaView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,16 +38,20 @@ public class PersonalModule {
             TaquillaView vistaTaquilla = new TaquillaView(usuarioActivo);
             CarteleraCrudView vistaCartelera = new CarteleraCrudView();
             EmitirBoletoView vistaEmitir = new EmitirBoletoView(usuarioActivo);
+            GestionFuncionesView vistaFunciones = new GestionFuncionesView();
 
             // AGREGAR BOTONES DE NAVEGACIÓN
             Button btnTaquilla = headerCtrl.agregarBotonNav("Taquilla", () -> {
                 contenedorPrincipal.setCenter(vistaTaquilla);
             });
+            Button btnEmitir = headerCtrl.agregarBotonNav("Emitir boleto", () -> {
+                contenedorPrincipal.setCenter(vistaEmitir);
+            });
             Button btnCartelera = headerCtrl.agregarBotonNav("Cartelera", () -> {
                 contenedorPrincipal.setCenter(vistaCartelera);
             });
-            Button btnEmitir = headerCtrl.agregarBotonNav("Emitir boleto", () -> {
-                contenedorPrincipal.setCenter(vistaEmitir);
+            Button btnFunciones = headerCtrl.agregarBotonNav("Funciones", () -> {
+                contenedorPrincipal.setCenter(vistaFunciones);
             });
 
             // CONFIGURAR ACCIONES DEL MENÚ DESPLEGABLE

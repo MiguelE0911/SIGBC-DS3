@@ -85,6 +85,9 @@ public class EmitirBoletoView extends BorderPane {
     }
 
     private VBox construirFormulario() {
+        Label lblSeccionUsuario = new Label("1. Espectador");
+        lblSeccionUsuario.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: -fx-acento-principal;");
+
         // --- Sección usuario ---
         campoBusquedaUsuario.setPromptText("Buscar por nombre, correo o username...");
         Button btnBuscar = new Button("Buscar");
@@ -98,28 +101,34 @@ public class EmitirBoletoView extends BorderPane {
         labelUsuarioSeleccionado.getStyleClass().add("vista-subtitulo");
 
         VBox seccionUsuario = new VBox(8,
-                new Label("1. Espectador"), filaBusqueda, listaUsuarios, labelUsuarioSeleccionado);
+                lblSeccionUsuario, filaBusqueda, listaUsuarios, labelUsuarioSeleccionado);
 
         btnBuscar.setOnAction(e -> buscarUsuarios());
         campoBusquedaUsuario.setOnAction(e -> buscarUsuarios());
 
         // --- Sección película/función ---
+        Label lblSeccionFuncion = new Label("2. Película y función");
+        lblSeccionFuncion.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: -fx-acento-principal;");
+
         comboPelicula.setPromptText("Seleccionar película");
         comboFuncion.setPromptText("Seleccionar función");
         HBox filaPeliculaFuncion = new HBox(12, comboPelicula, comboFuncion);
         filaPeliculaFuncion.setAlignment(Pos.CENTER_LEFT);
 
         VBox seccionFuncion = new VBox(8,
-                new Label("2. Película y función"), filaPeliculaFuncion);
+                lblSeccionFuncion, filaPeliculaFuncion);
 
         // --- Sección asientos ---
+        Label lblSeccionAsientos = new Label("3. Asiento(s) — selección múltiple");
+        lblSeccionAsientos.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: -fx-acento-principal;");
+
         listaAsientos.setPrefHeight(160);
         listaAsientos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listaAsientos.setPlaceholder(new Label("Elegí una función primero"));
         labelAsientosInfo.getStyleClass().add("vista-subtitulo");
 
         VBox seccionAsientos = new VBox(8,
-                new Label("3. Asiento(s) — selección múltiple"), listaAsientos, labelAsientosInfo);
+                lblSeccionAsientos, listaAsientos, labelAsientosInfo);
 
         // --- Botón emitir ---
         btnEmitir.getStyleClass().add("boton-aprobar");
@@ -131,7 +140,6 @@ public class EmitirBoletoView extends BorderPane {
     }
 
     // ---------- Usuario ----------
-
     private void configurarBusquedaUsuario() {
         listaUsuarios.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(UsuarioDTO u, boolean empty) {

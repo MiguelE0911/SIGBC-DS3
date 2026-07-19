@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -155,5 +156,21 @@ public class PeliculaDAOImpl implements PeliculaDAO {
                 rs.getString("ruta_poster"),
                 rs.getBoolean("visible")
         );
+    }
+
+    @Override
+    public boolean eliminar(int id) {
+        String sql = "DELETE FROM " + TABLA + " WHERE id = ?";
+        try (Connection con = Conexion.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new DAOException("No se puede eliminar: la película tiene funciones asociadas", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error al eliminar la película " + id, e);
+        }
     }
 }
