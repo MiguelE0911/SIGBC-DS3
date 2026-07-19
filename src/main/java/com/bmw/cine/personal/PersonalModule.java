@@ -2,6 +2,10 @@ package com.bmw.cine.personal;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.view.HeaderPrincipalController;
+import com.bmw.cine.personal.controller.CarteleraCrudController;
+import com.bmw.cine.personal.controller.EmitirBoletoController;
+import com.bmw.cine.personal.controller.GestionFuncionesController;
+import com.bmw.cine.personal.controller.TaquillaController;
 import com.bmw.cine.personal.view.CarteleraCrudView;
 import com.bmw.cine.personal.view.EmitirBoletoView;
 import com.bmw.cine.personal.view.GestionFuncionesView;
@@ -35,10 +39,10 @@ public class PersonalModule {
             headerCtrl.configurar("Cinema BMW", usuarioActivo, true);
 
             // INSTANCIAR LAS VISTAS
-            TaquillaView vistaTaquilla = new TaquillaView(usuarioActivo);
-            CarteleraCrudView vistaCartelera = new CarteleraCrudView();
-            EmitirBoletoView vistaEmitir = new EmitirBoletoView(usuarioActivo);
-            GestionFuncionesView vistaFunciones = new GestionFuncionesView();
+            TaquillaView vistaTaquilla = new TaquillaView(); new TaquillaController(vistaTaquilla, usuarioActivo);
+            CarteleraCrudView vistaCartelera = new CarteleraCrudView(); new CarteleraCrudController(vistaCartelera);
+            EmitirBoletoView vistaEmitir = new EmitirBoletoView(); new EmitirBoletoController(vistaEmitir, usuarioActivo);
+            GestionFuncionesView vistaFunciones = new GestionFuncionesView(); new GestionFuncionesController(vistaFunciones);
 
             // AGREGAR BOTONES DE NAVEGACIÓN
             Button btnTaquilla = headerCtrl.agregarBotonNav("Taquilla", () -> {
