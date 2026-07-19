@@ -1,34 +1,35 @@
 package com.bmw.cine.espectador;
 
 import com.bmw.cine.common.dao.UsuarioDAO;
-import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.dao.impl.UsuarioDAOImpl;
+import com.bmw.cine.espectador.controller.LoginController;
+import com.bmw.cine.espectador.view.LoginView;
 
+import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * Utilidad para abrir el módulo del Espectador una vez autenticado.
- * NO es un punto de entrada de la aplicación (no extiende Application).
- * El único lanzador de la app es com.bmw.cine.Main.
+ * Clase lanzadora que conecta el DAO real con la vista de Login.
  */
-public class EspectadorModule {
+public class EspectadorModule extends Application {
 
-    /**
-     * Abre la vista principal del módulo del espectador, reutilizando
-     * el stage ya existente.
-     */
-    public static void iniciar(Stage stage, UsuarioDTO usuarioDTO, UsuarioDAO usuarioDAO) {
-        stage.setTitle("Cine BMW - Espectador: " + usuarioDTO.getNombre());
-        // TODO: aquí instancias la vista principal del espectador
-        // (cartelera, compra de boletos, etc.) y su controlador,
-        // pasando usuarioDAO y usuarioDTO si los necesita.
-        //
-        // Ejemplo:
-        // CarteleraView carteleraView = new CarteleraView();
-        // new CarteleraController(carteleraView, usuarioDAO, usuarioDTO, stage);
-        // carteleraView.mostrar(stage);
+    @Override
+    public void start(Stage primaryStage) {
+        // 1. Instanciar la implementación real que conecta a MariaDB [3]
+        UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+
+        // 2. Instanciar la vista
+        LoginView loginView = new LoginView();
+
+        // 3. Crear el controlador inyectando el DAO y el stage [2, 4]
+        new LoginController(loginView, usuarioDAO, primaryStage);
+
+        // 4. Mostrar la ventana
+        primaryStage.setTitle("Cine BMW - Iniciar Sesión");
+        loginView.mostrar(primaryStage);
     }
 
-    private EspectadorModule() {
-        // Clase de utilidad, no instanciable
+    public static void main(String[] args) {
+        launch(args);
     }
 }

@@ -199,4 +199,30 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 rs.getBoolean("activo")
         );
     }
+
+    @Override
+    public List<UsuarioDTO> buscarPorTexto(String texto) {
+        String sql = "SELECT id, nombre, correo, username, rol_id, activo FROM usuario " +
+                "WHERE (nombre LIKE ? OR correo LIKE ? OR username LIKE ?) AND activo = TRUE " +
+                "ORDER BY nombre LIMIT 20";
+        String like = "%" + texto + "%";
+        List<UsuarioDTO> resultados = new ArrayList<>();
+        try (Connection conn = Conexion.getInstancia().conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, like);
+            ps.setString(2, like);
+            ps.setString(3, like);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    resultados.add(new UsuarioDTO(
+                            rs.getInt("id"), rs.getString("nombre"), rs.getString("correo"),
+                            rs.getString("username"), rs.getInt("rol_id"), rs.getBoolean("activo")
+                    ));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error al buscar usuarios", ex);
+        }
+        return resultados;
+    }
 }
