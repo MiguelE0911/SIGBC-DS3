@@ -78,3 +78,47 @@
 .tabla-usuarios .table-cell {
     -fx-text-fill: #f4e8d0;
 }
+
+.tabla-usuarios .table-row-cell:selected .table-cell {
+    -fx-text-fill: #1b1224;
+}
+
+.boton-principal {
+    -fx-background-color: #d4af37;
+    -fx-text-fill: #1b1224;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-cursor: hand;
+    -fx-padding: 10 18;
+}
+
+.boton-principal:hover {
+    -fx-background-color: #e6c34f;
+}
+
+.boton-principal:pressed {
+    -fx-background-color: #c69d24;
+}
+
+.boton-secundario {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f4e8d0;
+    -fx-border-color: #6b4d8d;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-padding: 10 18;
+}
+
+.boton-secundario:hover {
+    -fx-background-color: #31223f;
+}
+
+.boton-secundario:pressed {
+    -fx-background-color: #241a30;
+}

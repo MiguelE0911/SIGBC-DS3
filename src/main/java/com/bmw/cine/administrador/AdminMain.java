@@ -16,7 +16,7 @@ public class AdminMain extends Application {
         // Usuario de prueba únicamente para ejecutar el módulo
         UsuarioDTO administrador = new UsuarioDTO(
                 1,
-                "Administrador",
+                "Brandon",
                 "admin@bmw.com",
                 "admin",
                 Usuario.ROL_ADMINISTRADOR,
