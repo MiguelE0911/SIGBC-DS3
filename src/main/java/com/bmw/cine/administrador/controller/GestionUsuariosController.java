@@ -68,6 +68,12 @@ public class GestionUsuariosController {
 
                     vista.getBtnSuspender()
                             .setDisable(false);
+
+                    if (usuario.isActivo()) {
+                        vista.getBtnSuspender().setText("Suspender usuario");
+                    } else {
+                        vista.getBtnSuspender().setText("Reactivar usuario");
+                    }
                 });
     }
 
@@ -75,24 +81,17 @@ public class GestionUsuariosController {
 
     private void configurarBotones() {
         vista.getBtnGuardarCambios().setOnAction(e -> {
-
             if (usuarioSeleccionado == null) {
                 return;
             }
-
             String nuevoRol = vista.getCmbNuevoRol().getValue();
-
             int rolBD = convertirRol(nuevoRol);
-
             try {
-
                 boolean actualizado = usuarioDAO.actualizarRol(
                         usuarioSeleccionado.getId(),
                         rolBD
                 );
-
                 if (actualizado) {
-
                     Alert alerta = new Alert(AlertType.INFORMATION);
                     alerta.setHeaderText(null);
                     alerta.setContentText("Rol actualizado correctamente.");
@@ -103,9 +102,7 @@ public class GestionUsuariosController {
                     vista.getTablaUsuarios()
                             .getSelectionModel()
                             .select(usuarioSeleccionado);
-
                 } else {
-
                     Alert alerta = new Alert(AlertType.ERROR);
                     alerta.setHeaderText(null);
                     alerta.setContentText("No fue posible actualizar el rol.");
@@ -113,7 +110,6 @@ public class GestionUsuariosController {
                 }
 
             } catch (DAOException ex) {
-
                 Alert alerta = new Alert(AlertType.ERROR);
                 alerta.setHeaderText(null);
                 alerta.setContentText(ex.getMessage());
@@ -125,13 +121,58 @@ public class GestionUsuariosController {
             if (usuarioSeleccionado == null) {
                 return;
             }
+            boolean suspender = usuarioSeleccionado.isActivo();
+            Alert confirmacion = new Alert(AlertType.CONFIRMATION);
+            confirmacion.setTitle("Confirmar acción");
+            confirmacion.setHeaderText(null);
 
-            Alert alerta = new Alert(AlertType.INFORMATION);
-            alerta.setHeaderText(null);
-            alerta.setContentText(
-                    "Aquí se suspenderá el usuario."
-            );
-            alerta.showAndWait();
+            if (suspender) {
+                confirmacion.setContentText(
+                        "¿Desea suspender al usuario \""
+                                + usuarioSeleccionado.getUsername()
+                                + "\"?"
+                );
+            } else {
+                confirmacion.setContentText(
+                        "¿Desea reactivar al usuario \""
+                                + usuarioSeleccionado.getUsername()
+                                + "\"?"
+                );
+            }
+            if (confirmacion.showAndWait().orElse(null)
+                    != javafx.scene.control.ButtonType.OK) {
+                return;
+            }
+            boolean nuevoEstado = !usuarioSeleccionado.isActivo();
+            try {
+                boolean actualizado = usuarioDAO.actualizarEstadoActivo(
+                        usuarioSeleccionado.getId(),
+                        nuevoEstado
+                );
+                if (actualizado) {
+                    Alert alerta = new Alert(AlertType.INFORMATION);
+                    alerta.setHeaderText(null);
+                    alerta.setContentText(
+                            nuevoEstado
+                                    ? "El usuario fue reactivado correctamente."
+                                    : "El usuario fue suspendido correctamente."
+                    );
+                    alerta.showAndWait();
+                    int idUsuario = usuarioSeleccionado.getId();
+                    recargarTabla();
+                    seleccionarUsuario(idUsuario);
+                } else {
+                    Alert alerta = new Alert(AlertType.ERROR);
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("No fue posible actualizar el estado del usuario.");
+                    alerta.showAndWait();
+                }
+            } catch (DAOException ex) {
+                Alert alerta = new Alert(AlertType.ERROR);
+                alerta.setHeaderText(null);
+                alerta.setContentText(ex.getMessage());
+                alerta.showAndWait();
+            }
         });
     }
 
@@ -139,16 +180,12 @@ public class GestionUsuariosController {
      * Carga todos los usuarios desde la base de datos.
      */
     private void cargarUsuarios() {
-
         try {
-
             usuarios = usuarioDAO.listarTodos();
 
             vista.getTablaUsuarios().setItems(
                     FXCollections.observableArrayList(usuarios));
-
         } catch (DAOException e) {
-
             Alert alerta = new Alert(AlertType.ERROR);
             alerta.setTitle("Error");
             alerta.setHeaderText("No fue posible cargar los usuarios.");
@@ -193,24 +230,18 @@ public class GestionUsuariosController {
                 .toLowerCase();
 
         String rolSeleccionado = vista.getCmbRol().getValue();
-
         List<UsuarioDTO> resultado = usuarios.stream()
-
                 .filter(usuario -> {
 
                     boolean coincideTexto =
                             usuario.getNombre().toLowerCase().contains(textoBusqueda)
                                     || usuario.getUsername().toLowerCase().contains(textoBusqueda);
-
                     boolean coincideRol =
                             rolSeleccionado.equals("Todos")
                                     || usuario.getNombreRol().equalsIgnoreCase(rolSeleccionado);
-
                     return coincideTexto && coincideRol;
                 })
-
                 .collect(Collectors.toList());
-
         vista.getTablaUsuarios().setItems(
                 FXCollections.observableArrayList(resultado));
     }
@@ -232,5 +263,20 @@ public class GestionUsuariosController {
     public void recargarTabla() {
         cargarUsuarios();
         aplicarFiltros();
+    }
+
+    /**
+     * Vuelve a seleccionar un usuario de la tabla utilizando su ID.
+     */
+    private void seleccionarUsuario(int idUsuario) {
+        for (UsuarioDTO usuario : vista.getTablaUsuarios().getItems()) {
+            if (usuario.getId() == idUsuario) {
+                vista.getTablaUsuarios()
+                        .getSelectionModel()
+                        .select(usuario);
+
+                break;
+            }
+        }
     }
 }
