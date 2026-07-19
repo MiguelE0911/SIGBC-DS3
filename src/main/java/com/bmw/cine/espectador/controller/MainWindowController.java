@@ -2,50 +2,45 @@ package com.bmw.cine.espectador.controller;
 
 import java.util.Optional;
 
+import com.bmw.cine.app.SessionRouter;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.espectador.view.BilleteraView;
+import com.bmw.cine.espectador.view.CarteleraView;
 import com.bmw.cine.espectador.view.MainWindowView;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
-/**
- * Controlador principal de la interfaz del Espectador.
- * Gestiona el header global y la carga dinámica de la Billetera.
- * 
- * @author Wilma
- * @version 1.1
- */
 public class MainWindowController {
     private final MainWindowView vista;
     private final UsuarioDTO usuarioActivo;
+    private final Stage stage;
+    private BilleteraController billeteraControllerActual; // null si el panel está cerrado
 
-    /**
-     * Constructor del controlador.
-     * 
-     * @param vista         Instancia de la vista principal.
-     * @param usuarioActivo Datos del usuario que inició sesión.
-     */
-    public MainWindowController(MainWindowView vista, UsuarioDTO usuarioActivo) {
+    public MainWindowController(MainWindowView vista, UsuarioDTO usuarioActivo, Stage stage) {
         this.vista = vista;
         this.usuarioActivo = usuarioActivo;
+        this.stage = stage;
+        cargarCarteleraInicial();
         inicializarEventos();
     }
 
+    private void cargarCarteleraInicial() {
+        CarteleraView carteleraView = new CarteleraView();
+        // Antes: this::refrescarBilleteraSiEstaAbierta
+        // Ahora: al comprar, la Billetera se ABRE (si estaba cerrada) y se refresca.
+        new CarteleraController(carteleraView, stage, usuarioActivo, this::irABilletera);
+        vista.setVistaCentral(carteleraView);
+    }
+
     private void inicializarEventos() {
-        // EVENTO BILLETERA: Ahora carga el panel lateral real (Meta 3)
         vista.getBtnBilletera().setOnAction(e -> {
-            // 1. Instanciamos la vista del panel lateral
             BilleteraView billeteraVista = new BilleteraView();
-            
-            // 2. Creamos su controlador inyectando el usuario activo para filtrar sus boletos
-            new BilleteraController(billeteraVista, usuarioActivo);
-            
-            // 3. Lo colocamos en el lado derecho del BorderPane global
-            vista.getRootLayout().setRight(billeteraVista);
+            billeteraControllerActual = new BilleteraController(billeteraVista, usuarioActivo);
+            vista.toggleBilletera(billeteraVista); // este sí alterna: botón manual = abrir/cerrar
         });
 
-        // EVENTO SESIÓN: Alerta de confirmación para cerrar sesión (Meta 8)
         vista.getBtnSesion().setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Cerrar Sesión");
@@ -54,10 +49,19 @@ public class MainWindowController {
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Aquí podrías invocar un método para regresar al LoginView
-                System.out.println("Sesión de " + usuarioActivo.getNombre() + " cerrada.");
-                // stage.close(); o cargar el LoginView nuevamente
+                SessionRouter.cerrarSesion(stage);
             }
         });
+    }
+
+    /**
+     * Se ejecuta tras una compra exitosa (viene encadenado desde
+     * SeleccionAsientosController -> DetallePeliculaController -> CarteleraController).
+     * Abre la Billetera si estaba cerrada y la deja actualizada con el boleto nuevo.
+     */
+    private void irABilletera() {
+        BilleteraView billeteraVista = new BilleteraView();
+        billeteraControllerActual = new BilleteraController(billeteraVista, usuarioActivo);
+        vista.mostrarBilletera(billeteraVista); // idempotente: no cierra si ya estaba abierta
     }
 }

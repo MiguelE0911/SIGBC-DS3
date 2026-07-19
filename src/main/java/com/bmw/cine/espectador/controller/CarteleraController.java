@@ -1,40 +1,73 @@
 package com.bmw.cine.espectador.controller;
 
-import com.bmw.cine.common.dao.DAOException;
+import java.util.List;
+
+import com.bmw.cine.common.dao.FuncionDAO;
 import com.bmw.cine.common.dao.PeliculaDAO;
+import com.bmw.cine.common.dao.impl.FuncionDAOImpl;
 import com.bmw.cine.common.dao.impl.PeliculaDAOImpl;
 import com.bmw.cine.common.dto.PeliculaCardDTO;
+import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.espectador.view.CarteleraView;
 import com.bmw.cine.espectador.view.PeliculaCardView;
-import java.util.List;
+
+import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 
 public class CarteleraController {
     private final CarteleraView vista;
     private final PeliculaDAO peliculaDAO;
+    private final FuncionDAO funcionDAO;
+    private final Stage stage;
+    private final UsuarioDTO usuarioActivo;
+    private final Runnable onCompraExitosa;
 
-    public CarteleraController(CarteleraView vista) {
+    public CarteleraController(CarteleraView vista, Stage stage, UsuarioDTO usuarioActivo) {
+        this(vista, stage, usuarioActivo, null);
+    }
+
+    public CarteleraController(CarteleraView vista, Stage stage, UsuarioDTO usuarioActivo, Runnable onCompraExitosa) {
         this.vista = vista;
-        this.peliculaDAO = new PeliculaDAOImpl(); // Regla: Solo aquí se usa "Impl" [8]
+        this.stage = stage;
+        this.usuarioActivo = usuarioActivo;
+        this.onCompraExitosa = onCompraExitosa;
+        this.peliculaDAO = new PeliculaDAOImpl();
+        this.funcionDAO = new FuncionDAOImpl();
         cargarCartelera();
     }
 
     private void cargarCartelera() {
-        try {
-            // Obtiene solo películas con 'activa = true' del DAO [2]
-            List<PeliculaCardDTO> listaPeliculas = peliculaDAO.listarCartelera();
-            
+        Task<List<PeliculaCardDTO>> tarea = new Task<>() {
+            @Override
+            protected List<PeliculaCardDTO> call() throws Exception {
+                return peliculaDAO.listarCartelera();
+            }
+        };
+
+        tarea.setOnSucceeded(evt -> {
             vista.getFlowPaneCartelera().getChildren().clear();
-            for (PeliculaCardDTO dto : listaPeliculas) {
+            for (PeliculaCardDTO dto : tarea.getValue()) {
                 PeliculaCardView card = new PeliculaCardView(dto);
-                
-                // Evento para Meta 5: Detalle de película
-                card.setOnMouseClicked(e -> System.out.println("Cargando detalle de: " + dto.getTitulo()));
-                
+                card.setOnMouseClicked(e ->
+                    new DetallePeliculaController(dto.getPeliculaId(), peliculaDAO, funcionDAO, stage, usuarioActivo, onCompraExitosa)
+                );
                 vista.getFlowPaneCartelera().getChildren().add(card);
             }
-        } catch (DAOException e) {
-            // Manejo de error según guía [9]
-            System.err.println("Error al cargar cartelera: " + e.getMessage());
-        }
+        });
+
+        tarea.setOnFailed(evt -> {
+            Alert alerta = new Alert(AlertType.ERROR);
+            alerta.setTitle("Error al cargar cartelera");
+            alerta.setHeaderText(null);
+            alerta.setContentText("No se pudo obtener la lista de películas. Verifica la conexión con el servidor.");
+            alerta.showAndWait();
+            tarea.getException().printStackTrace();
+        });
+
+        Thread hilo = new Thread(tarea);
+        hilo.setDaemon(true);
+        hilo.start();
     }
 }

@@ -16,17 +16,17 @@ public class EspectadorModule extends Application {
     @Override
     public void start(Stage primaryStage) {
         // 1. Instanciar la implementación real que conecta a MariaDB [3]
-        UsuarioDAO usuarioDAO = new UsuarioDAOImpl(); 
+        UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
 
         // 2. Instanciar la vista
-        LoginView loginView = new LoginView(); 
+        LoginView loginView = new LoginView();
 
         // 3. Crear el controlador inyectando el DAO y el stage [2, 4]
-        new LoginController(loginView, usuarioDAO, primaryStage); 
+        new LoginController(loginView, usuarioDAO, primaryStage);
 
         // 4. Mostrar la ventana
         primaryStage.setTitle("Cine BMW - Iniciar Sesión");
-        loginView.mostrar(primaryStage); 
+        loginView.mostrar(primaryStage);
     }
 
     public static void main(String[] args) {

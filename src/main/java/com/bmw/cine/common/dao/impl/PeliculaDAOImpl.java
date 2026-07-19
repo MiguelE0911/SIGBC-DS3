@@ -1,20 +1,20 @@
 package com.bmw.cine.common.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.bmw.cine.common.dao.DAOException;
 import com.bmw.cine.common.dao.PeliculaDAO;
 import com.bmw.cine.common.db.Conexion;
 import com.bmw.cine.common.dto.PeliculaCardDTO;
 import com.bmw.cine.common.model.Pelicula;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class PeliculaDAOImpl implements PeliculaDAO {
 
@@ -94,7 +94,7 @@ public class PeliculaDAOImpl implements PeliculaDAO {
             ps.setString(2, pelicula.getSinopsis());
             ps.setString(3, pelicula.getGenero());
             ps.setInt(4, pelicula.getDuracionMinutos());
-            ps.setString(5, pelicula.rutaPoster());
+            ps.setString(5, pelicula.getRutaPoster());
             ps.setBoolean(6, pelicula.isActiva());
 
             ps.executeUpdate();
@@ -122,7 +122,7 @@ public class PeliculaDAOImpl implements PeliculaDAO {
             ps.setString(2, pelicula.getSinopsis());
             ps.setString(3, pelicula.getGenero());
             ps.setInt(4, pelicula.getDuracionMinutos());
-            ps.setString(5, pelicula.rutaPoster());
+            ps.setString(5, pelicula.getRutaPoster());
             ps.setInt(6, pelicula.getId());
 
             return ps.executeUpdate() > 0;

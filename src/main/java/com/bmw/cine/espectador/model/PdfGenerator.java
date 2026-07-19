@@ -38,7 +38,7 @@ public class PdfGenerator {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
             // Encabezado
-            document.add(new Paragraph("MULTICINES BMW")
+            document.add(new Paragraph("CINEMA BMW")
                     .setFontColor(COLOR_DORADO)
                     .setFontSize(24)
                     .setBold()

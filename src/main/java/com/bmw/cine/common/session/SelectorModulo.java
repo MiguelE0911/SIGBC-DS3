@@ -1,12 +1,13 @@
 package com.bmw.cine.common.session;
 
-
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
+import com.bmw.cine.espectador.controller.MainWindowController;
+import com.bmw.cine.espectador.view.MainWindowView;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -131,7 +132,13 @@ public class SelectorModulo {
     }
 
     private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
-        mostrarPendiente("Cartelera");
+         MainWindowView mainView = new MainWindowView();
+         new MainWindowController(mainView, usuarioActivo, stage);
+
+         Scene escena = new Scene(mainView.getRootLayout(), 1000, 650);
+         stage.setTitle("Cinema BMW");
+         stage.setScene(escena);
+         stage.show();
     }
 
     private static void entrarATaquilla(Stage stage, UsuarioDTO usuarioActivo) {
@@ -140,13 +147,5 @@ public class SelectorModulo {
 
     private static void entrarAAdmin(Stage stage, UsuarioDTO usuarioActivo) {
         com.bmw.cine.administrador.AdminModule.iniciar(stage, usuarioActivo);
-    }
-
-    private static void mostrarPendiente(String nombreModulo) {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setTitle("Módulo pendiente");
-        alerta.setHeaderText(null);
-        alerta.setContentText("El módulo \"" + nombreModulo + "\" aún no está implementado.");
-        alerta.showAndWait();
     }
 }

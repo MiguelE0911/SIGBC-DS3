@@ -17,18 +17,24 @@ import javafx.stage.Stage;
 public class SessionRouter {
 
     public static void enrutar(Stage stage, UsuarioDTO usuarioActivo) {
-        if (usuarioActivo.getRol() == Usuario.ROL_ESPECTADOR) {
-            MainWindowView vistaPrincipal = new MainWindowView();
-            new MainWindowController(vistaPrincipal, usuarioActivo);
-            Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800);
-            stage.setScene(escena);
-            stage.setTitle("Multicines BMW - Cartelera");
-            stage.show();
-            return;
-        }
+       if (usuarioActivo.getRol() == Usuario.ROL_ESPECTADOR) {
+    MainWindowView vistaPrincipal = new MainWindowView();
+    new MainWindowController(vistaPrincipal, usuarioActivo, stage);
+    Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800);
+
+    escena.getStylesheets().addAll(
+        MainWindowView.class.getResource("/css/tema-global.css").toExternalForm(),
+        MainWindowView.class.getResource("/css/header-principal.css").toExternalForm()
+    );
+
+    stage.setScene(escena);
+    stage.setTitle("Multicines BMW - Cartelera");
+    stage.show();
+    return;
+}
+        // Para Personal y Administrador, se muestra el selector de módulo.
         SelectorModulo.iniciar(stage, usuarioActivo);
     }
-
     /**
      * Cierra la sesión activa y regresa el stage a la pantalla de Login.
      * Cualquier módulo (Personal, Administrador, Espectador) puede llamarla

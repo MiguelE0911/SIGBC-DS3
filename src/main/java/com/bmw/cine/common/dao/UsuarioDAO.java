@@ -5,7 +5,6 @@ import com.bmw.cine.common.model.Usuario;
 
 import java.util.List;
 import java.util.Optional;
-
 /**
  * Contrato de acceso a datos para Usuario. Cubre login/registro
  * (Espectador) y gestión de cuentas (Administrador).
