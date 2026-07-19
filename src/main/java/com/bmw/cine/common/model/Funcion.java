@@ -31,7 +31,8 @@ public class Funcion {
 
     public LocalDateTime horario() {return horario;}
 
-    public void setFechaHora(LocalDateTime horario) {this.horario = horario;}
+    public LocalDateTime getHorario() {return horario;}
+    public void setHorario(LocalDateTime horario) {this.horario = horario;}
 
     public BigDecimal precioBase() {return precioBase;}
 

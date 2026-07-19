@@ -26,18 +26,18 @@ public class BilleteraView extends VBox {
     /**
      * Configura el estilo base del panel lateral siguiendo la paleta VIP.
      */
-    private void configurarPanelLateral() {
-        this.setPrefWidth(350); // Ancho fijo para el panel lateral
-        this.setSpacing(20);
-        this.setPadding(new Insets(25));
-        
-        // Estilo basado en los colores oficiales (#1b1224 y #100b16)
-        this.setStyle(
-            "-fx-background-color: linear-gradient(to bottom, #1b1224, #100b16); " +
-            "-fx-border-color: #3a2b4a; " +
-            "-fx-border-width: 0 0 0 1;" // Borde sutil a la izquierda
-        );
-    }
+   private void configurarPanelLateral() {
+    // Se elimina setPrefWidth(350) para permitir el redimensionamiento deslizable
+    this.setMinWidth(300); // Tamaño mínimo para no romper el diseño
+    this.setMaxWidth(600); // Tamaño máximo para no tapar toda la pantalla
+    this.setSpacing(20);
+    this.setPadding(new Insets(25));
+    this.setStyle(
+        "-fx-background-color: linear-gradient(to bottom, #1b1224, #100b16); " +
+        "-fx-border-color: #3a2b4a; " +
+        "-fx-border-width: 0 0 0 1;" // Borde a la izquierda
+    );
+}
 
     private void inicializarComponentes() {
         // 1. Título de la Billetera

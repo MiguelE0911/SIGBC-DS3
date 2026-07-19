@@ -13,20 +13,13 @@ public interface FuncionDAO {
      * (Espectador) para elegir función.
      */
     List<FuncionDTO> listarPorPelicula(int peliculaId);
-
     Optional<Funcion> buscarPorId(int id);
-
-    // Para la vista de Selección de asiento: qué códigos ya están ocupados.
-    List<String> listarAsientosOcupados(int funcionId);
-
-    // Gestión de horarios (Personal).
-    List<Funcion> listarTodas();
-
+    List<String> listarAsientosOcupados(int funcionId); // Para la vista de Selección de asiento: qué códigos ya están ocupados.
+    List<Funcion> listarTodas(); // Gestión de horarios (Personal).
     Funcion crear(Funcion funcion);
-
     boolean actualizar(Funcion funcion);
-
     boolean eliminar(int id);
 
+    /** @return {filas, columnas} de la sala asociada a la función */
     int[] obtenerDimensionesSala(int funcionId) throws DAOException;
 }

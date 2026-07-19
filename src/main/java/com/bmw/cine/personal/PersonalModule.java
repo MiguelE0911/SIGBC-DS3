@@ -3,6 +3,7 @@ package com.bmw.cine.personal;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.personal.view.CarteleraCrudView;
+import com.bmw.cine.personal.view.EmitirBoletoView;
 import com.bmw.cine.personal.view.TaquillaView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,6 +36,7 @@ public class PersonalModule {
             // INSTANCIAR LAS VISTAS
             TaquillaView vistaTaquilla = new TaquillaView(usuarioActivo);
             CarteleraCrudView vistaCartelera = new CarteleraCrudView();
+            EmitirBoletoView vistaEmitir = new EmitirBoletoView(usuarioActivo);
 
             // AGREGAR BOTONES DE NAVEGACIÓN
             Button btnTaquilla = headerCtrl.agregarBotonNav("Taquilla", () -> {
@@ -43,12 +45,14 @@ public class PersonalModule {
             Button btnCartelera = headerCtrl.agregarBotonNav("Cartelera", () -> {
                 contenedorPrincipal.setCenter(vistaCartelera);
             });
+            Button btnEmitir = headerCtrl.agregarBotonNav("Emitir boleto", () -> {
+                contenedorPrincipal.setCenter(vistaEmitir);
+            });
 
             // CONFIGURAR ACCIONES DEL MENÚ DESPLEGABLE
-            headerCtrl.setOnCerrarSesion(() -> mostrarPendiente("Cerrar Sesión próximamente"));
-            headerCtrl.setOnCambiarSeccion(() -> {
-                com.bmw.cine.common.session.SelectorModulo.iniciar(stage, usuarioActivo);
-            });
+            headerCtrl.setOnCerrarSesion(() -> headerCtrl.setOnCerrarSesion(() ->com.bmw.cine.app.SessionRouter.cerrarSesion(stage)));
+
+            headerCtrl.setOnCambiarSeccion(() -> com.bmw.cine.common.session.SelectorModulo.iniciar(stage, usuarioActivo));
 
             //  ESTADO INICIAL DE LA PANTALLA
             contenedorPrincipal.setTop(header);
