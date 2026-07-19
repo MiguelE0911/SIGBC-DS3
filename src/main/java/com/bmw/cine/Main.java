@@ -27,7 +27,7 @@ public class Main extends Application {
         SessionRouter.enrutar(stage, usuarioPrueba);
         */
 
-        // --- LÍNEAS AÑADIDAS ---
+        // --- LÍNEAS AÑADIDAS PARA EL CABLEADO FUNCIONAL ---
         
         // 1. Instanciamos la implementación real que conecta con MariaDB [3, 4]
         UsuarioDAO usuarioDAO = new UsuarioDAOImpl(); 

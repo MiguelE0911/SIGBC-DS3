@@ -1,8 +1,13 @@
 package com.bmw.cine.common.session;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
-import com.bmw.cine.common.session.OpcionModulo;
+import com.bmw.cine.espectador.controller.CarteleraController;
+import com.bmw.cine.espectador.view.CarteleraView;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,9 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // Pantalla intermedia que aparece después de un login exitoso.
 public class SelectorModulo {
@@ -130,8 +132,15 @@ public class SelectorModulo {
         return tarjeta;
     }
 
-    private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
-        mostrarPendiente("Cartelera");
+      private static void entrarACartelera(Stage stage, UsuarioDTO usuarioActivo) {
+        CarteleraView carteleraView = new CarteleraView();
+        // El controlador engancha el DAO real y carga las películas dentro de la vista
+        new CarteleraController(carteleraView);
+
+        Scene escena = new Scene(carteleraView, 900, 600);
+        stage.setTitle("Cine BMW - Cartelera");
+        stage.setScene(escena);
+        stage.show();
     }
 
     private static void entrarATaquilla(Stage stage, UsuarioDTO usuarioActivo) {
