@@ -1,10 +1,10 @@
 package com.bmw.cine.common.dao;
 
-import com.bmw.cine.common.dto.PeliculaCardDTO;
-import com.bmw.cine.common.model.Pelicula;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.bmw.cine.common.dto.PeliculaCardDTO;
+import com.bmw.cine.common.model.Pelicula;
 
 /**
  * Contrato de acceso a datos para Pelicula. Compartido por 3 flujos:
@@ -25,4 +25,5 @@ public interface PeliculaDAO {
     Pelicula crear(Pelicula pelicula);
     boolean actualizar(Pelicula pelicula);
     boolean actualizarVisibilidad(int id, boolean visible); // (activa=True)(desactivada=False)
+    boolean eliminar(int id);
 }
