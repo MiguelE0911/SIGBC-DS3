@@ -46,6 +46,9 @@ public class HeaderPrincipalController {
     @FXML
     private MenuItem itemCerrarSesion;
 
+    @FXML
+    private MenuItem itemVerPerfil;
+
     /**
      * Configura el header. Llamar justo después de cargar el FXML,
      * antes de agregar botones de navegación.
@@ -86,10 +89,18 @@ public class HeaderPrincipalController {
     }
 
     public void setOnCerrarSesion(Runnable accion) {
-        itemCerrarSesion.setOnAction(e -> accion.run());
+        itemCerrarSesion.setOnAction(e -> javafx.application.Platform.runLater(accion));
     }
 
     public void setOnCambiarSeccion(Runnable accion) {
-        itemCambiarSeccion.setOnAction(e -> accion.run());
+        itemCambiarSeccion.setOnAction(e -> javafx.application.Platform.runLater(accion));
+    }
+
+    public void setOnVerPerfil(Runnable accion) {
+        itemVerPerfil.setOnAction(e -> javafx.application.Platform.runLater(accion));
+    }
+
+    public void actualizarNombreUsuario(UsuarioDTO usuarioActualizado) { //  Refresca el nombre/rol mostrado en el menú tras editar el perfil.
+        menuUsuario.setText(usuarioActualizado.getNombre() + "  ·  " + usuarioActualizado.getNombreRol());
     }
 }
