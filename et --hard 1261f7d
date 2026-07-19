@@ -1,0 +1,35 @@
+[33m1ab33cd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/espectador[m[33m)[m Merge branch 'main' into feature/espectador
+[33m1261f7d[m LA CARTELERA YA ESTA CONECTADA A LA BD, FUNCIONA TODO BIEN AQUI
+[33m539a0c3[m AQUI FUNCIONA BIEN LA CARTELERA, EL LOGIN, EL REGISTRO Y LOS QR
+[33m52cd8ae[m AQUI FUNCIONA BIEN LA CARTELERA, EL LOGIN, EL REGISTRO Y LOS QR
+[33m38c4700[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Merge branch 'main' of https://github.com/MiguelE0911/SIGBC-DS3
+[33me5b3ea7[m Merge branch 'feature/personal'
+[33mf55bc06[m cerrar sesion
+[33m1eb4055[m change: refactor de EspectadorModulo
+[33m5816d37[m fix: ajustes necesarios para merge con main
+[33m4cb01ad[m Merge pull request #1 from MiguelE0911/feature/personal
+[33mbb001f1[m conflict: merge resuelto
+[33m2cd7a90[m feat: meta 3: emisión de manual de boletos
+[33m9a59b79[m[33m ([m[1;31morigin/feature/espectador[m[33m)[m CARTELERA
+[33me3ce102[m Merge branch 'main' of https://github.com/MiguelE0911/SIGBC-DS3
+[33m51bbc36[m feat: DAOsImpl y DTOs de boleto, función y pelicula
+[33m6ba7b7b[m Merge branch 'feature/espectador'
+[33m55f19f5[m Meta 3 completa: Billetera funcional con QR, PDF e integración total de base de datos
+[33ma2fbbff[m feat: Inicio flujo de taquilla y temas globales
+[33md90efea[m Meta 3: Agregada dependencia javafx-swing para renderizar códigos QR
+[33m6efee5d[m Meta 3: Creados el modelo Boleto y las vistas de la Billetera
+[33mfd9d3c0[m Meta 3: Implementado BilleteraController para gestionar historial de boletos
+[33m6b17150[m Meta 3: Creada interfaz de Billetera con ScrollPane para historial de boletos
+[33mff78936[m[33m ([m[1;31morigin/feature/cartelera[m[33m)[m Refactor: organizada estructura de paquetes en el módulo de espectador
+[33m4c88dfd[m Fix: Ajustes finales en EspectadorMain antes del merge
+[33mfe7ca0b[m Feature: Flujo de Login y Registro del espectador
+[33m44dc4ad[m feat: arquitectura principal del paquete common
+[33mc2e7fe4[m feat: Selector de módulo, datos de prueba
+[33mfe3372c[m Merge branch 'main' into feature/db
+[33md928ec8[m fix: organización de modulos main por paquete
+[33mb3a6a7b[m feat: Conexion a bd temporal
+[33mbb697f1[m merge
+[33me177edb[m test: Rama Admin
+[33md4f66ce[m fix: mostrar README.md
+[33maa4bcfd[m update: Creación de ramas
+[33m3f414e2[m[33m ([m[1;31morigin/feature/db[m[33m)[m Commit inicial: Estructura base del proyecto y configuración
