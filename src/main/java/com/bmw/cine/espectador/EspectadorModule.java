@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 /**
  * Clase lanzadora que conecta el DAO real con la vista de Login.
  */
-public class EspectadorMain extends Application {
+public class EspectadorModule extends Application {
 
     @Override
     public void start(Stage primaryStage) {
