@@ -1,51 +1,47 @@
 package com.bmw.cine.app;
 
+import com.bmw.cine.common.dao.UsuarioDAO;
+import com.bmw.cine.common.dao.impl.UsuarioDAOImpl;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
 import com.bmw.cine.common.session.SelectorModulo;
-import com.bmw.cine.espectador.controller.MainWindowController; // Línea añadida [1]
-import com.bmw.cine.espectador.view.MainWindowView; // Línea añadida [1]
+import com.bmw.cine.espectador.controller.LoginController;
+import com.bmw.cine.espectador.controller.MainWindowController;
+import com.bmw.cine.espectador.view.LoginView;
+import com.bmw.cine.espectador.view.MainWindowView;
 
-import javafx.scene.Scene; // Línea añadida [2]
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-
-/**
- * Única clase que conoce a los 3 módulos (Espectador, Personal,
- * Administrador). Nadie más debe importar EspectadorModule,
- * PersonalModule ni AdminModule directamente — todos pasan por aquí.
- *
- * Se llama UNA sola vez, justo después de un login exitoso:
- *   LoginController -> UsuarioDAO.autenticar() -> SessionRouter.enrutar()
- *
- * Regla de negocio (la misma que ya vive en SelectorModulo, pero aquí
- * decide el punto de entrada, no qué tarjetas mostrar):
- *  - Espectador: nunca ve el selector, entra directo a Cartelera.
- *  - Personal / Administrador: pasan por el Selector de Módulo.
- */
 
 public class SessionRouter {
 
     public static void enrutar(Stage stage, UsuarioDTO usuarioActivo) {
         if (usuarioActivo.getRol() == Usuario.ROL_ESPECTADOR) {
-            // TODO: reemplazar por EspectadorModule.iniciar(stage, usuarioActivo);
-            
-            // --- LÍNEAS AÑADIDAS PARA LA RAMA ESPECTADOR ---
-            MainWindowView vistaPrincipal = new MainWindowView(); // [2]
-            new MainWindowController(vistaPrincipal, usuarioActivo); // [2, 3]
-            Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800); // [2]
-            stage.setScene(escena); // [2]
-            stage.setTitle("Multicines BMW - Cartelera"); // [2]
-            stage.show(); // [2]
-            // -----------------------------------------------
-
-            // mostrarPendiente("Cartelera (Espectador)"); 
+            MainWindowView vistaPrincipal = new MainWindowView();
+            new MainWindowController(vistaPrincipal, usuarioActivo);
+            Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800);
+            stage.setScene(escena);
+            stage.setTitle("Multicines BMW - Cartelera");
+            stage.show();
             return;
         }
-        SelectorModulo.iniciar(stage, usuarioActivo); // Personal y Administrador pasan por el selector.
+        SelectorModulo.iniciar(stage, usuarioActivo);
     }
 
-    // Eliminar este metodo cuando se haya creado el enlace a cartelera
+    /**
+     * Cierra la sesión activa y regresa el stage a la pantalla de Login.
+     * Cualquier módulo (Personal, Administrador, Espectador) puede llamarla
+     * desde su botón/menú de "Cerrar sesión" — evita duplicar la
+     * instanciación de LoginView/LoginController en cada uno.
+     */
+    public static void cerrarSesion(Stage stage) {
+        UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+        LoginView loginView = new LoginView();
+        new LoginController(loginView, usuarioDAO, stage);
+        loginView.mostrar(stage);
+    }
+
     private static void mostrarPendiente(String nombreModulo) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("Módulo pendiente");

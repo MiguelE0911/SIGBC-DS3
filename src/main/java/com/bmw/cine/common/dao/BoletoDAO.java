@@ -17,6 +17,9 @@ public interface BoletoDAO {
     /** Lista de solicitudes según los filtros dados (ver FiltroSolicitudDTO). */
     List<SolicitudBoletoDTO> listarSolicitudes(FiltroSolicitudDTO filtro);
 
+    List<String> listarAsientosOcupados(int funcionId);
+    int emitirConfirmado(int usuarioId, int funcionId, String asientoCodigo, int aprobadoPorUsuarioId);
+
     /**
      * Aprueba una solicitud PENDIENTE: la marca CONFIRMADO y registra
      * quién la aprobó. Devuelve false si el boleto ya no estaba
