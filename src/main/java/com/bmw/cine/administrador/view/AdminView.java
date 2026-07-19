@@ -81,6 +81,9 @@ public class AdminView {
 
         escena.getStylesheets().add(
                 getClass().getResource("/css/panel-comun.css").toExternalForm());
+
+        escena.getStylesheets().add(
+                getClass().getResource("/css/gestion-usuarios.css").toExternalForm());
     }
 
     /**
