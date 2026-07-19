@@ -8,7 +8,7 @@ import com.bmw.cine.common.model.Usuario;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class AdminMain extends Application {
+public class AdminModule extends Application {
 
     @Override
     public void start(Stage primaryStage) {

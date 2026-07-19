@@ -9,6 +9,8 @@ import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.administrador.view.ReportesView;
 import com.bmw.cine.administrador.view.DashboardView;
 import com.bmw.cine.administrador.controller.DashboardController;
+import com.bmw.cine.app.SessionRouter;
+import com.bmw.cine.common.session.SelectorModulo;
 
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -70,13 +72,11 @@ public class AdminController {
         HeaderPrincipalController header = vista.getHeaderController();
 
         header.setOnCambiarSeccion(() -> {
-            System.out.println("Cambiar de sección");
-            // TODO: SelectorModulo.iniciar(stage, usuarioActivo);
+            SelectorModulo.iniciar(stage, usuarioActivo);
         });
 
         header.setOnCerrarSesion(() -> {
-            System.out.println("Cerrar sesión");
-            // TODO: Regresar al Login
+            SessionRouter.cerrarSesion(stage);
         });
     }
 
