@@ -77,13 +77,12 @@ public class GestionUsuariosController {
                 });
     }
 
-
-
     private void configurarBotones() {
         vista.getBtnGuardarCambios().setOnAction(e -> {
             if (usuarioSeleccionado == null) {
                 return;
             }
+
             String nuevoRol = vista.getCmbNuevoRol().getValue();
             int rolBD = convertirRol(nuevoRol);
             try {
@@ -119,6 +118,15 @@ public class GestionUsuariosController {
 
         vista.getBtnSuspender().setOnAction(e -> {
             if (usuarioSeleccionado == null) {
+                return;
+            }
+            if (usuarioSeleccionado.getRol() == Usuario.ROL_ADMINISTRADOR) {
+                Alert alerta = new Alert(AlertType.WARNING);
+                alerta.setHeaderText(null);
+                alerta.setContentText(
+                        "No es posible suspender una cuenta de administrador."
+                );
+                alerta.showAndWait();
                 return;
             }
             boolean suspender = usuarioSeleccionado.isActivo();
