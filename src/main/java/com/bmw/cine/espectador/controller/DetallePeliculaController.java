@@ -51,6 +51,7 @@ public class DetallePeliculaController {
         vista.getBtnComprar().setOnAction(e -> procesarCompra());
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private void cargarPelicula(int peliculaId) {
         Task<Optional<Pelicula>> tarea = new Task<>() {
             @Override
@@ -80,6 +81,7 @@ public class DetallePeliculaController {
         lanzar(tarea);
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private void cargarHorarios(int peliculaId) {
         Task<List<FuncionDTO>> tarea = new Task<>() {
             @Override

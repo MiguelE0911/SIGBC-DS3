@@ -19,7 +19,7 @@ public class SessionRouter {
     public static void enrutar(Stage stage, UsuarioDTO usuarioActivo) {
         if (usuarioActivo.getRol() == Usuario.ROL_ESPECTADOR) {
             MainWindowView vistaPrincipal = new MainWindowView();
-            new MainWindowController(vistaPrincipal, usuarioActivo);
+            new MainWindowController(vistaPrincipal, usuarioActivo, stage); //añadi stage aqui tambien
             Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800);
             stage.setScene(escena);
             stage.setTitle("Multicines BMW - Cartelera");
