@@ -43,42 +43,42 @@ public class BoletoItemView extends HBox {
     }
 
     private void inicializarComponentes() {
-        // 1. Representación del QR Funcional
-        // Preparamos la información que contendrá el QR según los requisitos [1]
-        String infoQr = String.format("ID Compra: %d | Película: %s | Asiento: %s", 
-                                      boleto.getIdCompra(), 
-                                      boleto.getPelicula(), 
-                                      boleto.getAsiento());
+    // 1. Mensaje del QR con formato ordenado
+    String infoQr = String.format(
+        "🎟 MULTICINES BMW 🎟\n" +
+        "--------------------\n" +
+        "ORDEN: #%d\n" +
+        "PELÍCULA: %s\n" +
+        "ASIENTO: %s\n" +
+        "ESTADO: %s",
+        boleto.getIdCompra(),
+        boleto.getPelicula().toUpperCase(),
+        boleto.getAsiento(),
+        boleto.getEstadoTexto()
+    );
 
-        ImageView imgQR = new ImageView();
-        imgQR.setFitWidth(70);
-        imgQR.setFitHeight(70);
-        
-        // Llamada a la utilidad QrGenerator para obtener la imagen real [4]
-        imgQR.setImage(QrGenerator.generarImagenQr(infoQr)); 
+    ImageView imgQR = new ImageView();
+    imgQR.setFitWidth(100);  // Aumentado de 70 a 100
+    imgQR.setFitHeight(100); // Aumentado de 70 a 100
+    imgQR.setImage(QrGenerator.generarImagenQr(infoQr));
 
-        // 2. Información del Boleto (Columna Central)
-        VBox infoContainer = new VBox(5);
-        infoContainer.setAlignment(Pos.CENTER_LEFT);
+    // 2. Info central (Pelicula y Fecha)
+    VBox infoContainer = new VBox(5);
+    infoContainer.setAlignment(Pos.CENTER_LEFT);
+    Label lblPelicula = new Label(boleto.getPelicula().toUpperCase());
+    lblPelicula.setStyle("-fx-font-weight: bold; -fx-text-fill: #f4e8d0; -fx-font-size: 14px;");
+    Label lblDetalle = new Label("Asiento: " + boleto.getAsiento() + " | " + boleto.getFecha().toLocalDate());
+    lblDetalle.setStyle("-fx-text-fill: #b8a9c9; -fx-font-size: 11px;");
+    infoContainer.getChildren().addAll(lblPelicula, lblDetalle);
 
-        Label lblPelicula = new Label(boleto.getPelicula().toUpperCase());
-        lblPelicula.setStyle("-fx-font-weight: bold; -fx-text-fill: #f4e8d0; -fx-font-size: 14px;");
+    // 3. Etiqueta de Estado
+    Label lblEstado = new Label(boleto.getEstadoTexto());
+    lblEstado.setPadding(new Insets(4, 10, 4, 10));
+    lblEstado.setStyle(obtenerEstiloEstado(boleto.getEstado()));
 
-        Label lblDetalle = new Label("Asiento: " + boleto.getAsiento() + " | " + boleto.getFecha().toLocalDate());
-        lblDetalle.setStyle("-fx-text-fill: #b8a9c9; -fx-font-size: 11px;");
-
-        infoContainer.getChildren().addAll(lblPelicula, lblDetalle);
-
-        // 3. Indicador de Estado (Derecha)
-        Label lblEstado = new Label(boleto.getEstado().toString());
-        lblEstado.setPadding(new Insets(4, 10, 4, 10));
-        lblEstado.setStyle(obtenerEstiloEstado(boleto.getEstado()));
-
-        // Asegurar que el estado se empuje a la derecha para un diseño balanceado [5]
-        HBox.setHgrow(infoContainer, javafx.scene.layout.Priority.ALWAYS);
-
-        this.getChildren().addAll(imgQR, infoContainer, lblEstado);
-    }
+    HBox.setHgrow(infoContainer, javafx.scene.layout.Priority.ALWAYS);
+    this.getChildren().addAll(imgQR, infoContainer, lblEstado);
+}
 
     /**
      * Devuelve el estilo CSS según el estado del boleto.
