@@ -6,11 +6,7 @@ import com.bmw.cine.common.db.Conexion;
 import com.bmw.cine.common.dto.FiltroSolicitudDTO;
 import com.bmw.cine.common.dto.SolicitudBoletoDTO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +107,44 @@ public class BoletoDAOImpl implements BoletoDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DAOException("Error al rechazar el boleto " + boletoId, e);
+        }
+    }
+
+    @Override
+    public List<String> listarAsientosOcupados(int funcionId) {
+        String sql = "SELECT asiento_codigo FROM boleto WHERE funcion_id = ?";
+        List<String> ocupados = new ArrayList<>();
+        try (Connection conn = Conexion.getInstancia().conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, funcionId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) ocupados.add(rs.getString("asiento_codigo"));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error al consultar asientos ocupados", ex);
+        }
+        return ocupados;
+    }
+
+    @Override
+    public int emitirConfirmado(int usuarioId, int funcionId, String asientoCodigo, int aprobadoPorUsuarioId) {
+        String sql = "INSERT INTO boleto (usuario_id, funcion_id, asiento_codigo, estado, aprobado_por, " +
+                "fecha_solicitud, fecha_confirmacion) VALUES (?, ?, ?, 'CONFIRMADO', ?, NOW(), NOW())";
+        try (Connection conn = Conexion.getInstancia().conectar();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, usuarioId);
+            ps.setInt(2, funcionId);
+            ps.setString(3, asientoCodigo);
+            ps.setInt(4, aprobadoPorUsuarioId);
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) return keys.getInt(1);
+                throw new DAOException("No se obtuvo el id del boleto generado");
+            }
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            throw new DAOException("ASIENTO_OCUPADO: el asiento " + asientoCodigo + " ya fue tomado.", ex);
+        } catch (SQLException ex) {
+            throw new DAOException("Error al emitir boleto", ex);
         }
     }
 }

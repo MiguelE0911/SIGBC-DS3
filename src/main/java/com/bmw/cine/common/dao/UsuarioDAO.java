@@ -35,4 +35,5 @@ public interface UsuarioDAO {
     List<UsuarioDTO> listarTodos(); // Para el panel de Administrador: listado completo de cuentas.
     boolean actualizarEstadoActivo(int usuarioId, boolean activo); // Suspender o reactivar una cuenta.
     boolean actualizarRol(int usuarioId, int nuevoRol); // Cambiar el rol de un usuario (ver constantes ROL_* en Usuario).
+    List<UsuarioDTO> buscarPorTexto(String texto); // Búsqueda parcial por nombre, correo o username (activos). Usado por Personal al emitir boletos manualmente.
 }

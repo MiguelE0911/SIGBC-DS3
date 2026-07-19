@@ -176,4 +176,20 @@ public class FuncionDAOImpl implements FuncionDAO {
                 rs.getBigDecimal("precio_base")
         );
     }
+
+    @Override
+    public int[] obtenerDimensionesSala(int funcionId) throws DAOException {
+        String sql = "SELECT s.filas, s.columnas FROM funcion f " +
+                "JOIN sala s ON s.id = f.sala_id WHERE f.id = ?";
+        try (Connection conn = Conexion.getInstancia().conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, funcionId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return new int[]{ rs.getInt("filas"), rs.getInt("columnas") };
+                throw new DAOException("Función no encontrada: " + funcionId);
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error al obtener dimensiones de sala", ex);
+        }
+    }
 }

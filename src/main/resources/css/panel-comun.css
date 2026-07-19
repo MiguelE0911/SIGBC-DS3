@@ -16,3 +16,118 @@
     -fx-font-size: 13px;
     -fx-text-fill: #b8a9c9;
 }
+
+/* --- Botones de acción (Aprobar / Rechazar / Secundario) --- */
+
+.boton-aprobar {
+    -fx-background-color: #3a7d44;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6;
+    -fx-padding: 4 10 4 10;
+    -fx-cursor: hand;
+}
+
+.boton-aprobar:hover {
+    -fx-background-color: #479653;
+}
+
+.boton-aprobar:disabled {
+    -fx-opacity: 0.4;
+}
+
+.boton-rechazar {
+    -fx-background-color: #a33636;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6;
+    -fx-padding: 4 10 4 10;
+    -fx-cursor: hand;
+}
+
+.boton-rechazar:hover {
+    -fx-background-color: #c04242;
+}
+
+.boton-rechazar:disabled {
+    -fx-opacity: 0.4;
+}
+
+.boton-secundario {
+    -fx-background-color: #241a30;
+    -fx-text-fill: #f4e8d0;
+    -fx-border-color: #3a2b4a;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6 16 6 16;
+    -fx-cursor: hand;
+}
+
+.boton-secundario:hover {
+    -fx-background-color: #2e2140;
+}
+
+/* --- Tabla (tema oscuro para TableView, ComboBox) --- */
+
+.tabla-solicitudes {
+    -fx-background-color: #1b1224;
+    -fx-control-inner-background: #1b1224;
+    -fx-table-cell-border-color: #3a2b4a;
+}
+
+.tabla-solicitudes .column-header-background {
+    -fx-background-color: #241a30;
+}
+
+.tabla-solicitudes .column-header .label {
+    -fx-text-fill: #f4e8d0;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.tabla-solicitudes .table-row-cell {
+    -fx-background-color: #1b1224;
+    -fx-text-fill: #f4e8d0;
+    -fx-border-color: transparent transparent #2e2140 transparent;
+}
+
+.tabla-solicitudes .table-row-cell:odd {
+    -fx-background-color: #201731;
+}
+
+.tabla-solicitudes .table-row-cell:selected {
+    -fx-background-color: #2e2140;
+}
+
+.tabla-solicitudes .table-cell {
+    -fx-text-fill: #f4e8d0;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.tabla-solicitudes .placeholder .label {
+    -fx-text-fill: #b8a9c9;
+}
+
+.combo-box, .combo-box-base {
+    -fx-background-color: #241a30;
+    -fx-text-fill: #f4e8d0;
+    -fx-border-color: #3a2b4a;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-mark-color: #b8a9c9;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #f4e8d0;
+    -fx-background-color: #241a30;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #241a30;
+    -fx-border-color: #3a2b4a;
+}
+
+.combo-box-popup .list-cell:filled:hover {
+    -fx-background-color: #2e2140;
+}
