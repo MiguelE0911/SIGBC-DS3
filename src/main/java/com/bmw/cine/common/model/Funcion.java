@@ -35,6 +35,5 @@ public class Funcion {
     public void setHorario(LocalDateTime horario) {this.horario = horario;}
 
     public BigDecimal precioBase() {return precioBase;}
-
-    public void setPrecio(BigDecimal precioBase) {this.precioBase = precioBase;}
+    public void setPrecioBase(BigDecimal precioBase) {this.precioBase = precioBase;}
 }

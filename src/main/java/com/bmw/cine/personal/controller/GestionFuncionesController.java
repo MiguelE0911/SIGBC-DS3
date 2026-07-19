@@ -221,7 +221,7 @@ public class GestionFuncionesController {
             f.setPeliculaId(comboPelicula.getValue().getId());
             f.setSalaId(comboSala.getValue().getId());
             f.setHorario(LocalDateTime.of(fecha.getValue(), LocalTime.of(spnHora.getValue(), spnMinuto.getValue())));
-            f.setPrecio(new BigDecimal(txtPrecio.getText().trim()));
+            f.setPrecioBase(new BigDecimal(txtPrecio.getText().trim()));
             return f;
         });
 
