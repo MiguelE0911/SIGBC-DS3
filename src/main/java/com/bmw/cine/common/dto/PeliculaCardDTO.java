@@ -24,7 +24,7 @@ public class PeliculaCardDTO {
 
     public int getPeliculaId() {return peliculaId;}
     public String getTitulo() {return titulo;}
-    public String getRutaPoster() {return rutaPoster;}
+    public String rutaPoster() {return rutaPoster;}
     public String getGenero() {return genero;}
     public int getDuracionMinutos() {return duracionMinutos;}
 }

@@ -27,4 +27,6 @@ public interface FuncionDAO {
     boolean actualizar(Funcion funcion);
 
     boolean eliminar(int id);
+
+    int[] obtenerDimensionesSala(int funcionId) throws DAOException;
 }

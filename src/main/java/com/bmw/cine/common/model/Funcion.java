@@ -29,11 +29,11 @@ public class Funcion {
     public int getSalaId() {return salaId;}
     public void setSalaId(int salaId) {this.salaId = salaId;}
 
-    public LocalDateTime getFechaHora() {return horario;}
+    public LocalDateTime horario() {return horario;}
 
     public void setFechaHora(LocalDateTime horario) {this.horario = horario;}
 
-    public BigDecimal getPrecio() {return precioBase;}
+    public BigDecimal precioBase() {return precioBase;}
 
     public void setPrecio(BigDecimal precioBase) {this.precioBase = precioBase;}
 }

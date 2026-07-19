@@ -122,3 +122,21 @@
 .boton-secundario:pressed {
     -fx-background-color: #241a30;
 }
+
+.tarjeta-reporte {
+    -fx-background-color: #241a30;
+    -fx-background-radius: 12;
+    -fx-border-color: #3a2b4a;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+}
+
+.descripcion-pagina {
+    -fx-text-fill: #b8a9c9;
+    -fx-font-size: 15px;
+}
+
+.descripcion-tarjeta {
+    -fx-text-fill: #b8a9c9;
+    -fx-font-size: 15px;
+}

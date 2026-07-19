@@ -6,6 +6,8 @@ import com.bmw.cine.common.dao.UsuarioDAO;
 import com.bmw.cine.common.dao.impl.UsuarioDAOImpl;
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.view.HeaderPrincipalController;
+import com.bmw.cine.administrador.view.ReportesView;
+import com.bmw.cine.administrador.controller.ReportesController;
 
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -51,7 +53,7 @@ public class AdminController {
 
         btnReportes = header.agregarBotonNav(
                 "Reportes",
-                () -> System.out.println("Reportes"));
+                this::mostrarReportes);
     }
 
     /**
@@ -88,6 +90,14 @@ public class AdminController {
         vista.getContentPane()
                 .getChildren()
                 .setAll(gestionUsuariosView);
+    }
+
+    private void mostrarReportes() {
+        ReportesView reportesView = new ReportesView();
+        new ReportesController(reportesView);
+        vista.getContentPane()
+                .getChildren()
+                .setAll(reportesView);
     }
 
 }
