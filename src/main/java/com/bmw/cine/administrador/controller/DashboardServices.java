@@ -59,8 +59,8 @@ public class DashboardServices {
                     Integer::sum
             );
 
-            if (funcion.horario().getMonth() == hoy.getMonth()
-                    && funcion.horario().getYear() == hoy.getYear()) {
+            if (funcion.getHorario().getMonth() == hoy.getMonth()
+                    && funcion.getHorario().getYear() == hoy.getYear()) {
 
                 BigDecimal ganancia =
                         funcion.getPrecioBase().multiply(

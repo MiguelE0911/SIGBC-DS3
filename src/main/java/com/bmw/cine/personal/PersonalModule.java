@@ -65,8 +65,7 @@ public class PersonalModule {
                 com.bmw.cine.common.view.PerfilDialog.mostrar(stage, usuarioActivo, new com.bmw.cine.common.dao.impl.UsuarioDAOImpl())
                         .ifPresent(headerCtrl::actualizarNombreUsuario);
             });
-            headerCtrl.setOnCerrarSesion(() -> headerCtrl.setOnCerrarSesion(() ->com.bmw.cine.app.SessionRouter.cerrarSesion(stage)));
-
+            headerCtrl.setOnCerrarSesion(() -> com.bmw.cine.app.SessionRouter.cerrarSesion(stage));
             headerCtrl.setOnCambiarSeccion(() -> com.bmw.cine.common.session.SelectorModulo.iniciar(stage, usuarioActivo));
 
             //  ESTADO INICIAL DE LA PANTALLA
