@@ -200,35 +200,27 @@ public class GestionUsuariosView extends VBox {
     public TextField getTxtBuscar() {
         return txtBuscar;
     }
-
     public ComboBox<String> getCmbRol() {
         return cmbRol;
     }
-
     public TableView<UsuarioDTO> getTablaUsuarios() {
         return tablaUsuarios;
     }
-
     public Label getLblUsuarioSeleccionado() {
         return lblUsuarioSeleccionado;
     }
-
     public Label getLblEstadoSeleccionado() {
         return lblEstadoSeleccionado;
     }
-
     public ComboBox<String> getCmbNuevoRol() {
         return cmbNuevoRol;
     }
-
     public Button getBtnGuardarCambios() {
         return btnGuardarCambios;
     }
-
     public Button getBtnSuspender() {
         return btnSuspender;
     }
-
     public Label getLblRolSeleccionado() {
         return lblRolSeleccionado;
     }

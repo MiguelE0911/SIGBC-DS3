@@ -3,6 +3,7 @@ package com.bmw.cine.personal;
 import java.io.IOException;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.util.VentanaUtil;
 import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.personal.controller.CarteleraCrudController;
 import com.bmw.cine.personal.controller.EmitirBoletoController;
@@ -27,8 +28,6 @@ public class PersonalModule {
     @SuppressWarnings("CallToPrintStackTrace")
     public static void iniciar(Stage stage, UsuarioDTO usuarioActivo) {
         try {
-            stage.setTitle("Panel de Personal - Cinema BMW");
-
             BorderPane contenedorPrincipal = new BorderPane();
             contenedorPrincipal.getStyleClass().add("panel-fondo");
 
@@ -65,8 +64,7 @@ public class PersonalModule {
                 com.bmw.cine.common.view.PerfilDialog.mostrar(stage, usuarioActivo, new com.bmw.cine.common.dao.impl.UsuarioDAOImpl())
                         .ifPresent(headerCtrl::actualizarNombreUsuario);
             });
-            headerCtrl.setOnCerrarSesion(() -> headerCtrl.setOnCerrarSesion(() ->com.bmw.cine.app.SessionRouter.cerrarSesion(stage)));
-
+            headerCtrl.setOnCerrarSesion(() -> com.bmw.cine.app.SessionRouter.cerrarSesion(stage));
             headerCtrl.setOnCambiarSeccion(() -> com.bmw.cine.common.session.SelectorModulo.iniciar(stage, usuarioActivo));
 
             //  ESTADO INICIAL DE LA PANTALLA
@@ -82,20 +80,10 @@ public class PersonalModule {
             escena.getStylesheets().add(PersonalModule.class.getResource("/css/panel-comun.css").toExternalForm());
             escena.getStylesheets().add(PersonalModule.class.getResource("/css/header-principal.css").toExternalForm());
 
-            stage.setScene(escena);
-            stage.show();
+            VentanaUtil.mostrar(stage, escena, "Panel de Personal - Cinema BMW");
 
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarPendiente("Error al cargar la interfaz visual: " + e.getMessage());
         }
-    }
-
-    private static void mostrarPendiente(String mensaje) {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setTitle("Pendiente");
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
     }
 }

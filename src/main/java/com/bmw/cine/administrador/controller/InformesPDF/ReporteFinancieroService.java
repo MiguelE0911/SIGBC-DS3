@@ -42,13 +42,13 @@ public class ReporteFinancieroService {
                     .listarAsientosOcupados(funcion.getId())
                     .size();
 
-            BigDecimal precio = funcion.precioBase();
+            BigDecimal precio = funcion.getPrecioBase();
 
             BigDecimal ganancia = precio.multiply(BigDecimal.valueOf(asistentes));
 
             reporte.add(new FilaReporteFinanciero(
                     pelicula.getTitulo(),
-                    funcion.horario().toString(),
+                    funcion.getHorario().toString(),
                     asistentes,
                     precio,
                     ganancia
@@ -83,19 +83,15 @@ public class ReporteFinancieroService {
         public String getPelicula() {
             return pelicula;
         }
-
         public String getFuncion() {
             return funcion;
         }
-
         public int getAsistentes() {
             return asistentes;
         }
-
         public BigDecimal getPrecio() {
             return precio;
         }
-
         public BigDecimal getGanancia() {
             return ganancia;
         }

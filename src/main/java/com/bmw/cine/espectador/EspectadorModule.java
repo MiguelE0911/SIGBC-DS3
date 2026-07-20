@@ -1,35 +1,24 @@
 package com.bmw.cine.espectador;
 
-import com.bmw.cine.common.dao.UsuarioDAO;
-import com.bmw.cine.common.dao.impl.UsuarioDAOImpl;
-import com.bmw.cine.espectador.controller.LoginController;
-import com.bmw.cine.espectador.view.LoginView;
-
-import javafx.application.Application;
+import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.util.VentanaUtil;
+import com.bmw.cine.espectador.controller.MainWindowController;
+import com.bmw.cine.espectador.view.MainWindowView;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * Clase lanzadora que conecta el DAO real con la vista de Login.
- */
-public class EspectadorModule extends Application {
+public class EspectadorModule {
 
-    @Override
-    public void start(Stage primaryStage) {
-        // 1. Instanciar la implementación real que conecta a MariaDB [3]
-        UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+    public static void iniciar(Stage stage, UsuarioDTO usuarioActivo) {
+        MainWindowView vistaPrincipal = new MainWindowView();
+        new MainWindowController(vistaPrincipal, usuarioActivo, stage);
 
-        // 2. Instanciar la vista
-        LoginView loginView = new LoginView();
+        Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800);
+        escena.getStylesheets().addAll(
+                MainWindowView.class.getResource("/css/tema-global.css").toExternalForm(),
+                MainWindowView.class.getResource("/css/header-principal.css").toExternalForm()
+        );
 
-        // 3. Crear el controlador inyectando el DAO y el stage [2, 4]
-        new LoginController(loginView, usuarioDAO, primaryStage);
-
-        // 4. Mostrar la ventana
-        primaryStage.setTitle("Cine BMW - Iniciar Sesión");
-        loginView.mostrar(primaryStage);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
+        VentanaUtil.mostrar(stage, escena, "Cinema BMW - Cartelera");
     }
 }

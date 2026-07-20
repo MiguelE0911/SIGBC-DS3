@@ -23,9 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 
-/**
- * Vista de Detalle de Película (Meta 5).
- */
 public class DetallePeliculaView extends VBox {
 
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");

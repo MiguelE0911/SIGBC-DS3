@@ -69,11 +69,10 @@ public class ReporteBoletosService {
 
             reporte.add(new RegistroBoleto(
                     pelicula.getTitulo(),
-                    funcion.horario().format(formato),
+                    funcion.getHorario().format(formato),
                     boletosVendidos
             ));
         }
-
         return reporte;
     }
 }

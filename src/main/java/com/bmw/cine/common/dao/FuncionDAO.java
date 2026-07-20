@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FuncionDAO {
-    /**
+    /*
      * Horarios disponibles de una película, ya con nombre de sala y
-     * asientos disponibles resueltos — usado en Detalle de Película
-     * (Espectador) para elegir función.
+     * asientos disponibles resueltos
      */
     List<FuncionDTO> listarPorPelicula(int peliculaId);
+
     Optional<Funcion> buscarPorId(int id);
     List<String> listarAsientosOcupados(int funcionId); // Para la vista de Selección de asiento: qué códigos ya están ocupados.
     List<Funcion> listarTodas(); // Gestión de horarios (Personal).

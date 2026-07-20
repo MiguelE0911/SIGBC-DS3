@@ -18,9 +18,7 @@ public class GestionUsuariosController {
     private final GestionUsuariosView vista;
     private final UsuarioDAO usuarioDAO;
 
-    // Lista completa de usuarios obtenida desde la BD
-    private List<UsuarioDTO> usuarios;
-
+    private List<UsuarioDTO> usuarios; // Lista completa de usuarios obtenida desde la BD
     private UsuarioDTO usuarioSeleccionado;
 
     public GestionUsuariosController(GestionUsuariosView vista, UsuarioDAO usuarioDAO) {
@@ -184,9 +182,7 @@ public class GestionUsuariosController {
         });
     }
 
-    /**
-     * Carga todos los usuarios desde la base de datos.
-     */
+    // Carga todos los usuarios desde la base de datos.
     private void cargarUsuarios() {
         try {
             usuarios = usuarioDAO.listarTodos();
@@ -202,9 +198,7 @@ public class GestionUsuariosController {
         }
     }
 
-    /**
-     * Configura los eventos de búsqueda y filtro.
-     */
+    // Configura los eventos de búsqueda y filtro.
     private void configurarFiltros() {
 
         vista.getTxtBuscar().textProperty().addListener(
@@ -227,9 +221,7 @@ public class GestionUsuariosController {
         });
     }
 
-    /**
-     * Aplica los filtros por nombre, usuario y rol.
-     */
+     // Aplica los filtros por nombre, usuario y rol.
     private void aplicarFiltros() {
 
         String textoBusqueda = vista.getTxtBuscar()
@@ -265,24 +257,19 @@ public class GestionUsuariosController {
         }
     }
 
-    /**
-     * Permite volver a cargar la tabla cuando haya cambios.
-     */
+    // Permite volver a cargar la tabla cuando haya cambios.
     public void recargarTabla() {
         cargarUsuarios();
         aplicarFiltros();
     }
 
-    /**
-     * Vuelve a seleccionar un usuario de la tabla utilizando su ID.
-     */
+    //Vuelve a seleccionar un usuario de la tabla utilizando su ID.
     private void seleccionarUsuario(int idUsuario) {
         for (UsuarioDTO usuario : vista.getTablaUsuarios().getItems()) {
             if (usuario.getId() == idUsuario) {
                 vista.getTablaUsuarios()
                         .getSelectionModel()
                         .select(usuario);
-
                 break;
             }
         }

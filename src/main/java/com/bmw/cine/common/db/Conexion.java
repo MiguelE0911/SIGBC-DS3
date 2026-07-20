@@ -22,7 +22,6 @@ public class Conexion {
         String contrasena = obtenerVariable(dotenv, "DB_PASSWORD");
 
         this.pool = crearPool("PoolCine", url, usuario, contrasena, TIMEOUT_CONEXION_MS);
-        System.out.println("[ConexionPool] Pool inicializado contra " + url);
     }
 
     public static synchronized Conexion getInstancia() {
@@ -57,8 +56,6 @@ public class Conexion {
         try {
             return pool.getConnection();
         } catch (SQLException e) {
-            System.out.println("[ConexionPool] Error al obtener conexión de "
-                    + pool.getPoolName() + ": " + e.getMessage());
             return null;
         }
     }
@@ -66,12 +63,6 @@ public class Conexion {
     public void cerrar() {
         if (pool != null && !pool.isClosed()) {
             pool.close();
-            System.out.println("[ConexionPool] Pool cerrado.");
         }
-    }
-
-    public static void main(String[] args){
-        Conexion bd = new Conexion();
-        bd.conectar();
     }
 }

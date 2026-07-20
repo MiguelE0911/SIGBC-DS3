@@ -1,11 +1,16 @@
 package com.bmw.cine.espectador.controller;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.bmw.cine.common.dao.BoletoDAO;
+import com.bmw.cine.common.dao.PeliculaDAO;
 import com.bmw.cine.common.dao.impl.BoletoDAOImpl;
+import com.bmw.cine.common.dao.impl.PeliculaDAOImpl;
 import com.bmw.cine.common.dto.SolicitudBoletoDTO;
 import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.model.Pelicula;
 import com.bmw.cine.espectador.model.Boleto;
 import com.bmw.cine.espectador.view.BilleteraView;
 import com.bmw.cine.espectador.view.BoletoItemView;
@@ -15,24 +20,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-/**
- * Controlador para gestionar la lógica de la Billetera del Espectador.
- * Consulta los boletos reales del usuario vía BoletoDAO, reutilizando
- * SolicitudBoletoDTO (mismo DTO que usa la Bandeja de Taquilla).
- *
- * @author Wilma
- * @version 1.2
- */
 public class BilleteraController {
 
     private final BilleteraView vista;
     private final UsuarioDTO usuarioActivo;
     private final BoletoDAO boletoDAO;
+    private final PeliculaDAO peliculaDAO;
 
     public BilleteraController(BilleteraView vista, UsuarioDTO usuarioActivo) {
         this.vista = vista;
         this.usuarioActivo = usuarioActivo;
         this.boletoDAO = new BoletoDAOImpl();
+        this.peliculaDAO = new PeliculaDAOImpl();
 
         Label lblUsuario = new Label("Billetera de: " + usuarioActivo.getNombre());
         lblUsuario.setStyle("-fx-text-fill: #f4e8d0; -fx-font-weight: bold; -fx-font-size: 14px;");
@@ -42,23 +41,32 @@ public class BilleteraController {
     }
 
     public BilleteraController(BilleteraView billeteraVista, Stage stage, UsuarioDTO usuarioActivo2) {
-        // El Stage no se usa por ahora; se delega toda la inicialización
-        // al constructor principal para dejar los campos final consistentes.
         this(billeteraVista, usuarioActivo2);
     }
 
     public void actualizarListaBoletos() {
         Task<List<SolicitudBoletoDTO>> tarea = new Task<>() {
             @Override
-            protected List<SolicitudBoletoDTO> call() {
-                return boletoDAO.listarPorUsuario(usuarioActivo.getId());
+            protected List<SolicitudBoletoDTO> call() throws Exception {
+                List<SolicitudBoletoDTO> boletos = boletoDAO.listarPorUsuario(usuarioActivo.getId());
+
+                // Mismas películas que Cartelera considera "ocultas" (activa = false)
+                Set<String> peliculasOcultas = peliculaDAO.listarTodas().stream()
+                        .filter(p -> !p.isActiva())
+                        .map(Pelicula::getTitulo)
+                        .collect(Collectors.toSet());
+
+                // Se excluyen del listado, sin tocar nada en la base de datos
+                return boletos.stream()
+                        .filter(b -> !peliculasOcultas.contains(b.getTituloPelicula()))
+                        .collect(Collectors.toList());
             }
         };
 
         tarea.setOnSucceeded(evt -> {
             vista.getContenedorBoletos().getChildren().removeIf(node -> node instanceof BoletoItemView);
             vista.getContenedorBoletos().getChildren().removeIf(node ->
-                node instanceof Label && ((Label) node).getText().equals("No tienes boletos comprados.")
+                    node instanceof Label && ((Label) node).getText().equals("No tienes boletos comprados.")
             );
 
             List<SolicitudBoletoDTO> dtos = tarea.getValue();
@@ -67,13 +75,13 @@ public class BilleteraController {
             } else {
                 for (SolicitudBoletoDTO dto : dtos) {
                     Boleto boleto = new Boleto(
-                        dto.getBoletoId(),
-                        dto.getTituloPelicula(),
-                        dto.getAsientoCodigo(),
-                        "CONFIRMADO".equalsIgnoreCase(dto.getEstado())
-                            ? Boleto.EstadoBoleto.CONFIRMADO
-                            : Boleto.EstadoBoleto.PENDIENTE,
-                        dto.getHorarioFuncion()
+                            dto.getBoletoId(),
+                            dto.getTituloPelicula(),
+                            dto.getAsientoCodigo(),
+                            "CONFIRMADO".equalsIgnoreCase(dto.getEstado())
+                                    ? Boleto.EstadoBoleto.CONFIRMADO
+                                    : Boleto.EstadoBoleto.PENDIENTE,
+                            dto.getHorarioFuncion()
                     );
                     vista.getContenedorBoletos().getChildren().add(new BoletoItemView(boleto));
                 }

@@ -2,23 +2,9 @@ package com.bmw.cine.espectador.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Clase que representa una entrada de cine (Boleto).
- * Almacena la información de compra, ubicación y estado.
- * 
- * @author Wilma
- * @version 1.0
- */
 public class Boleto {
 
-    /**
-     * Enum para definir los estados posibles de un boleto.
-     */
-    public enum EstadoBoleto {
-        PENDIENTE,
-        CONFIRMADO
-    }
-
+    public enum EstadoBoleto {PENDIENTE, CONFIRMADO}
     private int idCompra;
     private String pelicula;
     private String asiento;
@@ -42,7 +28,7 @@ public class Boleto {
         this.fecha = fecha;
     }
 
-    // --- Getters y Setters ---
+    //  Getters y Setters
 
     public int getIdCompra() { return idCompra; }
     public void setIdCompra(int idCompra) { this.idCompra = idCompra; }
@@ -59,10 +45,5 @@ public class Boleto {
     public LocalDateTime getFecha() { return fecha; }
     public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
 
-    /**
-     * Método auxiliar para obtener el nombre del estado en texto.
-     */
-    public String getEstadoTexto() {
-        return estado.toString();
-    }
+    public String getEstadoTexto() {return estado.toString();} // Método auxiliar para obtener el nombre del estado en texto.
 }

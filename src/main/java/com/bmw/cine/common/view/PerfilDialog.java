@@ -15,15 +15,10 @@ import javafx.stage.Window;
 
 import java.util.Optional;
 
-/**
- * Diálogo de "Mi perfil", compartido por los 3 flujos (Personal,
- * Administrador, Espectador). Edita nombre/correo/username; NO toca
+/*
+ * Diálogo de "Mi perfil", Edita nombre/correo/username; NO toca
  * password_hash, rol_id ni activo — eso queda fuera del alcance de esta
  * pantalla.
- *
- * Uso:
- *   PerfilDialog.mostrar(stage, usuarioActivo, usuarioDAO)
- *       .ifPresent(actualizado -> headerCtrl.actualizarNombreUsuario(actualizado));
  */
 public class PerfilDialog {
 

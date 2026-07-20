@@ -2,12 +2,6 @@ package com.bmw.cine.common.dto;
 
 import com.bmw.cine.common.model.Usuario;
 
-/**
- * Lo que viaja fuera de la capa DAO: nunca incluye password_hash.
- * Usado para el usuario logueado (sesión activa) y el listado de
- * cuentas del Administrador.
- */
-
 public class UsuarioDTO {
     private final int id;
     private final String nombre;

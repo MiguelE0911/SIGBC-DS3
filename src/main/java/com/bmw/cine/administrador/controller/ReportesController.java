@@ -7,7 +7,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class ReportesController {
-
     private final ReportesView vista;
 
     public ReportesController(ReportesView vista) {
@@ -16,19 +15,13 @@ public class ReportesController {
     }
 
     private void configurarEventos() {
-
         vista.getBtnGenerarPDF().setOnAction(e -> {
-
             try {
-
                 ReporteFinancieroPDF reporte = new ReporteFinancieroPDF();
-
                 reporte.generar(
                         vista.getScene().getWindow()
                 );
-
             } catch (Exception ex) {
-
                 Alert alerta = new Alert(AlertType.ERROR);
                 alerta.setHeaderText(null);
                 alerta.setContentText(
@@ -39,17 +32,12 @@ public class ReportesController {
             }
         });
         vista.getBtnReporteBoletosPDF().setOnAction(e -> {
-
             try {
-
                 ReporteBoletosPDF reporte = new ReporteBoletosPDF();
-
                 reporte.generar(
                         vista.getScene().getWindow()
                 );
-
             } catch (Exception ex) {
-
                 Alert alerta = new Alert(AlertType.ERROR);
                 alerta.setHeaderText(null);
                 alerta.setContentText(
@@ -58,7 +46,6 @@ public class ReportesController {
                 );
                 alerta.showAndWait();
             }
-
         });
     }
 }

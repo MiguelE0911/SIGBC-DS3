@@ -11,12 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/**
- * Vista encargada de la interfaz gráfica del formulario de registro de usuarios
- * para el Módulo del Espectador.
- * @author Wilma
- * @version 1.0
- */
 public class RegistroView {
 
     // Componentes de la interfaz gráfica necesarios para el controlador
@@ -28,16 +22,12 @@ public class RegistroView {
     private Hyperlink lnkVolverLogin;
     private Scene escena;
 
-    /**
-     * Constructor de la vista. Inicializa todos los controles y aplica los estilos.
-     */
+    // Constructor de la vista. Inicializa todos los controles y aplica los estilos.
     public RegistroView() {
         inicializarComponentes();
     }
 
-    /**
-     * Crea los elementos visuales, define la paleta de colores y estructura el contenedor.
-     */
+    // Crea los elementos visuales, define la paleta de colores y estructura el contenedor.
     private void inicializarComponentes() {
         // 1. Título principal de la ventana
         Label lblTitulo = new Label("Crear Cuenta");
@@ -122,10 +112,6 @@ public class RegistroView {
         escena = new Scene(root, 380, 520);
     }
 
-    /**
-     * Muestra el formulario de registro reemplazando la escena del escenario provisto.
-     * * @param stage El escenario (Stage) actual donde se renderizará el Registro.
-     */
     public void mostrar(Stage stage) {
         stage.setTitle("Cinema - Crear Cuenta Espectador");
         stage.setScene(escena);
@@ -133,29 +119,11 @@ public class RegistroView {
         stage.show();
     }
 
-    // --- MÉTODOS GETTERS PARA EXTRACCIÓN DE DATOS DESDE EL CONTROLADOR ---
-
-    public String getNombre() {
-        return txtNombre.getText().trim();
-    }
-
-    public String getCorreo() {
-        return txtCorreo.getText().trim();
-    }
-
-    public String getUsuario() {
-        return txtUsuario.getText().trim();
-    }
-
-    public String getPassword() {
-        return txtPassword.getText();
-    }
-
-    public Button getBtnRegistrar() {
-        return btnRegistrar;
-    }
-
-    public Hyperlink getLnkVolverLogin() {
-        return lnkVolverLogin;
-    }
+    //  MÉTODOS GETTERS PARA EXTRACCIÓN DE DATOS DESDE EL CONTROLADOR
+    public String getNombre() {return txtNombre.getText().trim();}
+    public String getCorreo() {return txtCorreo.getText().trim();}
+    public String getUsuario() {return txtUsuario.getText().trim();}
+    public String getPassword() {return txtPassword.getText();}
+    public Button getBtnRegistrar() {return btnRegistrar;}
+    public Hyperlink getLnkVolverLogin() {return lnkVolverLogin;}
 }

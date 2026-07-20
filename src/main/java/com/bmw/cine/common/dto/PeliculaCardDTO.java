@@ -1,11 +1,5 @@
 package com.bmw.cine.common.dto;
 
-/**
- * Lo mínimo que necesita una tarjeta de Cartelera para pintarse.
- * No expone sinopsis completa ni el flag "activa" — eso es detalle
- * de administración, no de la vista de Espectador.
- */
-
 public class PeliculaCardDTO {
     private final int peliculaId;
     private final String titulo;

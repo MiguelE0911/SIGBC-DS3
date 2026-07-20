@@ -12,16 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-/**
- * Vista de Emisión manual de boletos — solo construcción de componentes
- * visuales. Toda la lógica (búsqueda de usuario, carga de asientos,
- * emisión) vive en EmitirBoletoController.
- *
- * NOTA: la selección de asiento usa un ListView de códigos generados a
- * partir de filas/columnas de la sala (A1, A2, ...) como reemplazo
- * temporal del mapa de asientos visual del Espectador. Cuando ese mapa
- * exista, esta pantalla debería reutilizarlo en vez de este ListView.
- */
 public class EmitirBoletoView extends BorderPane {
 
     //  Búsqueda de usuario
@@ -34,7 +24,7 @@ public class EmitirBoletoView extends BorderPane {
     private final ComboBox<Pelicula> comboPelicula = new ComboBox<>();
     private final ComboBox<FuncionDTO> comboFuncion = new ComboBox<>();
 
-    // --- Asientos (placeholder del mapa real) ---
+    // Asientos
     private final ListView<String> listaAsientos = new ListView<>();
     private final Label labelAsientosInfo = new Label();
 
