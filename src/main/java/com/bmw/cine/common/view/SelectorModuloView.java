@@ -2,6 +2,7 @@ package com.bmw.cine.common.view;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.session.OpcionModulo;
+import com.bmw.cine.common.util.VentanaUtil;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,9 +36,7 @@ public class SelectorModuloView {
         BorderPane.setAlignment(tarjetas, Pos.CENTER);
 
         Scene escena = new Scene(raiz, 900, 600);
-        stage.setTitle("Selector de Módulo");
-        stage.setScene(escena);
-        stage.show();
+        VentanaUtil.mostrar(stage, escena, "Selector de Módulo - BMW");
     }
 
     private VBox construirEncabezado(UsuarioDTO usuarioActivo) {

@@ -1,6 +1,7 @@
 package com.bmw.cine.espectador;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.util.VentanaUtil;
 import com.bmw.cine.espectador.controller.MainWindowController;
 import com.bmw.cine.espectador.view.MainWindowView;
 import javafx.scene.Scene;
@@ -18,8 +19,6 @@ public class EspectadorModule {
                 MainWindowView.class.getResource("/css/header-principal.css").toExternalForm()
         );
 
-        stage.setTitle("Cinema BMW - Cartelera");
-        stage.setScene(escena);
-        stage.show();
+        VentanaUtil.mostrar(stage, escena, "Cinema BMW - Cartelera");
     }
 }

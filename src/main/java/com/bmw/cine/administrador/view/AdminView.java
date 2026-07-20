@@ -3,6 +3,7 @@ package com.bmw.cine.administrador.view;
 import java.io.IOException;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.util.VentanaUtil;
 import com.bmw.cine.common.view.HeaderPrincipalController;
 
 import javafx.fxml.FXMLLoader;
@@ -81,10 +82,7 @@ public class AdminView {
 
     // Muestra la vista.
     public void mostrar(Stage stage) {
-        stage.setTitle("Cinema - Panel de Administrador");
-        stage.setScene(escena);
-        stage.setMaximized(true);
-        stage.show();
+        VentanaUtil.mostrar(stage, escena, "Cinema - Panel de Administrador");
     }
 
     // Devuelve el contenedor donde se cargarán las distintas vistas (Gestión de Usuarios, Reportes, etc.).

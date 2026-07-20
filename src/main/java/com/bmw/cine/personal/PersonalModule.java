@@ -3,6 +3,7 @@ package com.bmw.cine.personal;
 import java.io.IOException;
 
 import com.bmw.cine.common.dto.UsuarioDTO;
+import com.bmw.cine.common.util.VentanaUtil;
 import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.personal.controller.CarteleraCrudController;
 import com.bmw.cine.personal.controller.EmitirBoletoController;
@@ -27,8 +28,6 @@ public class PersonalModule {
     @SuppressWarnings("CallToPrintStackTrace")
     public static void iniciar(Stage stage, UsuarioDTO usuarioActivo) {
         try {
-            stage.setTitle("Panel de Personal - Cinema BMW");
-
             BorderPane contenedorPrincipal = new BorderPane();
             contenedorPrincipal.getStyleClass().add("panel-fondo");
 
@@ -81,8 +80,7 @@ public class PersonalModule {
             escena.getStylesheets().add(PersonalModule.class.getResource("/css/panel-comun.css").toExternalForm());
             escena.getStylesheets().add(PersonalModule.class.getResource("/css/header-principal.css").toExternalForm());
 
-            stage.setScene(escena);
-            stage.show();
+            VentanaUtil.mostrar(stage, escena, "Panel de Personal - Cinema BMW");
 
         } catch (IOException e) {
             e.printStackTrace();

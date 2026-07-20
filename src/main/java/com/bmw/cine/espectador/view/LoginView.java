@@ -1,5 +1,6 @@
 package com.bmw.cine.espectador.view;
 
+import com.bmw.cine.common.util.VentanaUtil;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -106,10 +107,7 @@ public class LoginView {
 
     // Muestra la vista en el escenario principal provisto.
     public void mostrar(Stage stage) {
-        stage.setTitle("Cinema - Iniciar Sesión");
-        stage.setScene(escena);
-        stage.setResizable(false); // Mantiene fijo el tamaño del Login
-        stage.show();
+        VentanaUtil.mostrar(stage, escena, "Cinema BMW - Iniciar Sesión");
     }
 
     // MÉTODOS GETTERS PARA EL CONTROLADOR
