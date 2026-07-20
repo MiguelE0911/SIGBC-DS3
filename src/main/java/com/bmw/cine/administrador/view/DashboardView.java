@@ -9,13 +9,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.layout.VBox;
 
 public class DashboardView extends VBox {
-
     private final Label lblGananciasMes;
     private final Label lblPeliculaMasVendida;
     private final Label lblUsuariosActivos;
 
     public DashboardView() {
-
         setSpacing(20);
         setPadding(new Insets(20));
         getStyleClass().add("vista-cuerpo");
@@ -64,7 +62,6 @@ public class DashboardView extends VBox {
     }
 
     private VBox crearTarjeta(String titulo) {
-
         VBox tarjeta = new VBox(20);
         tarjeta.setAlignment(Pos.CENTER);
         tarjeta.setPadding(new Insets(25));
@@ -78,19 +75,14 @@ public class DashboardView extends VBox {
         tarjeta.setFillWidth(true);
         VBox.setVgrow(tarjeta, Priority.ALWAYS);
 
-
         tarjeta.getStyleClass().add("tarjeta-reporte");
-
         Label lblTitulo = new Label(titulo);
         lblTitulo.getStyleClass().add("vista-titulo");
-
         tarjeta.getChildren().add(lblTitulo);
-
         return tarjeta;
     }
 
     private Label crearValor(String texto) {
-
         Label lbl = new Label(texto);
 
         lbl.setWrapText(true);

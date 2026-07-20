@@ -29,9 +29,7 @@ public class ReportesView extends VBox {
         );
         subtitulo.getStyleClass().add("descripcion-pagina");
 
-        // ============================
         // TARJETA REPORTE FINANCIERO
-        // ============================
         VBox tarjetaReporte = new VBox(20);
         tarjetaReporte.setAlignment(Pos.CENTER);
         tarjetaReporte.setPadding(new Insets(30));
@@ -60,9 +58,7 @@ public class ReportesView extends VBox {
                 btnGenerarPDF
         );
 
-        // ============================
         // TARJETA REPORTE OCUPACIÓN
-        // ============================
         VBox tarjetaOcupacion = new VBox(20);
         tarjetaOcupacion.setAlignment(Pos.CENTER);
         tarjetaOcupacion.setPadding(new Insets(30));
@@ -91,9 +87,7 @@ public class ReportesView extends VBox {
                 btnReporteBoletosPDF
         );
 
-        // ============================
         // Contenedor de tarjetas
-        // ============================
         VBox tarjetas = new VBox(20);
         tarjetas.setAlignment(Pos.TOP_CENTER);
 
@@ -105,9 +99,7 @@ public class ReportesView extends VBox {
         StackPane contenedor = new StackPane();
         contenedor.setAlignment(Pos.TOP_CENTER);
         contenedor.getChildren().add(tarjetas);
-
         VBox.setVgrow(contenedor, Priority.ALWAYS);
-
         getChildren().addAll(
                 titulo,
                 subtitulo,

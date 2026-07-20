@@ -30,14 +30,12 @@ public class AdminView {
         inicializarComponentes();
     }
 
-
      // Inicializa y organiza todos los componentes visuales.
     private void inicializarComponentes() {
 
         // Contenedor principal
         root = new BorderPane();
         root.getStyleClass().add("panel-fondo");
-
 
         // Header reutilizable
         try {
@@ -66,16 +64,12 @@ public class AdminView {
 
         // Escena
         escena = new Scene(root, 1200, 700);
-
         escena.getStylesheets().add(
                 getClass().getResource("/css/tema-global.css").toExternalForm());
-
         escena.getStylesheets().add(
                 getClass().getResource("/css/header-principal.css").toExternalForm());
-
         escena.getStylesheets().add(
                 getClass().getResource("/css/panel-comun.css").toExternalForm());
-
         escena.getStylesheets().add(
                 getClass().getResource("/css/gestion-usuarios.css").toExternalForm());
     }
@@ -89,7 +83,6 @@ public class AdminView {
     public StackPane getContentPane() {
         return contentPane;
     }
-
 
     // Devuelve el controlador del Header reutilizable.
     public HeaderPrincipalController getHeaderController() {
