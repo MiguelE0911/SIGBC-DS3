@@ -45,7 +45,7 @@ public class GestionFuncionesView extends BorderPane {
         tabla.getStyleClass().add("tabla-usuarios");
 
         TableColumn<Funcion, BigDecimal> colPrecio = new TableColumn<>("Precio base");
-        colPrecio.setCellValueFactory(new PropertyValueFactory<>("getPrecioBase"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory<>("PrecioBase"));
 
         tabla.getColumns().add(colPrecio);
         tabla.setPlaceholder(new Label("No hay funciones programadas"));
