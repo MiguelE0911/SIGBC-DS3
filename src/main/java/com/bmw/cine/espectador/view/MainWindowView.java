@@ -13,10 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-/**
- * Vista principal con SplitPane para permitir un menú lateral ajustable.
- * Colores VIP: Fondo #100b16, Dorado #d4af37 [3].
- */
+// Vista principal con SplitPane para permitir un menú lateral ajustable.
 public class MainWindowView {
     private final BorderPane rootLayout;
     private final HBox headerContainer;
@@ -31,7 +28,7 @@ public class MainWindowView {
     public MainWindowView() {
         this.rootLayout = new BorderPane();
 
-        // --- HEADER VIP ---
+        // HEADER
         this.headerContainer = new HBox();
         this.headerContainer.setPadding(new Insets(15, 25, 15, 25));
         this.headerContainer.setAlignment(Pos.CENTER_LEFT);
@@ -62,7 +59,7 @@ public class MainWindowView {
 
         this.headerContainer.getChildren().addAll(lblLogo, actionsContainer);
 
-        // --- ÁREA CENTRAL DESLIZABLE (SplitPane) ---
+        // ÁREA CENTRAL DESLIZABLE (SplitPane)
         this.splitPane = new SplitPane();
         this.splitPane.setStyle("-fx-background-color: #100b16; -fx-box-border: transparent;");
 
@@ -107,9 +104,7 @@ public class MainWindowView {
     }
 }
 
-    /**
-     * Alterna la visibilidad de la billetera en el SplitPane.
-     */
+    // Alterna la visibilidad de la billetera en el SplitPane.
     public void toggleBilletera(Node billeteraView) {
         if (splitPane.getItems().size() > 1) {
             splitPane.getItems().remove(1); // Quita el panel si ya existe

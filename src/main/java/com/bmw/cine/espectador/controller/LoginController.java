@@ -15,11 +15,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
-/**
- * Controlador encargado de gestionar la lógica de inicio de sesión.
- * @author Wilma
- * @version 1.3
- */
 public class LoginController {
 
     private final LoginView vista;

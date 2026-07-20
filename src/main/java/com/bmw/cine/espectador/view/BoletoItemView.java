@@ -17,13 +17,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
-/**
+/*
  * Componente visual que representa una fila individual en la Billetera.
  * Muestra el QR del boleto generado dinámicamente, detalles de la función,
  * el estado, y permite exportar el boleto como PDF.
- *
- * @author Wilma
- * @version 1.2
  */
 public class BoletoItemView extends HBox {
 
@@ -120,7 +117,7 @@ public class BoletoItemView extends HBox {
         alerta.showAndWait();
     }
 
-    /**
+    /*
      * Devuelve el estilo CSS según el estado del boleto.
      * Verde para CONFIRMADO, Naranja para PENDIENTE.
      */

@@ -6,13 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
-/**
- * Vista del panel lateral de la Billetera.
- * Contiene un área desplazable para listar los boletos del espectador.
- * 
- * @author Wilma
- * @version 1.0
- */
 public class BilleteraView extends VBox {
 
     private VBox contenedorBoletos;
@@ -23,7 +16,7 @@ public class BilleteraView extends VBox {
         inicializarComponentes();
     }
 
-    /**
+    /*
      * Configura el estilo base del panel lateral siguiendo la paleta VIP.
      */
    private void configurarPanelLateral() {
@@ -69,10 +62,8 @@ public class BilleteraView extends VBox {
         this.getChildren().addAll(lblTitulo, lblSubtitulo, scrollPane);
     }
 
-    /**
-     * @return El contenedor interno donde se deben agregar los BoletoItemView.
-     */
-    public VBox getContenedorBoletos() {
+    // Contenedor interno donde se deben agregar los BoletoItemView.
+     public VBox getContenedorBoletos() {
         return contenedorBoletos;
     }
 }

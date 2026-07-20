@@ -11,12 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/**
- * Vista encargada de la interfaz gráfica del inicio de sesión (Login)
- * para el Módulo del Espectador.
- * @author Wilma
- * @version 1.0
- */
 public class LoginView {
 
     // Componentes de la interfaz que el controlador necesitará leer o escuchar
@@ -26,16 +20,13 @@ public class LoginView {
     private Hyperlink lnkRegistrarse;
     private Scene escena;
 
-    /**
-     * Constructor de la vista. Inicializa y estructura todos los componentes visuales.
-     */
+
+    // Constructor de la vista. Inicializa y estructura todos los componentes visuales.
     public LoginView() {
         inicializarComponentes();
     }
 
-    /**
-     * Crea los elementos gráficos, aplica los estilos y los organiza dentro del contenedor principal.
-     */
+    //Crea los elementos gráficos, aplica los estilos y los organiza dentro del contenedor principal.
     private void inicializarComponentes() {
         // 1. Título de la ventana
         Label lblTitulo = new Label("Iniciar Sesión");
@@ -113,10 +104,7 @@ public class LoginView {
         escena = new Scene(root, 380, 480);
     }
 
-    /**
-     * Muestra la vista en el escenario principal provisto.
-     * * @param stage El escenario (Stage) de JavaFX donde se renderizará la vista.
-     */
+    // Muestra la vista en el escenario principal provisto.
     public void mostrar(Stage stage) {
         stage.setTitle("Cinema - Iniciar Sesión");
         stage.setScene(escena);
@@ -124,21 +112,9 @@ public class LoginView {
         stage.show();
     }
 
-    // --- MÉTODOS GETTERS PARA EL CONTROLADOR ---
-
-    public String getUsuario() {
-        return txtUsuario.getText().trim();
-    }
-
-    public String getPassword() {
-        return txtPassword.getText();
-    }
-
-    public Button getBtnIngresar() {
-        return btnIngresar;
-    }
-
-    public Hyperlink getLnkRegistrarse() {
-        return lnkRegistrarse;
-    }
+    // MÉTODOS GETTERS PARA EL CONTROLADOR
+    public String getUsuario() {return txtUsuario.getText().trim();}
+    public String getPassword() {return txtPassword.getText();}
+    public Button getBtnIngresar() {return btnIngresar;}
+    public Hyperlink getLnkRegistrarse() {return lnkRegistrarse;}
 }

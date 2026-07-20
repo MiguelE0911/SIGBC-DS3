@@ -21,10 +21,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/**
- * Controlador de la ventana de Detalle de Película (Meta 5).
- * El botón "Comprar boleto" abre la Selección de Asientos (Meta 6).
- */
 public class DetallePeliculaController {
 
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");

@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Controlador de Selección de Asientos (Meta 6).
+ * Controlador de Selección de Asientos.
  * Carga el mapa real de la sala, permite elegir exactamente `cantidad`
  * asientos, y dispara la solicitud de compra contra la base de datos.
  */
@@ -72,7 +72,7 @@ public class SeleccionAsientosController {
         ventanaAsientos.sizeToScene();
     }
 
-    /** Carga dimensiones de la sala + asientos ocupados, y construye el grid. */
+    // Carga dimensiones de la sala + asientos ocupados, y construye el grid.
     private void cargarMapaAsientos() {
         Task<Object[]> tarea = new Task<>() {
             @Override

@@ -15,14 +15,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-/**
- * Controlador para gestionar la lógica de la Billetera del Espectador.
- * Consulta los boletos reales del usuario vía BoletoDAO, reutilizando
- * SolicitudBoletoDTO (mismo DTO que usa la Bandeja de Taquilla).
- *
- * @author Wilma
- * @version 1.2
- */
 public class BilleteraController {
 
     private final BilleteraView vista;

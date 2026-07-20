@@ -41,11 +41,6 @@ public class HeaderPrincipalController {
         }
     }
 
-    /**
-     * Agrega un botón de navegación al header (ej. "Taquilla", "Cartelera CRUD").
-     * Al presionarlo, ejecuta la acción Y se marca a sí mismo como activo
-     * (quita el estilo "activo" de los demás botones de navegación).
-     */
     public Button agregarBotonNav(String etiqueta, Runnable accion) {
         Button boton = new Button(etiqueta);
         boton.getStyleClass().add("header-nav-boton");

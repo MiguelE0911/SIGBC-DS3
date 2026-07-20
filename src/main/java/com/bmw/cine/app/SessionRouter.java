@@ -6,11 +6,8 @@ import com.bmw.cine.common.dto.UsuarioDTO;
 import com.bmw.cine.common.model.Usuario;
 import com.bmw.cine.common.session.SelectorModulo;
 import com.bmw.cine.espectador.controller.LoginController;
-import com.bmw.cine.espectador.controller.MainWindowController;
 import com.bmw.cine.espectador.view.LoginView;
-import com.bmw.cine.espectador.view.MainWindowView;
 
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class SessionRouter {
