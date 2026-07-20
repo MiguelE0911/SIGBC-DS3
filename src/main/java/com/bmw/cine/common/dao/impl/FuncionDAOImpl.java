@@ -120,8 +120,8 @@ public class FuncionDAOImpl implements FuncionDAO {
 
             ps.setInt(1, funcion.getPeliculaId());
             ps.setInt(2, funcion.getSalaId());
-            ps.setTimestamp(3, java.sql.Timestamp.valueOf(funcion.horario()));
-            ps.setBigDecimal(4, funcion.precioBase());
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(funcion.getHorario()));
+            ps.setBigDecimal(4, funcion.getPrecioBase());
 
             ps.executeUpdate();
             try (ResultSet claves = ps.getGeneratedKeys()) {
@@ -144,8 +144,8 @@ public class FuncionDAOImpl implements FuncionDAO {
 
             ps.setInt(1, funcion.getPeliculaId());
             ps.setInt(2, funcion.getSalaId());
-            ps.setTimestamp(3, java.sql.Timestamp.valueOf(funcion.horario()));
-            ps.setBigDecimal(4, funcion.precioBase());
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(funcion.getHorario()));
+            ps.setBigDecimal(4, funcion.getPrecioBase());
             ps.setInt(5, funcion.getId());
 
             return ps.executeUpdate() > 0;

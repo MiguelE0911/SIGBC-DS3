@@ -87,15 +87,6 @@ public class PersonalModule {
 
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarPendiente("Error al cargar la interfaz visual: " + e.getMessage());
         }
-    }
-
-    private static void mostrarPendiente(String mensaje) {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setTitle("Pendiente");
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
     }
 }

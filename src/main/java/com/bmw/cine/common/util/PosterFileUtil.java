@@ -13,12 +13,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Gestiona los pósters de películas guardados en disco. NO se guardan
- * como BLOB en la BD — solo el nombre de archivo va en pelicula.ruta_poster.
- * El archivo físico se guarda en <Escritorio del usuario>/posters, para
- * que la ruta no dependa de dónde se ejecute el .jar/IDE.
- */
 public class PosterFileUtil {
 
     private static final String CARPETA_POSTERS = "posters";

@@ -14,30 +14,23 @@ import javafx.stage.Stage;
 
 public class AdminView {
 
-    // Usuario autenticado
-    private UsuarioDTO usuarioActivo;
+    private UsuarioDTO usuarioActivo;  // Usuario autenticado
 
     // Componentes principales
     private BorderPane root;
     private StackPane contentPane;
 
-    // Header reutilizable
-    private HeaderPrincipalController headerController;
+    private HeaderPrincipalController headerController; // Header reutilizable
+    private Scene escena; // Escena
 
-    // Escena
-    private Scene escena;
-
-    /**
-     * Constructor de la vista.
-     */
+     // Constructor de la vista.
     public AdminView(UsuarioDTO usuarioActivo) {
         this.usuarioActivo = usuarioActivo;
         inicializarComponentes();
     }
 
-    /**
-     * Inicializa y organiza todos los componentes visuales.
-     */
+
+     // Inicializa y organiza todos los componentes visuales.
     private void inicializarComponentes() {
 
         // Contenedor principal
@@ -86,9 +79,7 @@ public class AdminView {
                 getClass().getResource("/css/gestion-usuarios.css").toExternalForm());
     }
 
-    /**
-     * Muestra la vista.
-     */
+    // Muestra la vista.
     public void mostrar(Stage stage) {
         stage.setTitle("Cinema - Panel de Administrador");
         stage.setScene(escena);
@@ -96,24 +87,18 @@ public class AdminView {
         stage.show();
     }
 
-    /**
-     * Devuelve el contenedor donde se cargarán las distintas vistas
-     * (Gestión de Usuarios, Reportes, etc.).
-     */
+    // Devuelve el contenedor donde se cargarán las distintas vistas (Gestión de Usuarios, Reportes, etc.).
     public StackPane getContentPane() {
         return contentPane;
     }
 
-    /**
-     * Devuelve el controlador del Header reutilizable.
-     */
+
+    // Devuelve el controlador del Header reutilizable.
     public HeaderPrincipalController getHeaderController() {
         return headerController;
     }
 
-    /**
-     * Devuelve el usuario autenticado.
-     */
+     // Devuelve el usuario autenticado.
     public UsuarioDTO getUsuarioActivo() {
         return usuarioActivo;
     }

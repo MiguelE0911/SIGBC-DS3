@@ -63,7 +63,7 @@ public class DashboardServices {
                     && funcion.horario().getYear() == hoy.getYear()) {
 
                 BigDecimal ganancia =
-                        funcion.precioBase().multiply(
+                        funcion.getPrecioBase().multiply(
                                 BigDecimal.valueOf(boletosVendidos));
 
                 gananciasMes = gananciasMes.add(ganancia);

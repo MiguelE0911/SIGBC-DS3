@@ -6,11 +6,7 @@ import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
-/**
- * Punto único para mensajes de feedback al usuario (éxito, error,
- * advertencia, confirmación). Compartido por los 3 flujos — evita
- * duplicar el boilerplate de Alert en cada vista/controller.
- */
+// Mensajes de feedback al usuario (éxito, error, advertencia, confirmación).
 public class Notificador {
 
     private Notificador() {}

@@ -44,9 +44,7 @@ public class AdminController {
         vista.getHeaderController().marcarActivo(btnDashboard);
     }
 
-    /**
-     * Configura los botones de navegación del Header.
-     */
+    // Configura los botones de navegación del Header.
     private void configurarHeader() {
 
         HeaderPrincipalController header = vista.getHeaderController();
@@ -64,9 +62,7 @@ public class AdminController {
                 this::mostrarReportes);
     }
 
-    /**
-     * Configura las opciones del menú del usuario.
-     */
+    // Configura las opciones del menú del usuario.
     private void configurarEventos() {
 
         HeaderPrincipalController header = vista.getHeaderController();
@@ -80,9 +76,7 @@ public class AdminController {
         });
     }
 
-    /**
-     * Muestra la vista de Gestión de Usuarios.
-     */
+    // Muestra la vista de Gestión de Usuarios.
     private void mostrarGestionUsuarios() {
 
         GestionUsuariosView gestionUsuariosView =
@@ -113,5 +107,4 @@ public class AdminController {
                 .getChildren()
                 .setAll(reportesView);
     }
-
 }

@@ -2,11 +2,6 @@ package com.bmw.cine.common.dto;
 
 import java.time.LocalDateTime;
 
-/**
- * Una fila de la Bandeja de Solicitudes (Taquilla). Une datos de
- * boleto + usuario + funcion + pelicula + sala, para que la vista no
- * tenga que hacer 4 consultas ni conocer los IDs internos.
- */
 public class SolicitudBoletoDTO {
 
     private final int boletoId;

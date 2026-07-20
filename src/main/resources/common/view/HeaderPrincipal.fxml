@@ -8,16 +8,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 
-<!--
-  Header reutilizable para los 3 flujos (Espectador no lo necesita
-  completo, pero Personal y Administrador sí). Se carga con FXMLLoader
-  y se configura desde Java vía HeaderPrincipalController.configurar(...).
-
-  Copien este archivo y su Controller tal cual — la idea es que NO se
-  edite el FXML por módulo, sino que se configure en tiempo de
-  ejecución (título del panel, botones de navegación, si aparece o no
-  "Cambiar de sección").
--->
 <HBox fx:id="raizHeader" alignment="CENTER_LEFT" spacing="16" styleClass="header-principal"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.bmw.cine.common.view.HeaderPrincipalController">

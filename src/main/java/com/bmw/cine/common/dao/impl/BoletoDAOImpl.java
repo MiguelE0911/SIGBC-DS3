@@ -17,9 +17,6 @@ import com.bmw.cine.common.dto.FiltroSolicitudDTO;
 import com.bmw.cine.common.dto.SolicitudBoletoDTO;
 
 public class BoletoDAOImpl implements BoletoDAO {
-    
-    
-
     private static final String SQL_BASE =
             "SELECT b.id AS boleto_id, u.nombre AS nombre_usuario, p.titulo AS titulo_pelicula, "
                     + "f.horario AS horario_funcion, s.nombre AS nombre_sala, b.asiento_codigo, "
@@ -84,35 +81,35 @@ public class BoletoDAOImpl implements BoletoDAO {
         }
     }
    //NUEVO METODO SOLICITUD BOLETO 
-@Override
-public List<SolicitudBoletoDTO> listarPorUsuario(int usuarioId) {
-    String sql = SQL_BASE + " WHERE b.usuario_id = ? ORDER BY b.fecha_solicitud DESC";
+    @Override
+    public List<SolicitudBoletoDTO> listarPorUsuario(int usuarioId) {
+        String sql = SQL_BASE + " WHERE b.usuario_id = ? ORDER BY b.fecha_solicitud DESC";
 
-    try (Connection con = Conexion.getInstancia().conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.getInstancia().conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setInt(1, usuarioId);
+            ps.setInt(1, usuarioId);
 
-        List<SolicitudBoletoDTO> boletos = new ArrayList<>();
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                boletos.add(new SolicitudBoletoDTO(
-                        rs.getInt("boleto_id"),
-                        rs.getString("nombre_usuario"),
-                        rs.getString("titulo_pelicula"),
-                        rs.getTimestamp("horario_funcion").toLocalDateTime(),
-                        rs.getString("nombre_sala"),
-                        rs.getString("asiento_codigo"),
-                        rs.getString("estado"),
-                        rs.getTimestamp("fecha_solicitud").toLocalDateTime()
-                ));
+            List<SolicitudBoletoDTO> boletos = new ArrayList<>();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    boletos.add(new SolicitudBoletoDTO(
+                            rs.getInt("boleto_id"),
+                            rs.getString("nombre_usuario"),
+                            rs.getString("titulo_pelicula"),
+                            rs.getTimestamp("horario_funcion").toLocalDateTime(),
+                            rs.getString("nombre_sala"),
+                            rs.getString("asiento_codigo"),
+                            rs.getString("estado"),
+                            rs.getTimestamp("fecha_solicitud").toLocalDateTime()
+                    ));
+                }
             }
+            return boletos;
+        } catch (SQLException e) {
+            throw new DAOException("Error al listar los boletos del usuario " + usuarioId, e);
         }
-        return boletos;
-    } catch (SQLException e) {
-        throw new DAOException("Error al listar los boletos del usuario " + usuarioId, e);
     }
-}
 
     @Override
     public boolean aprobarSolicitud(int boletoId, int aprobadoPorUsuarioId) {
@@ -188,44 +185,44 @@ public List<SolicitudBoletoDTO> listarPorUsuario(int usuarioId) {
 
     //Solicitad boleto agregado 
     @Override
-public List<Integer> solicitarBoletos(int usuarioId, int funcionId, List<String> asientosCodigos) {
-    String sql = "INSERT INTO boleto (usuario_id, funcion_id, asiento_codigo, estado, fecha_solicitud) " +
-            "VALUES (?, ?, ?, 'PENDIENTE', NOW())";
+    public List<Integer> solicitarBoletos(int usuarioId, int funcionId, List<String> asientosCodigos) {
+        String sql = "INSERT INTO boleto (usuario_id, funcion_id, asiento_codigo, estado, fecha_solicitud) " +
+                "VALUES (?, ?, ?, 'PENDIENTE', NOW())";
 
-    List<Integer> idsGenerados = new ArrayList<>();
+        List<Integer> idsGenerados = new ArrayList<>();
 
-    try (Connection con = Conexion.getInstancia().conectar()) {
-        con.setAutoCommit(false);
+        try (Connection con = Conexion.getInstancia().conectar()) {
+            con.setAutoCommit(false);
 
-        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            for (String asiento : asientosCodigos) {
-                ps.setInt(1, usuarioId);
-                ps.setInt(2, funcionId);
-                ps.setString(3, asiento);
-                ps.executeUpdate();
+            try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                for (String asiento : asientosCodigos) {
+                    ps.setInt(1, usuarioId);
+                    ps.setInt(2, funcionId);
+                    ps.setString(3, asiento);
+                    ps.executeUpdate();
 
-                try (ResultSet keys = ps.getGeneratedKeys()) {
-                    if (keys.next()) {
-                        idsGenerados.add(keys.getInt(1));
-                    } else {
-                        throw new DAOException("No se obtuvo el id del boleto generado para el asiento " + asiento);
+                    try (ResultSet keys = ps.getGeneratedKeys()) {
+                        if (keys.next()) {
+                            idsGenerados.add(keys.getInt(1));
+                        } else {
+                            throw new DAOException("No se obtuvo el id del boleto generado para el asiento " + asiento);
+                        }
                     }
                 }
+
+                con.commit();
+                return idsGenerados;
+
+            } catch (SQLIntegrityConstraintViolationException ex) {
+                con.rollback();
+                throw new DAOException("ASIENTO_OCUPADO: uno o más asientos ya fueron reservados por otro usuario.", ex);
+            } catch (SQLException ex) {
+                con.rollback();
+                throw new DAOException("Error al solicitar los boletos", ex);
             }
 
-            con.commit();
-            return idsGenerados;
-
-        } catch (SQLIntegrityConstraintViolationException ex) {
-            con.rollback();
-            throw new DAOException("ASIENTO_OCUPADO: uno o más asientos ya fueron reservados por otro usuario.", ex);
         } catch (SQLException ex) {
-            con.rollback();
-            throw new DAOException("Error al solicitar los boletos", ex);
+            throw new DAOException("Error de conexión al solicitar boletos", ex);
         }
-
-    } catch (SQLException ex) {
-        throw new DAOException("Error de conexión al solicitar boletos", ex);
     }
-}
 }

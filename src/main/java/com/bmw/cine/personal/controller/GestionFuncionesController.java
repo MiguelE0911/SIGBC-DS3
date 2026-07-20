@@ -176,7 +176,7 @@ public class GestionFuncionesController {
             fecha.setValue(existente.getHorario().toLocalDate());
             spnHora.getValueFactory().setValue(existente.getHorario().getHour());
             spnMinuto.getValueFactory().setValue(existente.getHorario().getMinute());
-            txtPrecio.setText(existente.precioBase().toPlainString());
+            txtPrecio.setText(existente.getPrecioBase().toPlainString());
         }
 
         GridPane grid = new GridPane();

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
+/*
  * Implementación real de UsuarioDAO contra MariaDB, alineada a la tabla
  * `usuario` real: id, nombre, correo, username, password_hash, rol_id,
  * activo, fecha_registro.
@@ -185,7 +185,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         }
     }
 
-    /**
+    /*
      * Convierte la fila actual del ResultSet a UsuarioDTO. Nunca lee ni
      * expone password_hash hacia afuera de esta clase.
      */

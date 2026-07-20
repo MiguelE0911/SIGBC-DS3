@@ -1,9 +1,5 @@
 package com.bmw.cine.common.dto;
 
-/**
- * Filtros de la Bandeja de Solicitudes. Cualquier campo en null significa
- * "sin filtrar por esto". Usa Integer (no int) para que null sea válido.
- */
 public class FiltroSolicitudDTO {
 
     private Integer peliculaId;

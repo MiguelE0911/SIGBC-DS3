@@ -12,12 +12,6 @@ import javafx.scene.layout.Priority;
 
 import java.math.BigDecimal;
 
-/**
- * Vista de Gestión de funciones/horarios — solo construcción de
- * componentes visuales. Toda la lógica (carga de datos, diálogo de
- * alta/edición, validación de solapamiento, eliminación) vive en
- * GestionFuncionesController.
- */
 public class GestionFuncionesView extends BorderPane {
 
     private final Button btnAgregar = new Button("+ Agregar función");
@@ -50,7 +44,7 @@ public class GestionFuncionesView extends BorderPane {
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<Funcion, BigDecimal> colPrecio = new TableColumn<>("Precio base");
-        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precioBase"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory<>("getPrecioBase"));
 
         tabla.getColumns().add(colPrecio);
         tabla.setPlaceholder(new Label("No hay funciones programadas"));

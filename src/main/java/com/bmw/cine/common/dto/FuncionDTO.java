@@ -3,12 +3,6 @@ package com.bmw.cine.common.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Lo que ve el Espectador al elegir horario en el Detalle de Película:
- * une datos de Funcion + nombre de Sala + cuántos asientos quedan,
- * sin que la vista tenga que hacer 3 consultas ni conocer los IDs de sala.
- */
-
 public class FuncionDTO {
     private final int funcionId;
     private final LocalDateTime horario;

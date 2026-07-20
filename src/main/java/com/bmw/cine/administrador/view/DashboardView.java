@@ -112,11 +112,9 @@ public class DashboardView extends VBox {
     public Label getLblGananciasMes() {
         return lblGananciasMes;
     }
-
     public Label getLblPeliculaMasVendida() {
         return lblPeliculaMasVendida;
     }
-
     public Label getLblUsuariosActivos() {
         return lblUsuariosActivos;
     }

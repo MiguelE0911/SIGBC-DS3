@@ -11,15 +11,12 @@ public class DashboardController {
     private final DashboardServices service;
 
     public DashboardController(DashboardView vista) {
-
         this.vista = vista;
         this.service = new DashboardServices();
-
         cargarDashboard();
     }
 
     private void cargarDashboard() {
-
         DashboardServices.DashboardInfo info =
                 service.obtenerResumen();
 
