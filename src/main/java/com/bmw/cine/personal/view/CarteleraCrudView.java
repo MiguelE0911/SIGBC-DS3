@@ -16,7 +16,7 @@ public class CarteleraCrudView extends BorderPane {
     private final TableView<Pelicula> tabla = new TableView<>();
 
     public CarteleraCrudView() {
-        getStyleClass().add("panel-fondo");
+        getStyleClass().add("vista-cuerpo");
         setPadding(new Insets(24));
 
         setTop(construirEncabezado());
@@ -25,7 +25,7 @@ public class CarteleraCrudView extends BorderPane {
 
     private HBox construirEncabezado() {
         Label titulo = new Label("Cartelera — Administración");
-        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: -fx-texto-titulos;");
+        titulo.getStyleClass().add("vista-titulo");
 
         btnAgregar.getStyleClass().add("boton-aprobar");
 
@@ -40,6 +40,7 @@ public class CarteleraCrudView extends BorderPane {
 
     private TableView<Pelicula> construirTabla() {
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabla.getStyleClass().add("tabla-usuarios");
 
         TableColumn<Pelicula, String> colTitulo = new TableColumn<>("Título");
         colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
@@ -65,7 +66,6 @@ public class CarteleraCrudView extends BorderPane {
         return tabla;
     }
 
-    //  Getters expuestos al controller
     public Button getBtnAgregar() { return btnAgregar; }
     public TableView<Pelicula> getTabla() { return tabla; }
 }

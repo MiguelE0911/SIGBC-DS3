@@ -18,7 +18,7 @@ public class GestionFuncionesView extends BorderPane {
     private final TableView<Funcion> tabla = new TableView<>();
 
     public GestionFuncionesView() {
-        getStyleClass().add("panel-fondo");
+        getStyleClass().add("vista-cuerpo");
         setPadding(new Insets(24));
 
         setTop(construirEncabezado());
@@ -27,7 +27,7 @@ public class GestionFuncionesView extends BorderPane {
 
     private HBox construirEncabezado() {
         Label titulo = new Label("Funciones — Gestión de horarios");
-        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: -fx-texto-titulos;");
+        titulo.getStyleClass().add("vista-titulo");
 
         btnAgregar.getStyleClass().add("boton-aprobar");
 
@@ -42,6 +42,7 @@ public class GestionFuncionesView extends BorderPane {
 
     private TableView<Funcion> construirTabla() {
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabla.getStyleClass().add("tabla-usuarios");
 
         TableColumn<Funcion, BigDecimal> colPrecio = new TableColumn<>("Precio base");
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("getPrecioBase"));
@@ -51,7 +52,6 @@ public class GestionFuncionesView extends BorderPane {
         return tabla;
     }
 
-    // Getters expuestos al controller
     public Button getBtnAgregar() { return btnAgregar; }
     public TableView<Funcion> getTabla() { return tabla; }
 }

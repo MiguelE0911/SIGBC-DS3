@@ -45,6 +45,7 @@ public class TaquillaView extends BorderPane {
 
     private TableView<SolicitudBoletoDTO> construirTabla() {
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabla.getStyleClass().add("tabla-usuarios");
 
         TableColumn<SolicitudBoletoDTO, String> colUsuario = new TableColumn<>("Usuario");
         colUsuario.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getNombreUsuario()));
