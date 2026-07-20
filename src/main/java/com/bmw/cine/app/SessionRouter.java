@@ -16,23 +16,11 @@ import javafx.stage.Stage;
 public class SessionRouter {
 
     public static void enrutar(Stage stage, UsuarioDTO usuarioActivo) {
-       if (usuarioActivo.getRol() == Usuario.ROL_ESPECTADOR) {
-            MainWindowView vistaPrincipal = new MainWindowView();
-            new MainWindowController(vistaPrincipal, usuarioActivo, stage);
-            Scene escena = new Scene(vistaPrincipal.getRootLayout(), 1200, 800);
-
-            escena.getStylesheets().addAll(
-                MainWindowView.class.getResource("/css/tema-global.css").toExternalForm(),
-                MainWindowView.class.getResource("/css/header-principal.css").toExternalForm()
-            );
-
-            stage.setScene(escena);
-            stage.setTitle("Cinema BMW - Cartelera");
-            stage.show();
+        if (usuarioActivo.getRol() == Usuario.ROL_ESPECTADOR) {
+            com.bmw.cine.espectador.EspectadorModule.iniciar(stage, usuarioActivo);
             return;
-       }
-
-        SelectorModulo.iniciar(stage, usuarioActivo); // Para Personal y Administrador, se muestra el selector de módulo.
+        }
+        SelectorModulo.iniciar(stage, usuarioActivo);
     }
 
     public static void cerrarSesion(Stage stage) {
