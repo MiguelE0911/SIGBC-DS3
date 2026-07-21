@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import java.util.List;
 import com.bmw.cine.common.dao.BoletoDAO;
 import com.bmw.cine.common.dao.DAOException;
 import com.bmw.cine.common.db.Conexion;
+import com.bmw.cine.common.db.PgErrores;
 import com.bmw.cine.common.dto.FiltroSolicitudDTO;
 import com.bmw.cine.common.dto.SolicitudBoletoDTO;
 
@@ -43,8 +43,8 @@ public class BoletoDAOImpl implements BoletoDAO {
                 parametros.add(filtro.getFuncionId());
             }
             if (filtro.getEstado() != null) {
-                condiciones.add("b.estado = ?");
-                parametros.add(filtro.getEstado());
+                condiciones.add("b.estado = ?::estado_boleto");
+                parametros.add(filtro.getEstado().toString());
             }
         }
 
@@ -80,7 +80,8 @@ public class BoletoDAOImpl implements BoletoDAO {
             throw new DAOException("Error al listar las solicitudes de boletos", e);
         }
     }
-   //NUEVO METODO SOLICITUD BOLETO 
+
+    //NUEVO METODO SOLICITUD BOLETO
     @Override
     public List<SolicitudBoletoDTO> listarPorUsuario(int usuarioId) {
         String sql = SQL_BASE + " WHERE b.usuario_id = ? ORDER BY b.fecha_solicitud DESC";
@@ -176,14 +177,18 @@ public class BoletoDAOImpl implements BoletoDAO {
                 if (keys.next()) return keys.getInt(1);
                 throw new DAOException("No se obtuvo el id del boleto generado");
             }
-        } catch (SQLIntegrityConstraintViolationException ex) {
-            throw new DAOException("ASIENTO_OCUPADO: el asiento " + asientoCodigo + " ya fue tomado.", ex);
         } catch (SQLException ex) {
+            if (PgErrores.esViolacionUnica(ex)) {
+                throw new DAOException("ASIENTO_OCUPADO: el asiento " + asientoCodigo + " ya fue tomado.", ex);
+            }
+            if (PgErrores.esErrorReintentable(ex)) {
+                throw new DAOException("CONFLICTO_CONCURRENCIA: reintenta la operación.", ex);
+            }
             throw new DAOException("Error al emitir boleto", ex);
         }
     }
 
-    //Solicitad boleto agregado 
+    //Solicitad boleto agregado
     @Override
     public List<Integer> solicitarBoletos(int usuarioId, int funcionId, List<String> asientosCodigos) {
         String sql = "INSERT INTO boleto (usuario_id, funcion_id, asiento_codigo, estado, fecha_solicitud) " +
@@ -213,11 +218,14 @@ public class BoletoDAOImpl implements BoletoDAO {
                 con.commit();
                 return idsGenerados;
 
-            } catch (SQLIntegrityConstraintViolationException ex) {
-                con.rollback();
-                throw new DAOException("ASIENTO_OCUPADO: uno o más asientos ya fueron reservados por otro usuario.", ex);
             } catch (SQLException ex) {
                 con.rollback();
+                if (PgErrores.esViolacionUnica(ex)) {
+                    throw new DAOException("ASIENTO_OCUPADO: uno o más asientos ya fueron reservados por otro usuario.", ex);
+                }
+                if (PgErrores.esErrorReintentable(ex)) {
+                    throw new DAOException("CONFLICTO_CONCURRENCIA: reintenta la solicitud de boletos.", ex);
+                }
                 throw new DAOException("Error al solicitar los boletos", ex);
             }
 

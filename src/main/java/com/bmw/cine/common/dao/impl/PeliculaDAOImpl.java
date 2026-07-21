@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.Optional;
 import com.bmw.cine.common.dao.DAOException;
 import com.bmw.cine.common.dao.PeliculaDAO;
 import com.bmw.cine.common.db.Conexion;
+import com.bmw.cine.common.db.PgErrores;
 import com.bmw.cine.common.dto.PeliculaCardDTO;
 import com.bmw.cine.common.model.Pelicula;
 
@@ -23,7 +23,7 @@ public class PeliculaDAOImpl implements PeliculaDAO {
     @Override
     public List<PeliculaCardDTO> listarCartelera() {
         String sql = "SELECT id, titulo, ruta_poster, genero, duracion_minutos "
-                + "FROM " + TABLA + " WHERE visible = 1 ORDER BY titulo";
+                + "FROM " + TABLA + " WHERE visible = TRUE ORDER BY titulo";
 
         List<PeliculaCardDTO> tarjetas = new ArrayList<>();
         try (Connection con = Conexion.getInstancia().conectar();
@@ -167,9 +167,10 @@ public class PeliculaDAOImpl implements PeliculaDAO {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
 
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new DAOException("No se puede eliminar: la película tiene funciones asociadas", e);
         } catch (SQLException e) {
+            if (PgErrores.esViolacionForeignKey(e)) {
+                throw new DAOException("No se puede eliminar: la película tiene funciones asociadas", e);
+            }
             throw new DAOException("Error al eliminar la película " + id, e);
         }
     }

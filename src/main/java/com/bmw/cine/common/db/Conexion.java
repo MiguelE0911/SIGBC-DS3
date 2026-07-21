@@ -7,19 +7,29 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/*
+ * Pool de conexiones hacia CockroachDB (driver de PostgreSQL, ya que
+ * CockroachDB implementa el protocolo de wire de PostgreSQL).*/
 public class Conexion {
-    private static final String CONDUCTOR = "org.mariadb.jdbc.Driver";
+
+    private static final String CONDUCTOR = "org.postgresql.Driver";
     private static final int TIMEOUT_CONEXION_MS = 15_000;
 
     private static Conexion instancia;
     private final HikariDataSource pool;
 
     private Conexion() {
+        try {
+            Class.forName(CONDUCTOR);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("No se encontró el driver de PostgreSQL en el classpath", e);
+        }
+
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
-        String url = obtenerVariable(dotenv, "DB_ADDRESS");
-        String usuario = obtenerVariable(dotenv, "DB_USER");
-        String contrasena = obtenerVariable(dotenv, "DB_PASSWORD");
+        String url = obtenerVariable(dotenv, "CLOUD_ADDRESS");
+        String usuario = obtenerVariable(dotenv, "CLOUD_USER");
+        String contrasena = obtenerVariable(dotenv, "CLOUD_PASSWORD");
 
         this.pool = crearPool("PoolCine", url, usuario, contrasena, TIMEOUT_CONEXION_MS);
     }
@@ -40,7 +50,14 @@ public class Conexion {
         config.setConnectionTimeout(timeoutConexionMs);
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(2);
-        config.setInitializationFailTimeout(-1);
+        /* Si el nodo al que estabas conectado se reinicia (mantenimiento,
+        caída, etc.), fuerza a renovar conexiones periódicamente en vez
+        de acumular conexiones "muertas" en el pool.*/
+        config.setMaxLifetime(1_800_000); // 30 min
+        config.setKeepaliveTime(300_000); // 5 min, evita que Tailscale/NAT cierre la conexión por inactividad
+        config.setInitializationFailTimeout(-1); // no bloquea el arranque si al inicio ningún nodo responde
+        // Mejora el rendimiento de INSERTs repetidos como en solicitarBoletos().
+        config.addDataSourceProperty("reWriteBatchedInserts", "true");
         return new HikariDataSource(config);
     }
 
@@ -56,7 +73,12 @@ public class Conexion {
         try {
             return pool.getConnection();
         } catch (SQLException e) {
-            return null;
+            // Antes esto retornaba null silenciosamente: con un clúster de
+            // 2 nodos sobre Tailscale, un fallo de conexión transitorio es
+            // mucho más probable que con un solo servidor MariaDB local, y
+            // un null aquí se traduce en un NullPointerException confuso
+            // varias capas más arriba. Mejor fallar rápido y explícito.
+            throw new RuntimeException("No se pudo obtener una conexión del pool hacia CockroachDB", e);
         }
     }
 

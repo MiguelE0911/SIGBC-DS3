@@ -28,13 +28,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Base de Datos MariaDB -->
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>3.4.0</version>
-        </dependency>
-
         <!-- Logging Simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -42,7 +35,8 @@
             <version>2.0.7</version>
         </dependency>
 
-        <!-- Driver PostgreSQL -->
+        <!-- Driver PostgreSQL (usado también para CockroachDB, que habla el
+             mismo protocolo de wire) -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -70,16 +64,16 @@
             <version>0.4</version>
         </dependency>
 
-      <dependency>
-    <groupId>com.itextpdf</groupId>
-    <artifactId>kernel</artifactId>
-    <version>8.0.3</version>
-</dependency>
-<dependency>
-    <groupId>com.itextpdf</groupId>
-    <artifactId>layout</artifactId>
-    <version>8.0.3</version>
-</dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>8.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>layout</artifactId>
+            <version>8.0.3</version>
+        </dependency>
 
         <!-- Interfaz Gráfica JavaFX -->
         <dependency>

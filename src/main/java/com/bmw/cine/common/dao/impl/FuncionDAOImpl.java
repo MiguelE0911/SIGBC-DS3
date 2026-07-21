@@ -196,14 +196,12 @@ public class FuncionDAOImpl implements FuncionDAO {
 
     @Override
     public boolean existeSolapamiento(int salaId, LocalDateTime inicio, LocalDateTime fin, Integer excluirFuncionId) {
-        // Dos rangos [f.horario, f.horario + duración] y [inicio, fin) se solapan
-        // si f.horario < fin  Y  f.horario + duración > inicio (regla clásica de intervalos).
         StringBuilder sql = new StringBuilder(
                 "SELECT COUNT(*) FROM funcion f "
                         + "JOIN pelicula p ON p.id = f.pelicula_id "
                         + "WHERE f.sala_id = ? "
                         + "AND f.horario < ? "
-                        + "AND DATE_ADD(f.horario, INTERVAL p.duracion_minutos MINUTE) > ? ");
+                        + "AND f.horario + (p.duracion_minutos * INTERVAL '1 minute') > ? ");
         if (excluirFuncionId != null) {
             sql.append("AND f.id <> ? ");
         }
