@@ -9,6 +9,7 @@ import com.bmw.cine.common.view.HeaderPrincipalController;
 import com.bmw.cine.administrador.view.ReportesView;
 import com.bmw.cine.administrador.view.DashboardView;
 import com.bmw.cine.administrador.controller.DashboardController;
+import com.bmw.cine.common.view.PerfilDialog;
 import com.bmw.cine.app.SessionRouter;
 import com.bmw.cine.common.session.SelectorModulo;
 
@@ -19,7 +20,7 @@ public class AdminController {
 
     private final AdminView vista;
     private final Stage stage;
-    private final UsuarioDTO usuarioActivo;
+    private UsuarioDTO usuarioActivo;
     private final UsuarioDAO usuarioDAO;
 
     private Button btnGestionUsuarios;
@@ -69,6 +70,14 @@ public class AdminController {
 
         header.setOnCambiarSeccion(() -> {
             SelectorModulo.iniciar(stage, usuarioActivo);
+        });
+
+        header.setOnVerPerfil(() -> {
+            PerfilDialog.mostrar(stage, usuarioActivo, usuarioDAO)
+                    .ifPresent(usuarioActualizado -> {
+                        usuarioActivo = usuarioActualizado;
+                        header.actualizarNombreUsuario(usuarioActivo);
+                    });
         });
 
         header.setOnCerrarSesion(() -> {
